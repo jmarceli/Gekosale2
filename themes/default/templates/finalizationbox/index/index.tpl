@@ -25,8 +25,8 @@
 			</tfoot>
 		</table>
 		<div class="pull-right">
-			<a href="{{ path('frontend.cart') }}" title=""><i class="icon icon-arrow-left-blue"></i> Wróć	do koszyka</a>
-			<button type="submit" class="btn btn-large btn-primary marginlt20">Wyślij zamówienie</button>
+			<a href="{{ path('frontend.cart') }}" title=""><i class="icon icon-arrow-left-blue"></i> {% trans %}TXT_BACK_TO_CART{% endtrans %}</a>
+			<button type="submit" class="btn btn-large btn-primary marginlt20">{% trans %}TXT_SEND_YOUR_ORDER{% endtrans %}</button>
 		</div>
 	</form>
 </div>

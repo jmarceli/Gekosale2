@@ -114,7 +114,7 @@
 		</tbody>
 	</table>      
 	<div class="pull-right">
-    	<a href="{{ path('frontend.clientorder') }}" title=""><i class="icon icon-arrow-left-blue"></i> Wróć do historii zamówień</a>
+    	<a href="{{ path('frontend.clientorder') }}" title=""><i class="icon icon-arrow-left-blue"></i> {% trans %}TXT_BACK_HISTORY_ORDERS{% endtrans %}</a>
 	</div>
 </article>
 {% endautoescape %}

@@ -6,7 +6,7 @@
     <table class="table table-striped table-bordered history-order">
     	<thead>
         	<tr class="thead-info">
-            	<td colspan="6">Poniżej są wyświetlone wszystkie Twoje zamówienia posortowane według daty dodania.</td>
+            	<td colspan="6">{% trans %}TXT_YOUR_ORDERS_SORTED_DATE{% endtrans %}</td>
             </tr>
             <tr>
             	<th>{% trans %}TXT_ORDER{% endtrans %}</th>
@@ -33,7 +33,7 @@
 </article>
 {% else %}
 <div class="alert alert-block alert-info">
-	Do tej pory nie złożyłeś jeszcze żadnego zamówienia! Nie czekaj, zobacz naszą ofertę, a na pewno znajdziesz coś dla siebie!
+	{% trans %}TXT_NOT_ORDERS_NOT_WAIT{% endtrans %}
 </div>
 {% endif %}
 {% endblock %}

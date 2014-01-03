@@ -31,7 +31,7 @@ GMessage('{{ success }}','');
 			</div>
 			{% else %}
 			<div class="alert scroll alert-info">
-				Zmieniając adres e-mail zmieni się również Twój login do sklepu. Po zmianie zostaniesz wylogowany i będzie konieczne ponowne zalogowanie w sklepie.
+				{% trans %}TXT_CHANGING_EMAIL_LOGGED_OUT_LOG_STORE{% endtrans %}
 			</div>
 			{% endif %}
 			{{ forms.input(formEmail.children.email, 'input-xlarge') }}
@@ -39,7 +39,7 @@ GMessage('{{ success }}','');
 			{{ forms.input(formEmail.children.phone2, 'input-xlarge') }}
 			{{ forms.hidden(formEmail.children.__csrf) }}
 			<div class="form-actions form-actions-clean">
-				<button type="submit" class="btn btn-large btn-primary marginlt20">Zapisz zmiany</button>
+				<button type="submit" class="btn btn-large btn-primary marginlt20">{% trans %}TXT_SAVE_CHANGES{% endtrans %}</button>
 			</div>
 		</fieldset>
 		{{ formEmail.javascript }}
@@ -61,7 +61,7 @@ GMessage('{{ success }}','');
 			{{ forms.password(formPass.children.confirmpassword, 'input-xlarge') }}
 			{{ forms.hidden(formPass.children.__csrf) }}
 			<div class="form-actions form-actions-clean">
-				<button type="submit" class="btn btn-large btn-primary marginlt20">Zapisz zmiany</button>
+				<button type="submit" class="btn btn-large btn-primary marginlt20">{% trans %}TXT_SAVE_CHANGES{% endtrans %}</button>
 			</div>
 		</fieldset>
 		{{ formPass.javascript }}

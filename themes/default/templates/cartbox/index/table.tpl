@@ -22,8 +22,8 @@
 {% if minimumordervalue > 0 %}
 <div class="alert alert-block alert-error">
 	<h4>
-		<strong>Minimalna wartość zamówienia nie została osiągnięta</strong><br />
-		Aby złożyć zamówienie, musisz jeszcze dodać do koszyka produkty o wartości <strong>{{ minimumordervalue|priceFormat }}</strong>
+		<strong>{% trans %}TXT_MIN_ORDER{% endtrans %}</strong><br />
+		{% trans %}TXT_MIN_ORDER_CONT{% endtrans %} <strong>{{ minimumordervalue|priceFormat }}</strong>
 	</h4>
 </div>
 {% else %}
