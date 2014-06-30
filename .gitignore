@@ -1,0 +1,8 @@
+config/settings.php
+serialization/*
+cache/*
+logs/*
+*.swp
+*.swo
+design/_gallery/*
+upload/images/*
