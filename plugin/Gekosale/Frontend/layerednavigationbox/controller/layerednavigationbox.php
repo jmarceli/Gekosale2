@@ -26,7 +26,7 @@ class LayeredNavigationBoxController extends Component\Controller\Box
 				
 				$this->orderBy = $this->getParam('orderBy', 'default');
 				$this->orderDir = $this->getParam('orderDir', 'asc');
-				$this->currentPage = $this->getParam('currentPage', 1);
+				$this->currentPage = 1;//$this->getParam('currentPage', 1);
 				$this->view = $this->getParam('viewType', 0);
 				$this->priceFrom = $this->getParam('priceFrom', 0);
 				$this->priceTo = $this->getParam('priceTo', Core::PRICE_MAX);
@@ -112,7 +112,7 @@ class LayeredNavigationBoxController extends Component\Controller\Box
 				
 				$this->orderBy = $this->getParam('orderBy', 'default');
 				$this->orderDir = $this->getParam('orderDir', 'asc');
-				$this->currentPage = $this->getParam('currentPage', 1);
+				$this->currentPage = 1;//$this->getParam('currentPage', 1);
 				$this->view = $this->getParam('viewType', 0);
 				$this->priceFrom = $this->getParam('priceFrom', 0);
 				$this->priceTo = $this->getParam('priceTo', Core::PRICE_MAX);
