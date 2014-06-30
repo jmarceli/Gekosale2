@@ -6,6 +6,9 @@ Nieoficjalne repozytorium Gekosale 2, którego celem jest zintegrowanie wszystki
 # Poprawki
 Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z http://gekosale.pl) oznaczonej przez autorów jako 2.0.1.
 
+* Problem z modyfikacją danych do faktury w podsumowaniu zamówienia
+* Usunięcie nieużywanych plików z szablonami stronicowania i nieużywanego szablonu e-mail
+
 # Repozytorium
 Repozytorium istnieje dzięki http://mygekosale.pl, oferujemy liczne rozszerzenia dla Gekosale jak również piszemy nowe na zamówienie.
 
