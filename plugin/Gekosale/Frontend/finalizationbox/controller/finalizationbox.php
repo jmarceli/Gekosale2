@@ -190,7 +190,7 @@ class FinalizationBoxController extends Component\Controller\Box
 		
 		if ($formBilling->Validate()){
 			$formData = $formBilling->getSubmitValues();
-			if ($formData['clienttype']){
+			if ($formData['clienttype'] == 1){
 				$formData['companyname'] = '';
 				$formData['nip'] = '';
 			}
