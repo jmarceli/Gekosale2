@@ -1,0 +1,9 @@
+# Default LF for all files
+* text=auto
+
+# Force LF for end of line
+*.xml text eol=lf
+*.php text eol=lf
+*.tpl text eol=lf
+*.js text eol=lf
+*.css text eol=lf
