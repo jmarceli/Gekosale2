@@ -12,7 +12,7 @@
 		{% endif %}
 		</td>
 		<td>
-			<input type="text" class="product-quantity spinnerhide" data-value="{{ product.qty }}" data-packagesize="{{ product.packagesize }}" value="{{ product.qty }}" onchange="$(this).spinner('disable');xajax_changeQuantity({{ product.idproduct }},null,this.value);" />
+      <input type="text" class="product-quantity spinnerhide" data-stock="{{ product.stock }}" data-value="{{ product.qty }}" data-packagesize="{{ product.packagesize }}" value="{{ product.qty }}" data-productid="{{ product.idproduct }}" data-trackstock="{{ product.trackstock }}"/>
 		</td>
 		<td>{{ product.qtyprice|priceFormat }}</td>
 		<td><a class="btn btn-mini" href="#" onclick="xajax_deleteProductFromCart({{ product.idproduct }}, null); return false;"><i class="icon-remove"></i></a></td>
@@ -35,7 +35,7 @@
 			{{ attribprod.newprice|priceFormat }}
 		{% endif %}
 		</td>
-		<td><input type="text" class="product-quantity spinnerhide" data-value="{{ attribprod.qty }}" data-packagesize="{{ attribprod.packagesize }}" value="{{ attribprod.qty }}" onchange="$(this).spinner('disable');xajax_changeQuantity({{ attribprod.idproduct }},{{ attribprod.attr }},this.value);" /></td>
+		<td><input type="text" class="product-quantity-att spinnerhide" data-stock="{{ attribprod.stock }}" data-value="{{ attribprod.qty }}" data-packagesize="{{ attribprod.packagesize }}" value="{{ attribprod.qty }}" data-productid="{{ product.idproduct }}" data-attr="{{ attribprod.attr }}" data-trackstock="{{ attribprod.trackstock }}"/></td>
 		<td>{{ attribprod.qtyprice|priceFormat }}</td>
 		<td><a class="btn btn-mini" href="#" onclick="xajax_deleteProductFromCart({{ attribprod.idproduct }}, {{ attribprod.attr }}); return false;"><i class="icon-remove"></i></a></td>
 	</tr>

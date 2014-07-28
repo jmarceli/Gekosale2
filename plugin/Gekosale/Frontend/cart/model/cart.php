@@ -346,46 +346,47 @@ class CartModel extends Component\Model
 			$this->deleteAJAXProductFromCart($idproduct, $attr);
 		}
 		else{
-			
 			try{
 				if (isset($this->Cart[$idproduct])){
 					// standard product (of product with attributes)
 					if (isset($this->Cart[$idproduct]['standard']) && $this->Cart[$idproduct]['standard'] == 1 && $attr == NULL){
 						$newqty = $this->checkPackageQty($newqty, $this->Cart[$idproduct]['packagesize']);
-						
 						$oldQty = $this->Cart[$idproduct]['stock'];
+
+            // check for trackstocked products
 						if (($newqty > $this->Cart[$idproduct]['stock']) && $this->Cart[$idproduct]['trackstock'] == 1){
-							$objResponseInc->script('GError("' . _('ERR_COULDNT_INCREASE_QTY') . _('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
+							$this->Cart[$idproduct]['qty'] = $this->Cart[$idproduct]['stock'];
+							$objResponseInc->script('GError("' . \Gekosale\_('ERR_COULDNT_INCREASE_QTY') . \Gekosale\_('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
 						}
-						else{
-							$this->Cart[$idproduct]['qty'] = $newqty;
-							$this->Cart[$idproduct]['qtyprice'] = $this->Cart[$idproduct]['newprice'] * $this->Cart[$idproduct]['qty'];
-							$this->Cart[$idproduct]['weighttotal'] = $this->Cart[$idproduct]['weight'] * $this->Cart[$idproduct]['qty'];
-							$this->updateSession();
-						}
+            else {
+              // update price and weight
+              $this->Cart[$idproduct]['qty'] = $newqty;
+            }
+            $this->Cart[$idproduct]['qtyprice'] = $this->Cart[$idproduct]['newprice'] * $this->Cart[$idproduct]['qty'];
+            $this->Cart[$idproduct]['weighttotal'] = $this->Cart[$idproduct]['weight'] * $this->Cart[$idproduct]['qty'];
+
+            $this->updateSessionSoft();
 					}
 					// product with attributes
 					if ($this->Cart[$idproduct]['attributes'] != NULL && $attr != NULL){
 						$modulo = $newqty % $this->Cart[$idproduct]['attributes'][$attr]['packagesize'];
 						$newqty = abs(($modulo > 0) ? $newqty - $modulo : $newqty);
 						$oldQty = $this->Cart[$idproduct]['attributes'][$attr]['qty'];
-						$this->Cart[$idproduct]['attributes'][$attr]['qty'] = $newqty;
+
+            // check for trackstocked products
+            if ($this->Cart[$idproduct]['attributes'][$attr]['trackstock'] == 1 
+              && $this->Cart[$idproduct]['attributes'][$attr]['qty'] > $this->Cart[$idproduct]['attributes'][$attr]['stock']) {
+								$this->Cart[$idproduct]['attributes'][$attr]['qty'] = $this->Cart[$idproduct]['attributes'][$attr]['stock'];
+								$objResponseInc->script('GError("' . \Gekosale\_('ERR_COULDNT_INCREASE_QTY') . '<br />' . \Gekosale\_('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
+            }
+            else {
+              // update price and weight
+              $this->Cart[$idproduct]['attributes'][$attr]['qty'] = $newqty;
+            }
 						$this->Cart[$idproduct]['attributes'][$attr]['qtyprice'] = $this->Cart[$idproduct]['attributes'][$attr]['newprice'] * $this->Cart[$idproduct]['attributes'][$attr]['qty'];
 						$this->Cart[$idproduct]['attributes'][$attr]['weighttotal'] = $this->Cart[$idproduct]['attributes'][$attr]['weight'] * $this->Cart[$idproduct]['attributes'][$attr]['qty'];
-						if ($this->Cart[$idproduct]['attributes'][$attr]['trackstock'] == 0){
-							$this->updateSession();
-						}
-						else{
-							if ($this->Cart[$idproduct]['attributes'][$attr]['qty'] <= $this->Cart[$idproduct]['attributes'][$attr]['stock']){
-								$this->updateSession();
-							}
-							else{
-								$this->Cart[$idproduct]['attributes'][$attr]['qty'] = $oldQty;
-								$this->Cart[$idproduct]['attributes'][$attr]['qtyprice'] = $this->Cart[$idproduct]['attributes'][$attr]['newprice'] * $this->Cart[$idproduct]['attributes'][$attr]['qty'];
-								$this->Cart[$idproduct]['attributes'][$attr]['weighttotal'] = $this->Cart[$idproduct]['attributes'][$attr]['weight'] * $this->Cart[$idproduct]['attributes'][$attr]['qty'];
-								$objResponseInc->script('GError("' . _('ERR_COULDNT_INCREASE_QTY') . '<br />' . _('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
-							}
-						}
+
+            $this->updateSessionSoft();
 					}
 				}
 			}
@@ -393,15 +394,19 @@ class CartModel extends Component\Model
 				$objResponseInc->alert($e->getMessage());
 			}
 		}
-		
 		$objResponseInc->clear("cart-contents", "innerHTML");
 		$objResponseInc->append("cart-contents", "innerHTML", $this->getCartTableTemplate());
 		$objResponseInc->script("qtySpinner();");
-		return $objResponseInc;
+    $objResponseInc->clear("topBasket", "innerHTML");
+		$objResponseInc->append("topBasket", "innerHTML", $this->getCartPreviewTemplate());
+    return $objResponseInc;
 	}
 
 	public function getCartTableTemplate ()
 	{
+    $method = Session::getActiveDispatchmethodChecked();
+    $payment = Session::getActivePaymentMethodChecked();
+
 		$this->clientModel = App::getModel('client');
 		$this->paymentModel = App::getModel('payment');
 		$this->deliveryModel = App::getModel('delivery');
@@ -409,25 +414,37 @@ class CartModel extends Component\Model
 		
 		$globalprice = $this->getGlobalPrice();
 		
+    // check rules
 		$checkRulesCart = App::getModel('cart')->checkRulesCart();
 		if (is_array($checkRulesCart) && count($checkRulesCart) > 0){
 			$this->registry->template->assign('checkRulesCart', $checkRulesCart);
 		}
-		if (Session::getActiveDispatchmethodChecked() == NULL){
-			usort($this->dispatchMethods, function  ($a, $b)
-			{
-				return $a['dispatchmethodcost'] - $b['dispatchmethodcost'];
-			});
-			$default = current($this->dispatchMethods);
-			App::getModel('delivery')->setDispatchmethodChecked($default['dispatchmethodid']);
+
+    // check dispatch
+		if ($method == NULL || !isset($this->dispatchMethods[$method['dispatchmethodid']])){
+      // set dispatch method if not selected or not available
+			$method = current($this->dispatchMethods);
+			App::getModel('delivery')->setDispatchmethodChecked($method['dispatchmethodid']);
 		}
+    else {
+      App::getModel('delivery')->setDispatchmethodChecked($method['dispatchmethodid']);
+    }
 		
+    // check payment
 		$paymentMethods = App::getModel('payment')->getPaymentMethods();
-		if (Session::getActivePaymentMethodChecked() == 0){
+    $paymentAvailable = false;
+    foreach($paymentMethods as $method) {
+      if($method['idpaymentmethod'] == $payment['idpaymentmethod'])
+        $paymentAvailable = true;
+    }
+		if ($payment == 0 || !$paymentAvailable){
 			if (isset($paymentMethods[0])){
 				App::getModel('payment')->setPaymentMethodChecked($paymentMethods[0]['idpaymentmethod'], $paymentMethods[0]['name']);
 			}
 		}
+    else {
+      App::getModel('payment')->setPaymentMethodChecked($payment['idpaymentmethod'], $payment['paymentmethodname']);
+    }
 		
 		$minimumordervalue = $this->getMinimumOrderValue();
 		
@@ -455,6 +472,21 @@ class CartModel extends Component\Model
 		}
 		return $this->registry->template->fetch('cartbox/index/table.tpl');
 	}
+  
+  private function updateSessionSoft() {
+    $this->setGlobalPrice();
+    $this->setGlobalPriceWithoutVat();
+    $this->setGlobalWeight();
+    $this->setCartForDelivery();
+          
+    Session::setActiveCart($this->Cart);
+    Session::setActiveGlobalPrice($this->globalPrice);
+    Session::setActiveGlobalWeight($this->globalWeight);
+    Session::setActiveGlobalPriceWithoutVat($this->globalPriceWithoutVat);
+    Session::setActiveglobalPriceWithDispatchmethod($this->globalPrice);
+    Session::setActiveglobalPriceWithDispatchmethodNetto($this->globalPriceWithoutVat);
+		Session::unsetActiveClientOrder();
+  }
 
 	public function deleteProductCart ($idproduct)
 	{
