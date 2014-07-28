@@ -1,7 +1,15 @@
 Gekosale
 ========
-
 Nieoficjalne repozytorium Gekosale 2, którego celem jest zintegrowanie wszystkich dostępnych poprawek i doprowadzenie projektu do wersji stabilnej, która zostanie oznaczona jako 2.1.
+
+# Instalacja
+Najprościej jest pobrać pliki w formie ZIPa https://github.com/jmarceli/Gekosale2/archive/master.zip i rozpakować na serwerze do katalogu głównego.
+
+Kolejny krok to wejście na adres pod którym są one dostępne, powinna pojawić się strona instalacji.
+
+Przed rozpoczęciem instalacji należy założyć nową bazę danych MySQL dla tworzonego sklepu. Dane dostępowe trzeba będzie podać podczas procesu instalacji.
+
+Proces instacji jest prosty, wymaga podania kilku informacji o nowozakładanym sklepie.
 
 # Poprawki
 Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z http://gekosale.pl) oznaczonej przez autorów jako 2.0.1.
@@ -20,6 +28,10 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Błąd wydruku zamówienia do formatu PDF
 * Problem dotyczący składania zamówienia przez klienta jeśli nie zaznaczy opcji zakładania konta
 * Liczne problemy dotyczące zmiany ilości produktów w koszyku
+
+# Błędy / problemy
+Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
+Podanie jak największej liczby informacji o napotkanym błędzie znacznie uprości pracę i pomoże w szybkim naprawieniu problemu.
 
 # Repozytorium
 Repozytorium istnieje dzięki http://mygekosale.pl, oferujemy liczne rozszerzenia dla Gekosale jak również piszemy nowe na zamówienie.
