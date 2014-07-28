@@ -187,11 +187,13 @@ class CategoryController extends Component\Controller\Admin
 				$formData = $form->getSubmitValues(FormEngine\Elements\Form::FORMAT_FLAT);
 				$this->model->editCategory($formData, $this->id);
 				
-				foreach ($integrationModels as $key => $model){
-					if (method_exists(App::getModel('integration/' . $model['model']), 'integrationUpdate')){
-						App::getModel('integration/' . $model['model'])->integrationUpdate($formData, $this->id);
-					}
-				}
+        if(isset($integrationModels)) {
+          foreach ($integrationModels as $key => $model){
+            if (method_exists(App::getModel('integration/' . $model['model']), 'integrationUpdate')){
+              App::getModel('integration/' . $model['model'])->integrationUpdate($formData, $this->id);
+            }
+          }
+        }
 				Session::setVolatileMessage("Zapisano zmiany w kategorii.");
 			}
 			catch (Exception $e){
