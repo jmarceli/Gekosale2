@@ -37,6 +37,19 @@
 		{% if error is defined %}
 		GError('{{ error }}');
 		{% endif %}
+
+    $('#order button[type=submit]').click(function() {
+      if(!$('#order input#order_create_account').attr('checked')) {
+        $('#order_password').val('');
+        $('#order_confirmpassword').val('');
+      }
+    });
+    $('#order input[type=checkbox]').click(function() {
+      if(!$(this).attr('checked')) {
+        $('#order_password').val('');
+        $('#order_confirmpassword').val('');
+      }
+    });
 	});
 </script>
 {{ xajax }}
