@@ -127,7 +127,11 @@
 			</div>
 		</div>
 		<div id="message-bar"></div>
-		<div id="content" class="layout-container"><div id="debug"></div>{% block content %}{% endblock %}</div>
+    <div id="content" class="layout-container">
+      <div id="debug"></div>
+      {% block content %}{% endblock %}
+      <small>Gekosale 2.0.1 poprawione przez <a href="http://mygekosale.pl">mygekosale.pl</a></small>
+    </div>
 		{% if CURRENT_CONTROLLER != 'exchange' %}
 		<script>
 		$(document).ready(function(){
