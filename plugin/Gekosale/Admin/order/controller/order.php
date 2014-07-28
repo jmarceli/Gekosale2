@@ -376,8 +376,8 @@ class OrderController extends Component\Controller\Admin
 		$this->registry->template->display($this->loadTemplate('add.tpl'));
 	}
 
-	public function edit ()
-	{
+  public function edit ()
+  {
 		Event::dispatch($this, 'admin.order.checkPaymentStatus', Array(
 			'id' => (int) $this->registry->core->getParam(),
 		));
@@ -668,10 +668,14 @@ class OrderController extends Component\Controller\Admin
 			'options' => FormEngine\Option::Make($this->registry->core->getDefaultValueToSelect() + $this->model->getPaymentmethodAllToSelect($this->registry->core->getParam()))
 		)));
 		
+    $weight = 0;
+    foreach($order['products'] as $product)
+      $weight += $product['weight'];
+
 		$paymentData->AddChild(new FormEngine\Elements\Select(Array(
 			'name' => 'delivery_method',
 			'label' => _('TXT_EDIT_ORDER_DELIVERY_METHOD'),
-			'options' => FormEngine\Option::Make($this->model->getDispatchmethodAllToSelect($order['total'], $this->registry->core->getParam(), $currencyid))
+			'options' => FormEngine\Option::Make($this->model->getDispatchmethodAllToSelect($order['total'], $this->registry->core->getParam(), $weight))
 		)));
 		
 		$paymentData->AddChild(new FormEngine\Elements\Select(Array(

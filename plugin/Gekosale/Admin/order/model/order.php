@@ -112,7 +112,6 @@ class OrderModel extends Component\Model\Datagrid
 			LEFT JOIN orderclientdata OC ON OC.orderid=O.idorder
 			LEFT JOIN orderclientdeliverydata OCD ON OCD.orderid = O.idorder
 			LEFT JOIN orderproduct OP ON OP.orderid = O.idorder
-			LEFT JOIN orderproductattribute OPA ON OP.idorderproduct = OPA.orderproductid
 			LEFT JOIN view V ON V.idview = O.viewid
 		');
 
@@ -123,7 +122,7 @@ class OrderModel extends Component\Model\Datagrid
 		$datagrid->setAdditionalWhere('
 			O.viewid IN (' . Helper::getViewIdsAsString() . ')
 		');
-	}
+  }
 
 	public function parseComments ($string)
 	{
@@ -925,9 +924,9 @@ class OrderModel extends Component\Model\Datagrid
 		return $Data;
 	}
 
-	public function getDispatchmethodAllToSelect ($price = 0, $idorder = 0)
+	public function getDispatchmethodAllToSelect ($price = 0, $idorder = 0, $weight = 0)
 	{
-		$Data = $this->getDispatchmethodForPrice($price, $idorder);
+		$Data = $this->getDispatchmethodForPrice($price, $idorder, 0, $weight);
 		$tmp = Array();
 		foreach ($Data as $key){
 			if (! empty($key['name']) && $key['name'] !== NULL){
@@ -2136,7 +2135,7 @@ class OrderModel extends Component\Model\Datagrid
 
 	public function getPrintableOrderById ($id, $tpl)
 	{
-		$pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8');
+		$pdf = new \Gekosale\Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8');
 		$pdf->SetCreator(PDF_CREATOR);
 		$pdf->SetAuthor('Gekosale');
 		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -2206,6 +2205,8 @@ class OrderModel extends Component\Model\Datagrid
 
 		$summary = Array();
 		foreach ($order['products'] as $key => $val){
+      if(!isset($summary[$val['vat']]))
+        $summary[$val['vat']] = array('vat' => $val['vat'], 'netto' => 0, 'brutto' => 0, 'vatvalue' => 0);
 			$summary[$val['vat']]['vat'] = $val['vat'];
 			$summary[$val['vat']]['netto'] += $val['net_subtotal'];
 			$summary[$val['vat']]['brutto'] += $val['subtotal'];
@@ -2230,7 +2231,7 @@ class OrderModel extends Component\Model\Datagrid
 		$pdf->AddPage();
 		$pdf->writeHTML($html, true, 0, true, 0);
 		@ob_clean();
-		$pdf->Output(Core::clearUTF(_('TXT_ORDER') . '_' . $order['order_id']), 'D');
+		$pdf->Output(Core::clearUTF(_('TXT_ORDER') . '_' . $order['order_id']) . '.pdf', 'D');
 	}
 
 	public function getOrderTotals ($idorder, $withDelivery = true)

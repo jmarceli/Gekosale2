@@ -126,18 +126,35 @@ class sitemapModel extends Component\Model
 				LEFT JOIN contentcategoryview CCV ON CCV.contentcategoryid = C.idcontentcategory
 				LEFT JOIN contentcategorytranslation CT ON CT.contentcategoryid = C.idcontentcategory AND CT.languageid = :languageid
 				WHERE CCV.viewid = :viewid ";
+
+    $sql = "SELECT 
+					C.idcontentcategory AS id, 
+          CCT.name,					
+          CCT.name,
+          C.redirect_route,
+          C.redirect,
+          C.redirect_url,
+          DATE_FORMAT(C.adddate,'%Y-%m-%d') as lastmod
+				FROM contentcategory C
+				LEFT JOIN contentcategoryview CCV ON CCV.contentcategoryid = C.idcontentcategory
+				LEFT JOIN contentcategorytranslation CCT ON CCT.contentcategoryid = C.idcontentcategory AND CCT.languageid = :languageid
+				WHERE CCV.viewid=:viewid";
 		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('url', URL);
 		$stmt->bindValue('languageid', $this->languageid);
 		$stmt->bindValue('viewid', $this->viewid);
-		$stmt->bindValue('seo', Seo::getSeo('staticcontent'));
 		$stmt->execute();
 		$Data = Array();
 		while ($rs = $stmt->fetch()){
-			$Data[] = Array(
-				'loc' => $rs['loc'] . '/' . strtolower(Core::clearUTF($rs['name'])),
-				'lastmod' => $rs['lastmod']
-			);
+      $category = array(
+        'redirect' => $rs['redirect'], 
+        'redirect_url' => $rs['redirect_url'], 
+        'redirect_route' => $rs['redirect_route'],
+				'id' => $rs['id'],
+				'name' => $rs['name'],
+        'lastmod' => $rs['lastmod'],
+        'seo' => strtolower(Core::clearSeoUTF($rs['name'])));
+      $category['loc'] = App::getModel('StaticContent')->generateUrl($category);
+      array_push($Data, $category);
 		}
 		return $Data;
 	}

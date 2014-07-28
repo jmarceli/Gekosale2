@@ -1,15 +1,37 @@
 /*!
  * Created by ONESIDE.PL Jonatan Polak (jonatanpolak@gmail.com)
+ * modified by Jan Grzegorowski mygekosale.pl (kontakt@mygekosale.pl)
  */
 
 function qtySpinner(){
-    if ($('.spinnerhide').length != 0){
-    	$('.spinnerhide').each(function(){
-    		var packagesize = $(this).attr('data-packagesize');
-    		var places = ((packagesize % 1) > 0) ? 2 : 0;
-    		$(this).spinner({min: packagesize, max: 100, width: 20, places: places, step: packagesize}).width(50);
-    	});
+  if ($('.spinnerhide').length != 0){
+    $('.spinnerhide').each(function(){
+      var packagesize = parseInt($(this).attr('data-packagesize'));
+      var places = ((packagesize % 1) > 0) ? 2 : 0;
+      $(this).spinner({min: packagesize, width: 20, places: places, step: packagesize}).width(50);
+    });
+  }
+  $('.product-quantity').unbind('keyup').keyup(function() {
+    change($(this), $(this).data('productid'), null, $(this).val());
+  });
+  $('.product-quantity-att').unbind('keyup').keyup(function() {
+    change($(this), $(this).data('productid'), $(this).data('attr'), $(this).val());
+  });
+  $('.product-quantity').next('.ui-spinner').unbind('click').bind('click', function() {
+    change($(this), $(this).prev('input').data('productid'), null, $(this).prev('input').val());
+  });
+  $('.product-quantity-att').next('.ui-spinner').unbind('click').bind('click', function() {
+    change($(this), $(this).prev('input').data('productid'), $(this).prev('input').data('attr'), $(this).prev('input').val());
+  });
+
+  var change = function(element, id, attr, val) {
+    var $this = element;
+    var timerId = $this.data("timerId");
+    if (timerId) {
+      window.clearTimeout(timerId);
     }
+    $this.data("timerId", window.setTimeout(function(){xajax_changeQuantity(id, attr, val)}, 500));
+  }
 }
 
 jQuery(function($) {

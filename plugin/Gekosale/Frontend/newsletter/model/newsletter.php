@@ -82,19 +82,23 @@ class NewsletterModel extends Component\Model
 
 	public function addClientAboutNewsletter ($email, $viewId = 0)
 	{
-		$sql = 'INSERT INTO clientnewsletter (email, viewid)
-					VALUES (:email, :viewid)';
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('email', $email);
-		$stmt->bindValue('viewid', $viewId !== 0 ? $viewId : Helper::getViewId());
-		try{
-			$stmt->execute();
-		}
-		catch (Exception $e){
-			throw new FrontendException($e->getMessage());
-		}
-		
-		return Db::getInstance()->lastInsertId();
+    $nlid = $this->checkEmailIfExists($email);
+    if(empty($nlid)) {
+      $sql = 'INSERT INTO clientnewsletter (email, viewid)
+            VALUES (:email, :viewid)';
+      $stmt = Db::getInstance()->prepare($sql);
+      $stmt->bindValue('email', $email);
+      $stmt->bindValue('viewid', $viewId !== 0 ? $viewId : Helper::getViewId());
+      try{
+        $stmt->execute();
+      }
+      catch (Exception $e){
+        throw new FrontendException($e->getMessage());
+      }
+      
+      return Db::getInstance()->lastInsertId();
+    }
+    return null;
 	}
 
 	public function updateNewsletterActiveLink ($idclientnewsletter, $email)

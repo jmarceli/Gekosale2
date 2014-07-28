@@ -111,7 +111,10 @@ class StaticContentModel extends Component\Model
 	{
 		$sql = "SELECT 
 					C.idcontentcategory AS id, 
-					CCT.name
+					CCT.name,
+          C.redirect_route,
+          C.redirect,
+          C.redirect_url
 				FROM contentcategory C
 				LEFT JOIN contentcategoryview CCV ON CCV.contentcategoryid = C.idcontentcategory
 				LEFT JOIN contentcategorytranslation CCT ON CCT.contentcategoryid = C.idcontentcategory
@@ -124,11 +127,16 @@ class StaticContentModel extends Component\Model
 		$stmt->execute();
 		$Data = Array();
 		while ($rs = $stmt->fetch()){
-			$Data[] = Array(
+      $category = array(
+        'redirect' => $rs['redirect'], 
+        'redirect_url' => $rs['redirect_url'], 
+        'redirect_route' => $rs['redirect_route'],
 				'id' => $rs['id'],
 				'name' => $rs['name'],
-				'seo' => strtolower(Core::clearSeoUTF($rs['name']))
-			);
+        'seo' => strtolower(Core::clearSeoUTF($rs['name'])));
+      $category['link'] = $this->generateUrl($category);
+
+      array_push($Data, $category);
 		}
 		return $Data;
 	}
