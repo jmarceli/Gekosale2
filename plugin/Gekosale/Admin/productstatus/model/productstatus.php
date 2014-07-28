@@ -151,7 +151,7 @@ class ProductStatusModel extends Component\Model\Datagrid
 		$sql = 'INSERT INTO productstatus (name, symbol) VALUES (:name, :symbol)';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('name', $Data['name']);
-		$stmt->bindValue('symbol', $Data['symbol']);
+		$stmt->bindValue('symbol', isset($Data['symbol'])? $Data['symbol'] : null);
 		try{
 			$stmt->execute();
 		}
