@@ -966,56 +966,6 @@ class OrderModel extends Component\Model
 		return $Data;
 	}
 
-	public function getOrderByClient ($idorder)
-	{
-		$sql = 'SELECT
-					OST.name as orderstatusname,
-					O.idorder,
-					O.adddate as orderdate,
-					O.dispatchmethodname,
-					O.paymentmethodname,
-					O.dispatchmethodprice,
-					O.globalprice,
-					O.price,
-					O.globalpricenetto,
-					O.currencysymbol
-				FROM `order` O
-				LEFT JOIN orderstatus OS ON OS.idorderstatus=O.orderstatusid
-				LEFT JOIN orderstatustranslation OST ON OST.orderstatusid=OS.idorderstatus
-				WHERE O.clientid= :clientid AND idorder= :idorder';
-		$Data = Array();
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('idorder', $idorder);
-		$stmt->bindValue('clientid', Session::getActiveClientid());
-		$stmt->execute();
-		$rs = $stmt->fetch();
-		
-		if ($rs){
-			$invoicedata = explode('-', $rs['orderdate']);
-			$invoicedata[2] = substr($invoicedata[2], 0, 2);
-			$dateinvoice = $invoicedata[0] . $invoicedata[1] . $invoicedata[2];
-			
-			$Data = Array(
-				'idorder' => $rs['idorder'],
-				'globalprice' => $rs['globalprice'],
-				'price' => $rs['price'],
-				'globalpricenetto' => $rs['globalpricenetto'],
-				'orderstatusname' => $rs['orderstatusname'],
-				'orderdate' => $rs['orderdate'],
-				'currencysymbol' => $rs['currencysymbol'],
-				'dispatchmethodname' => $rs['dispatchmethodname'],
-				'paymentmethodname' => $rs['paymentmethodname'],
-				'dispatchmethodprice' => $rs['dispatchmethodprice'],
-				'dateinvoice' => $dateinvoice,
-				'billingaddress' => $this->getOrderBillingData($rs['idorder']),
-				'shippingaddress' => $this->getOrderShippingData($rs['idorder']),
-				'invoices' => $this->getOrderInvoices($rs['idorder']),
-			);
-		}
-		
-		return $Data;
-	}
-
 	public function getOrderInvoices ($id)
 	{
 		$sql = "SELECT
@@ -1050,12 +1000,13 @@ class OrderModel extends Component\Model
 					OSG.colour
 				FROM `order` O
 				LEFT JOIN orderstatus OS ON OS.idorderstatus = O.orderstatusid
-				LEFT JOIN orderstatustranslation OST ON OST.orderstatusid = OS.idorderstatus
+				LEFT JOIN orderstatustranslation OST ON OST.orderstatusid = OS.idorderstatus AND OST.languageid = :languageid
 				LEFT JOIN orderstatusorderstatusgroups OSOSG ON O.orderstatusid = OSOSG.orderstatusid
 				LEFT JOIN orderstatusgroups OSG ON OSG.idorderstatusgroups = OSOSG.orderstatusgroupsid
 				WHERE O.clientid= :clientid ';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('clientid', Session::getActiveClientid());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		$Data = Array();
 		while ($rs = $stmt->fetch()){
@@ -1073,6 +1024,57 @@ class OrderModel extends Component\Model
 		return $Data;
 	}
 
+	public function getOrderByClient ($idorder)
+	{
+		$sql = 'SELECT
+					OST.name as orderstatusname,
+					O.idorder,
+					O.adddate as orderdate,
+					O.dispatchmethodname,
+					O.paymentmethodname,
+					O.dispatchmethodprice,
+					O.globalprice,
+					O.price,
+					O.globalpricenetto,
+					O.currencysymbol
+				FROM `order` O
+				LEFT JOIN orderstatus OS ON OS.idorderstatus=O.orderstatusid
+				LEFT JOIN orderstatustranslation OST ON OST.orderstatusid = OS.idorderstatus AND OST.languageid = :languageid
+				WHERE O.clientid= :clientid AND idorder= :idorder';
+		$Data = Array();
+		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('idorder', $idorder);
+		$stmt->bindValue('clientid', Session::getActiveClientid());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
+		$stmt->execute();
+		$rs = $stmt->fetch();
+		
+		if ($rs){
+			$invoicedata = explode('-', $rs['orderdate']);
+			$invoicedata[2] = substr($invoicedata[2], 0, 2);
+			$dateinvoice = $invoicedata[0] . $invoicedata[1] . $invoicedata[2];
+			
+			$Data = Array(
+				'idorder' => $rs['idorder'],
+				'globalprice' => $rs['globalprice'],
+				'price' => $rs['price'],
+				'globalpricenetto' => $rs['globalpricenetto'],
+				'orderstatusname' => $rs['orderstatusname'],
+				'orderdate' => $rs['orderdate'],
+				'currencysymbol' => $rs['currencysymbol'],
+				'dispatchmethodname' => $rs['dispatchmethodname'],
+				'paymentmethodname' => $rs['paymentmethodname'],
+				'dispatchmethodprice' => $rs['dispatchmethodprice'],
+				'dateinvoice' => $dateinvoice,
+				'billingaddress' => $this->getOrderBillingData($rs['idorder']),
+				'shippingaddress' => $this->getOrderShippingData($rs['idorder']),
+				'invoices' => $this->getOrderInvoices($rs['idorder']),
+			);
+		}
+		
+		return $Data;
+	}
+
 	public function getOrderStatusByEmailAndId ($email, $id)
 	{
 		$sql = 'SELECT
@@ -1080,13 +1082,14 @@ class OrderModel extends Component\Model
 					O.idorder
 				FROM `order` O
 				LEFT JOIN orderstatus OS ON OS.idorderstatus = O.orderstatusid
-				LEFT JOIN orderstatustranslation OST ON OST.orderstatusid = OS.idorderstatus
+				LEFT JOIN orderstatustranslation OST ON OST.orderstatusid = OS.idorderstatus AND OST.languageid = :languageid
 				LEFT JOIN orderclientdata OCD ON OCD.orderid = O.idorder
 				WHERE AES_DECRYPT(OCD.email, :encryptionKey) = :email AND O.idorder = :id';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('email', $email);
 		$stmt->bindValue('id', $id);
 		$stmt->bindValue('encryptionKey', Session::getActiveEncryptionKeyValue());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		$rs = $stmt->fetch();
 		if ($rs){
