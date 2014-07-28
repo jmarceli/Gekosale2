@@ -356,7 +356,7 @@ class CartModel extends Component\Model
             // check for trackstocked products
 						if (($newqty > $this->Cart[$idproduct]['stock']) && $this->Cart[$idproduct]['trackstock'] == 1){
 							$this->Cart[$idproduct]['qty'] = $this->Cart[$idproduct]['stock'];
-							$objResponseInc->script('GError("' . \Gekosale\_('ERR_COULDNT_INCREASE_QTY') . \Gekosale\_('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
+							$objResponseInc->script('GError("' . _('ERR_COULDNT_INCREASE_QTY') . _('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
 						}
             else {
               // update price and weight
@@ -377,7 +377,7 @@ class CartModel extends Component\Model
             if ($this->Cart[$idproduct]['attributes'][$attr]['trackstock'] == 1 
               && $this->Cart[$idproduct]['attributes'][$attr]['qty'] > $this->Cart[$idproduct]['attributes'][$attr]['stock']) {
 								$this->Cart[$idproduct]['attributes'][$attr]['qty'] = $this->Cart[$idproduct]['attributes'][$attr]['stock'];
-								$objResponseInc->script('GError("' . \Gekosale\_('ERR_COULDNT_INCREASE_QTY') . '<br />' . \Gekosale\_('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
+								$objResponseInc->script('GError("' . _('ERR_COULDNT_INCREASE_QTY') . '<br />' . _('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
             }
             else {
               // update price and weight
