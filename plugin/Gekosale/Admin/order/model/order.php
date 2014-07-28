@@ -112,7 +112,6 @@ class OrderModel extends Component\Model\Datagrid
 			LEFT JOIN orderclientdata OC ON OC.orderid=O.idorder
 			LEFT JOIN orderclientdeliverydata OCD ON OCD.orderid = O.idorder
 			LEFT JOIN orderproduct OP ON OP.orderid = O.idorder
-			LEFT JOIN orderproductattribute OPA ON OP.idorderproduct = OPA.orderproductid
 			LEFT JOIN view V ON V.idview = O.viewid
 		');
 
@@ -123,7 +122,7 @@ class OrderModel extends Component\Model\Datagrid
 		$datagrid->setAdditionalWhere('
 			O.viewid IN (' . Helper::getViewIdsAsString() . ')
 		');
-	}
+  }
 
 	public function parseComments ($string)
 	{
@@ -925,9 +924,9 @@ class OrderModel extends Component\Model\Datagrid
 		return $Data;
 	}
 
-	public function getDispatchmethodAllToSelect ($price = 0, $idorder = 0)
+	public function getDispatchmethodAllToSelect ($price = 0, $idorder = 0, $weight = 0)
 	{
-		$Data = $this->getDispatchmethodForPrice($price, $idorder);
+		$Data = $this->getDispatchmethodForPrice($price, $idorder, 0, $weight);
 		$tmp = Array();
 		foreach ($Data as $key){
 			if (! empty($key['name']) && $key['name'] !== NULL){
