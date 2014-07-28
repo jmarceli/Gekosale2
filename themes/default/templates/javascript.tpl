@@ -15,7 +15,6 @@
 <script type="text/javascript" src="{{ ASSETSPATH }}js/bootstrap-image-gallery.js"></script>
 <script type="text/javascript" src="{{ DESIGNPATH }}_js_frontend/core/gekosale.js"></script>
 <script type="text/javascript">
-	GCore.Init();
 	new GCore({
 		iCookieLifetime: 30,
 		sDesignPath: '{{ DESIGNPATH }}',
@@ -25,6 +24,7 @@
 	});
 
 	$(document).ready(function(){
+    GCore.Init();
 		$('#product-search').submit(function(){
 			return xajax_doSearchQuery($('#product-search-phrase').val());
 		});
