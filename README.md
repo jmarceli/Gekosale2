@@ -1,4 +1,4 @@
-Gekosale
+Gekosale 2
 ========
 Nieoficjalne repozytorium Gekosale 2, którego celem jest zintegrowanie wszystkich dostępnych poprawek i doprowadzenie projektu do wersji stabilnej, która zostanie oznaczona jako 2.1.
 
@@ -34,9 +34,9 @@ Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/G
 Podanie jak największej liczby informacji o napotkanym błędzie znacznie uprości pracę i pomoże w szybkim naprawieniu problemu.
 
 # Repozytorium
-Repozytorium istnieje dzięki http://mygekosale.pl, oferujemy liczne rozszerzenia dla Gekosale jak również piszemy nowe na zamówienie.
+Repozytorium istnieje dzięki http://mygekosale.pl, oferujemy liczne [rozszerzenia](http://mygekosale.pl/moduly) dla Gekosale jak również piszemy nowe na zamówienie.
 
-Jeśli ktokolwiek byłby zainteresowany współpracą w udoskonalaniu tego repozytorium to zapraszamy do kontaktu mailowego (adres email dostępny naszej stronie).
+Jeśli ktokolwiek byłby zainteresowany współpracą w udoskonalaniu tego repozytorium to zapraszamy do kontaktu mailowego ([adres email dostępny na naszej stronie](http://mygekosale.pl))
 
 # Autorzy
 Modyfikowany kod został pobrany z http://gekosale.pl i tam też należy szukać jego autorów.
