@@ -130,7 +130,7 @@ class DeliveryModel extends Component\Model
 					DW.`to`, 
 					DW.iddispatchmethodweight,
 					ROUND(DW.cost * CR.exchangerate, 4) AS dispatchmethodcostnetto,
-					IF(DW.vat IS NOT NULL, ROUND(DW.cost+(DW.cost*(V.`value`/100)) * CR.exchangerate,4), DW.cost * CR.exchangerate) as dispatchmethodcost, 
+					IF(DW.vat IS NOT NULL, ROUND((DW.cost+(DW.cost*(V.`value`/100))) * CR.exchangerate,4), DW.cost * CR.exchangerate) as dispatchmethodcost, 
 					D.freedelivery,
 					CASE
   						WHEN (`from`<>0 AND `from`<:globalweight AND `to`=0 AND DW.cost =0) THEN D.name
@@ -334,7 +334,7 @@ class DeliveryModel extends Component\Model
 		Session::setActiveDispatchmethodOption($active);
 		$objResponseDispatchmethod->clear("cart-contents", "innerHTML");
 		$objResponseDispatchmethod->append("cart-contents", "innerHTML", App::getModel('cart')->getCartTableTemplate());
-		$objResponseDispatchmethod->script("$('.spinnerhide').spinner({min: 1, max: 100, width: 20}).width(50)");
+		$objResponseDispatchmethod->script("qtySpinner();");
 		return $objResponseDispatchmethod;
 	}
 
