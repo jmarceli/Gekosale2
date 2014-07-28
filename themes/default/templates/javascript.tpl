@@ -14,8 +14,8 @@
 <script type="text/javascript" src="{{ ASSETSPATH }}js/load-image.min.js"></script>
 <script type="text/javascript" src="{{ ASSETSPATH }}js/bootstrap-image-gallery.js"></script>
 <script type="text/javascript" src="{{ DESIGNPATH }}_js_frontend/core/gekosale.js"></script>
-<script type="text/javascript" src="{{ DESIGNPATH }}_js_frontend/core/init.js"></script>
 <script type="text/javascript">
+	GCore.Init();
 	new GCore({
 		iCookieLifetime: 30,
 		sDesignPath: '{{ DESIGNPATH }}',
