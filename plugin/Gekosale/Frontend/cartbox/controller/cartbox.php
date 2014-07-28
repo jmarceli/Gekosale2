@@ -62,10 +62,6 @@ class CartBoxController extends Component\Controller\Box
 			$this->registry->template->assign('checkRulesCart', $checkRulesCart);
 		}
 		if (Session::getActiveDispatchmethodChecked() == NULL){
-			usort($this->dispatchMethods, function  ($a, $b)
-			{
-				return $a['dispatchmethodcost'] - $b['dispatchmethodcost'];
-			});
 			$default = current($this->dispatchMethods);
 			App::getModel('delivery')->setDispatchmethodChecked($default['dispatchmethodid']);
 		}
