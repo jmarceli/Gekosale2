@@ -35,6 +35,9 @@ class CmsBoxController extends Component\Controller\Box
 		if (empty($cms)){
 			App::redirectUrl($this->registry->router->generate('frontend.home', true));
 		}
+    if($cms['redirect'] == 1 && !empty($cms['redirect_route'])) {
+			App::redirectUrl($this->registry->router->generate($cms['redirect_route'], true));
+    }
 		$this->registry->template->assign('cms', $cms);
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
