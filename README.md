@@ -34,6 +34,8 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Problem dotyczący składania zamówienia przez klienta jeśli nie zaznaczy opcji zakładania konta
 * Liczne problemy dotyczące zmiany ilości produktów w koszyku
 * Uzupełnienie brakujących tłumaczeń sklepu po stronie klienta
+* Dodanie tzw. cookie bara z informacją o wykorzystywaniu na stronie plików cookies
+* Rozwiązanie problemu output_buffering podczas instalacji
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
