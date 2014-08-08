@@ -11,6 +11,11 @@ Przed rozpoczęciem instalacji należy założyć nową bazę danych MySQL dla t
 
 Proces instacji jest prosty, wymaga podania kilku informacji o nowozakładanym sklepie.
 
+Do poprawnego działania wymagane jest PHP w wersji przynajmniej 5.3
+
+# Przykładowy sklep
+Przykładowy sklep z wprowadzonymi poprawkami można znaleźć pod adresem http://fixg2.mygekosale.pl
+
 # Poprawki
 Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z http://gekosale.pl) oznaczonej przez autorów jako 2.0.1.
 
@@ -28,6 +33,7 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Błąd wydruku zamówienia do formatu PDF
 * Problem dotyczący składania zamówienia przez klienta jeśli nie zaznaczy opcji zakładania konta
 * Liczne problemy dotyczące zmiany ilości produktów w koszyku
+* Uzupełnienie brakujących tłumaczeń sklepu po stronie klienta
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
@@ -36,7 +42,7 @@ Podanie jak największej liczby informacji o napotkanym błędzie znacznie upro�
 # Repozytorium
 Repozytorium istnieje dzięki http://mygekosale.pl, oferujemy liczne [rozszerzenia](http://mygekosale.pl/moduly) dla Gekosale jak również piszemy nowe na zamówienie.
 
-Jeśli ktokolwiek byłby zainteresowany współpracą w udoskonalaniu tego repozytorium to zapraszamy do kontaktu mailowego ([adres email dostępny na naszej stronie](http://mygekosale.pl))
+Jeśli ktokolwiek byłby zainteresowany współpracą w udoskonalaniu tego repozytorium zapraszamy do kontaktu mailowego ([adres email dostępny na naszej stronie](http://mygekosale.pl))
 
 # Autorzy
 Modyfikowany kod został pobrany z http://gekosale.pl i tam też należy szukać jego autorów.
