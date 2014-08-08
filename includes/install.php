@@ -198,11 +198,11 @@ class Install
 		$checkExtensionMysqli = $this->checkExtension('mysqli');
 		$checkExtensionCurl = $this->checkExtension('curl');
 		
-		if(ini_get('output_buffering')){
-			$checkOB = true;
-		}else{
-			$checkOB = false;
-		}
+		//if(ini_get('output_buffering')){
+      $checkOB = true;
+		//}else{
+			//$checkOB = false;
+		//}
 		
 		if ($checkOB == TRUE && $checkPHPVersion == TRUE && $checkExtensionZlib == TRUE && $checkExtensionMysqli == TRUE && $checkExtensionCurl == TRUE && $checkExtensionGd = TRUE){
 			

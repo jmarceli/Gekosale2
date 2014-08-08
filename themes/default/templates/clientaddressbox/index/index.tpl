@@ -11,7 +11,7 @@
 		<input type="hidden" name="{{ formBilling.submit_name }}" value="1" />
 		<fieldset>
 			<legend>
-				Dane zamawiającego <small>*Pola wymagane zostały oznaczone gwiazdką</small>
+				{% trans %}TXT_PERSON_INFO{% endtrans %} <small>{% trans %}TXT_REQUIRED_FIELDS_ARE_MARKED{% endtrans %}</small>
 			</legend>
 
 			{{ forms.radio(formBilling.children.clienttype) }}
@@ -39,7 +39,7 @@
 
 			{{ forms.hidden(formBilling.children.__csrf) }}
 			<div class="form-actions form-actions-clean">
-				<button type="submit" class="btn btn-large btn-primary">Zapisz zmiany</button>
+				<button type="submit" class="btn btn-large btn-primary">{% trans %}TXT_SAVE_CHANGES{% endtrans %}</button>
 			</div>
 		</fieldset>
 		{{ formBilling.javascript }}

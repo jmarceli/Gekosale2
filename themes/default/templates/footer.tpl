@@ -53,5 +53,14 @@
 	{% if modulesettings.ceneo.ceneoguid != ''%}
 	<script type="text/javascript" src="http://ssl.ceneo.pl/shops/v3/script.js?accountGuid={{ modulesettings.ceneo.ceneoguid }}"></script>
 	{% endif %}
+  <script type="text/javascript" src="{{ css_asset('js/divante.cookies.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ css_asset('css/divante.cookies.min.css') }}" type="text/css"/>
+  <script>window.jQuery.cookie || document.write('<script src="{{ DESIGNPATH }}_js_libs/jquery.cookie.min.js"><\/script>')</script>
+  <script type="text/javascript">
+    jQuery.divanteCookies.render({
+        privacyPolicy : false,
+        cookiesPageURL : '{{ URL }}regulamin'
+    });
+  </script>
 </body>
 </html>

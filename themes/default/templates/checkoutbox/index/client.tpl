@@ -9,7 +9,7 @@
 			<fieldset>
 				<div class="well well-small well-clean">
 					<legend>
-						Dane zamawiającego <small>*Pola wymagane</small>
+						{% trans %}TXT_PERSON_INFO{% endtrans %} <small>{% trans %}TXT_REQUIRED_FIELDS{% endtrans %}</small>
 					</legend>
 					{{ forms.radio(form.children.billing_clienttype) }}
 					<div class="row-fluid">
@@ -54,7 +54,7 @@
 					</div>
 					<div class="control-group">
 						<div class="controls">
-							<span class="help-block gray"><small>Na powyższe dane zostanie wystawona faktura VAT</small></span>
+							<span class="help-block gray"><small>{% trans %}TXT_OFFERED_INVOICE{% endtrans %}</small></span>
 						</div>
 					</div>
 					
@@ -100,7 +100,7 @@
 						</div>
 					</div>
 					
-					<legend class="marginbt10">Dane kontaktowe</legend>
+					<legend class="marginbt10">{% trans %}TXT_CONTACT_BOX{% endtrans %}</legend>
 					
 					<div class="row-fluid">
 						<div class="span6">

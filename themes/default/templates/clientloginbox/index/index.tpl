@@ -15,7 +15,7 @@
 	<div class="row-fluid row-form">
 		<div class="span9">
 			<div class="span3">
-				<h3 class="normal font20">Posiadam konto</h3>
+        <h3 class="normal font20">{% trans %}TXT_HAVE_ACCOUNT{% endtrans %}</h3>
 			</div>
 			<div class="span6">
 				<form name="{{ form.name }}" id="{{ form.name }}" method="{{ form.method }}" action="{{ form.action }}" class="order-wrap">
@@ -24,15 +24,15 @@
 						<div class="well well-small">
 							<div class="login-form">
 								<legend>
-									Zaloguj się <small>*Pola wymagane</small>
+									{% trans %}TXT_LOGIN{% endtrans %} <small>{% trans %}TXT_REQUIRED_FIELDS{% endtrans %}</small>
 								</legend>
 								{{ forms.input(form.children.login, 'input-xlarge') }}
 								{{ forms.password(form.children.password, 'input-xlarge') }}
 								{{ forms.checkbox(form.children.autologin, 'input-xlarge') }}
 								{{ forms.hidden(form.children.__csrf) }}
 								<div class="form-actions form-actions-clean">
-									<a href="{{ path('frontend.forgotpassword') }}" title="">Przypomnij hasło</a>
-									<button type="submit" class="btn btn-large btn-primary pull-right">Zaloguj się</button>
+									<a href="{{ path('frontend.forgotpassword') }}" title="">{% trans %}TXT_FORGOT_PASSWORD{% endtrans %}</a>
+									<button type="submit" class="btn btn-large btn-primary pull-right">{% trans %}TXT_LOGIN{% endtrans %}</button>
 								</div>
 							</div>
 							<div class="clearfix"></div>

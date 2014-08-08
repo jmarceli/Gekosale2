@@ -5,7 +5,7 @@
 <div class="row-fluid row-form">
 	<div class="span9">
 		<div class="span3 alignright">
-			<h3 class="normal font20">Posiadam konto</h3>
+			<h3 class="normal font20">{% trans %}TXT_ORDER_WITH_ACCOUNT{% endtrans %}</h3>
 		</div>
 		<div class="span6">
 			{% if loginerror is defined %}
@@ -19,7 +19,7 @@
 					<div class="well well-small">
 						<div class="login-form">
 							<legend>
-								Zaloguj się <small>*Pola wymagane</small>
+                {% trans %}TXT_LOGIN{% endtrans %} <small>{% trans %}TXT_REQUIRED_FIELDS{% endtrans %}</small>
 							</legend>
 							{{ forms.input(formLogin.children.login, 'input-xlarge') }} 
 							{{ forms.password(formLogin.children.password, 'input-xlarge') }}
@@ -37,9 +37,9 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="span3 alignright">
-			<h3 class="normal font20">Kupuję pierwszy raz</h3>
+			<h3 class="normal font20">{% trans %}TXT_SHOPPING_FIRST_TIME{% endtrans %}</h3>
 			<h4 class="normal font15">
-				Kupuj jako gość<br>lub zarejestruj się
+				{% trans %}TXT_SHOPPING_AS_GUEST{% endtrans %}<br>{% trans %}TXT_OR_LOG_IN{% endtrans %}
 			</h4>
 		</div>
 		<div class="span6">
@@ -48,7 +48,7 @@
 				<fieldset>
 					<div class="well well-small well-clean">
 						<legend>
-							Dane zamawiającego <small>*Pola wymagane</small>
+							{% trans %}TXT_PERSON_INFO{% endtrans %} <small>{% trans %}TXT_REQUIRED_FIELDS{% endtrans %}</small>
 						</legend>
 						{{ forms.radio(form.children.billing_clienttype) }}
 						<div class="row-fluid">
@@ -93,7 +93,7 @@
 						</div>
 						<div class="control-group">
 							<div class="controls">
-								<span class="help-block gray"><small>Na powyższe dane zostanie wystawona faktura VAT</small></span>
+								<span class="help-block gray"><small>{% trans %}TXT_OFFERED_INVOICE{% endtrans %}</small></span>
 							</div>
 						</div>
 						
@@ -139,7 +139,7 @@
 							</div>
 						</div>
 						
-						<legend class="marginbt10">Dane kontaktowe</legend>
+						<legend class="marginbt10">{% trans %}TXT_CONTACT_BOX{% endtrans %}</legend>
 						<div class="row-fluid">
 							<div class="span6">
 								{{ forms.input(form.children.phone, 'span12') }}
@@ -159,7 +159,7 @@
 					<div class="well well-small">
 						{{ forms.checkbox(form.children.create_account, 'span12') }}
 						<div class="collapse in" id="create-account">
-							<legend class="marginbt10">Dane konta</legend>
+							<legend class="marginbt10">{% trans %}TXT_ACCOUNT_INFO{% endtrans %}</legend>
 							<div>
 								<div class="password-form">
 									{{ forms.password(form.children.password, 'span12') }}
@@ -172,7 +172,7 @@
 				</fieldset>
 				<fieldset>
 					<div class="well well-small">
-						<legend>Warunki sklepu oraz biuletyn okazji</legend>
+						<legend>{% trans %}TXT_CONDITIONS_AND_NEWSLETTER{% endtrans %}</legend>
 						{{ forms.checkbox(form.children.confirmterms) }}
 						{{ forms.checkbox(form.children.newsletter) }}
 					</div>

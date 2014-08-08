@@ -4,7 +4,7 @@
 	<h1 class="large">Krok 3. Potwierdzenie i płatność</h1>
 	<div class="span11">
     	<div class="alert alert-block alert-success">
-        	<h3>Trwa przekierowanie na strony systemu płatności Platnosci.pl. Proszę czekać...</h3>
+        	<h3>{% trans %}TXT_REDIRECTING_PAGE_PLATNOSCIPL_PAYMENT_SYSTEM_PLEASE_WAIT{% endtrans %}</h3>
 		</div>
 	</div>
 </div>
