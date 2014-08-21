@@ -95,8 +95,12 @@ class Form
 		<script type=\"text/javascript\">
 			GCore.OnLoad(function() {
 				$('#{$this->form['name']}').validate({
-					onfocusout: true,
-					onkeyup: true,
+					onfocusout:function(element){
+						jQuery(element).valid();
+					},
+					onkeyup:function(element){
+						jQuery(element).valid();
+					},
 					errorElement: 'span',
 					errorClass: 'error',
 					wrapClass: 'help-block',
