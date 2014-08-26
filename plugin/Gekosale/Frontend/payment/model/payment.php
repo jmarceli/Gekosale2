@@ -64,7 +64,7 @@ class PaymentModel extends Component\Model
 		Session::setActiveClientOrder(0);
 		$objResponse->clear("cart-contents", "innerHTML");
 		$objResponse->append("cart-contents", "innerHTML", App::getModel('cart')->getCartTableTemplate());
-		$objResponse->script("$('.spinnerhide').spinner({min: 1, max: 100, width: 20}).width(50)");
+		$objResponse->script("qtySpinner();");
 		return $objResponse;
 	}
 
