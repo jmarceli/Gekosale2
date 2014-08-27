@@ -288,8 +288,6 @@ class DeliveryModel extends Component\Model
 		$objResponseDispatchmethod = new xajaxResponse();
 		try{
 			$this->setDispatchmethodChecked($dispatchmethodid);
-			Session::setActivePaymentMethodChecked(0);
-			Session::setActivePaymentData(NULL);
 			$objResponseDispatchmethod->clear("cart-contents", "innerHTML");
 			$objResponseDispatchmethod->append("cart-contents", "innerHTML", App::getModel('cart')->getCartTableTemplate());
 			$objResponseDispatchmethod->script("qtySpinner();");
