@@ -61,7 +61,7 @@ class CurrenciesListModel extends Component\Model\Datagrid
 	public function downloadExchangeRates ($basecurrency)
 	{
 		
-		$xml_file = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
+		$xml_file = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $xml_file);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
