@@ -43,6 +43,9 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
 Podanie jak największej liczby informacji o napotkanym błędzie znacznie uprości pracę i pomoże w szybkim naprawieniu problemu.
 
+# Aktualizacja
+Jeśli posiadasz sklep oparty na Gekosale 2 i chciałbyś wprowadzić do niego wymienione wyżej poprawki skontaktuj się z nami, mail na stronie [http://mygekosale.pl](http://mygekosale.pl)
+
 # Repozytorium
 Repozytorium istnieje dzięki http://mygekosale.pl, oferujemy liczne [rozszerzenia](http://mygekosale.pl/moduly) dla Gekosale jak również piszemy nowe na zamówienie.
 
