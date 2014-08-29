@@ -38,6 +38,7 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Rozwiązanie problemu output_buffering podczas instalacji
 * Poprawienie przycisku odświeżania kursów walut (problem wynikał ze zmiany adresu pliku z kursami walut)
 * Usunięcie problemu polegającego na zmienianiu metody płaności na domyślną po zmianie sposobu dostawy
+* Poprawienie kwoty zamówienia przesyłanej do PayU
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
