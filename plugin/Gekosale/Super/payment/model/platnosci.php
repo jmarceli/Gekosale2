@@ -166,7 +166,7 @@ class PlatnosciModel extends Component\Model
 			$Data['js'] = 1;
 			$Data['pos_id'] = $settings['idpos'];
 			$Data['pos_auth_key'] = $settings['authkey'];
-			$Data['amount'] = $amount;
+			$Data['amount'] = round($amount);
 			$Data['desc'] = 'Zamowienie ' . $order['orderId'] . ' - ' . $order['orderData']['clientaddress']['firstname'] . ' ' . $order['orderData']['clientaddress']['surname'];
 			$Data['first_name'] = $order['orderData']['clientaddress']['firstname'];
 			$Data['last_name'] = $order['orderData']['clientaddress']['surname'];
