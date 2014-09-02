@@ -49,7 +49,9 @@
 		{{ xajax }}
 		{% if error is defined %}
 		<script type="text/javascript">
+		$(document).ready(function(){
 			GError('{% trans %}TXT_ERROR_OCCURED{% endtrans %}', '{{ error }}');
+		});
 		</script>
 		{% endif %}
 		{% if message is defined %}
