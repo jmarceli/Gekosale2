@@ -39,6 +39,7 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Poprawienie przycisku odświeżania kursów walut (problem wynikał ze zmiany adresu pliku z kursami walut)
 * Usunięcie problemu polegającego na zmienianiu metody płaności na domyślną po zmianie sposobu dostawy
 * Poprawienie kwoty zamówienia przesyłanej do PayU
+* Poprawka błędu przy drukowaniu zamówienia w którym występują produkty bez przypisanego zdjęcia
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
