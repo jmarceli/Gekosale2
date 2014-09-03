@@ -58,18 +58,22 @@ class File
 
 	public function delete ($name)
 	{
-		foreach (glob($this->path . strtolower($name) . '*') as $key => $fn){
-			@unlink($fn);
-		}
-
-	}
+    $files = glob($this->path . strtolower($name) . '*');
+    if(!empty($files)) {
+      foreach ($files as $key => $fn){
+        @unlink($fn);
+      }
+    }	
+  }
 
 	public function deleteAll ()
 	{
-		foreach (glob($this->path . '*' . $this->suffix) as $fn){
-			@unlink($fn);
-		}
-
+		$files = glob($this->path . '*' . $this->suffix);
+    if(!empty($files)) {
+      foreach ($files as $fn){
+        @unlink($fn);
+      }
+    }
 	}
 
 	public function getCacheFileName ($name)
