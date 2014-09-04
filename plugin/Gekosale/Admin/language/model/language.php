@@ -337,7 +337,9 @@ class LanguageModel extends Component\Model\Datagrid
 				$name = (string) $row->field[0];
 				$value = (string) $row->field[1];
 				
-				$this->updateTranslation($languageid, $name, $value);
+        if(!empty($value)) { // skip empty translations
+          $this->updateTranslation($languageid, $name, $value, true);
+        }
 			}
 			$this->registry->cache->delete('translations');
 		}
