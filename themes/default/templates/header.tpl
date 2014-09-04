@@ -64,8 +64,8 @@
                             	<li><a class="dropdown-toggle" href="{{ path('frontend.clientorder') }}" title="">{% if client.firstname is defined %}{{ client.firstname }} {{ client.surname }}{% else %}{{ clientdata.firstname }} {{ clientdata.surname }}{% endif %}</a></li>
                                 <li><a href="{{ path('frontend.logout') }}" title="{% trans %}TXT_LOGOUT{% endtrans %}">{% trans %}TXT_LOGOUT{% endtrans %}</a></li>
                             {% else %}
-                                <li><a href="{{ path('frontend.clientlogin') }}" title="">Logowanie</a></li>
-                                <li><a href="{{ path('frontend.registration') }}" title="">Rejestracja</a></li>
+                            <li><a href="{{ path('frontend.clientlogin') }}" title="">{% trans %}TXT_LOGIN{% endtrans %}</a></li>
+                            <li><a href="{{ path('frontend.registration') }}" title="">{% trans %}TXT_REGISTRATION{% endtrans %}</a></li>
                                 {% endif %}
                             </ul>
                         </div>
