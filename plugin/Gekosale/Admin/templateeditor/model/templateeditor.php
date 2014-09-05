@@ -227,7 +227,9 @@ class TemplateEditorModel extends Component\Model\Datagrid
 		$theme = array_pop($parts);
 		
 		$dirs = Array();
-		foreach (glob(ROOTPATH . 'themes/*', GLOB_ONLYDIR) as $dir){
+    $dirs1 = glob(ROOTPATH . 'themes/*', GLOB_ONLYDIR);
+    if(!empty($dirs1)) {
+		foreach ($dirs1 as $dir){
 			$i = 0;
 			$dir = basename($dir);
 			if ($dir == $theme){
@@ -236,7 +238,9 @@ class TemplateEditorModel extends Component\Model\Datagrid
 					'parent' => NULL,
 					'weight' => 0
 				);
-				foreach (glob(ROOTPATH . 'themes' . DS . $dir . DS . 'templates' . DS . '*', GLOB_ONLYDIR) as $subdir){
+        $dirs2 = glob(ROOTPATH . 'themes' . DS . $dir . DS . 'templates' . DS . '*', GLOB_ONLYDIR);
+        if(!empty($dirs2)) {
+				foreach ($dirs2 as $subdir){
 					$j = 0;
 					$subdir = basename($subdir);
 					$dirs[$dir . '.' . $subdir] = Array(
@@ -245,7 +249,9 @@ class TemplateEditorModel extends Component\Model\Datagrid
 						'weight' => $i
 					);
 					$i ++;
-					foreach (glob(ROOTPATH . 'themes' . DS . $dir . DS . 'templates' . DS . $subdir . DS . '*', GLOB_ONLYDIR) as $subsubdir){
+          $dirs3 = glob(ROOTPATH . 'themes' . DS . $dir . DS . 'templates' . DS . $subdir . DS . '*', GLOB_ONLYDIR);
+          if(!empty($dirs3)) {
+					foreach ($dirs3 as $subsubdir){
 						$subsubdir = basename($subsubdir);
 						$dirs[$dir . '.' . $subdir . '.' . $subsubdir] = Array(
 							'name' => $subsubdir,
@@ -254,13 +260,16 @@ class TemplateEditorModel extends Component\Model\Datagrid
 						);
 						$j ++;
 					}
+          }
 				}
+        }
 			}
 		}
+    }
 		return $dirs;
-	}
-
-	public function getFiles ($id)
+  }
+  
+  public function getFiles ($id)
 	{
 		// $files = Array();
 		$parts = array_reverse(explode('.', $id));
