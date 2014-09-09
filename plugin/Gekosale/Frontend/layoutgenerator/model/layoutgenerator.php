@@ -221,7 +221,8 @@ class LayoutGeneratorModel extends Component\Model
 			$queryCSS = '
 					SELECT
 						CS.variable AS variable,
-						CS.value AS value
+						CS.value AS value,
+            CS.viewid
 					FROM
 						layoutboxcontentspecificvalue AS CS
 					WHERE
@@ -234,7 +235,12 @@ class LayoutGeneratorModel extends Component\Model
 			$stmtCSS->execute();
 			$boxAttributes = Array();
 			while ($rsCSS = $stmtCSS->fetch()){
-				$boxAttributes[$rsCSS['variable']] = $rsCSS['value'];
+        if(empty($boxAttributes[$rsCSS['variable']])) {
+          $boxAttributes[$rsCSS['variable']] = $rsCSS['value'];
+        }
+        elseif($rsCSS['viewid'] == $viewId) {
+          $boxAttributes[$rsCSS['variable']] = $rsCSS['value'];
+        }
 			}
 			
 			$LayoutBoxParams[$boxId] = Array(
