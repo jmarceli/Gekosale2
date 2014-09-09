@@ -473,7 +473,7 @@ class CartModel extends Component\Model
 		return $this->registry->template->fetch('cartbox/index/table.tpl');
 	}
   
-  private function updateSessionSoft() {
+  protected function updateSessionSoft() {
     $this->setGlobalPrice();
     $this->setGlobalPriceWithoutVat();
     $this->setGlobalWeight();
