@@ -40,6 +40,7 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Usunięcie problemu polegającego na zmienianiu metody płaności na domyślną po zmianie sposobu dostawy
 * Poprawienie kwoty zamówienia przesyłanej do PayU
 * Poprawka błędu przy drukowaniu zamówienia w którym występują produkty bez przypisanego zdjęcia
+* Poprawka błędu dotyczącego tłumaczenia zawartości boksów w konfiguracji multilanguage w multistore
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
