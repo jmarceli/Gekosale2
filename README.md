@@ -13,6 +13,27 @@ Proces instacji jest prosty, wymaga podania kilku informacji o nowozakładanym s
 
 Do poprawnego działania wymagane jest PHP w wersji przynajmniej 5.3
 
+# Modyfikacja
+Sugerowanym sposobem modyfikowania wyglądu sklepu jest modyfikowanie domyślnie dostępnego szablonu, czyli plików z folderu *themes/default*.
+
+### Szablony
+Pliki zawierające szablony umieszczone są w folderze *themes/default/templates*. Szablony oparte są na silniku Twig ([dokumentacja](http://twig.sensiolabs.org/documentation)).
+
+### CSS
+Główny arkusz styli CSS znajduje się w pliku *themes/default/assets/css/application.less*. Gekosale 2.0 bazuje na frameworku Bootstrap w wersji 2.0.3 do którego dokumentację można znaleźć [tutaj](http://bootstrapdocs.com/v2.0.3/docs/)
+
+### JS
+Skrypt niestety znajduje się w kilku miejscach. Najprostszy sposób na jego modyfikację do dodanie w pliku *themes/default/templates/javascript.tpl* linku do własnego pliku zawierającego kod JS (najlepiej umieścić go w folderze *themes/default/assets/js/* w celu zachowania porządku).
+
+Pluginy używane w Gekosale 2:
+
+* jQuery 1.7.2
+* jQuery UI Spinner 1.2
+* jCarousel 0.2 [dokumentacja](http://www.klm-mra.be/klm-new/homepage/jcarousel/)
+* Bootstrap [link](http://bootstrapdocs.com/v2.0.3/docs/javascript.html)
+* Bootstrap Image Gallery 2.8
+
+
 # Przykładowy sklep
 Przykładowy sklep z wprowadzonymi poprawkami można znaleźć pod adresem http://fixg2.mygekosale.pl
 
