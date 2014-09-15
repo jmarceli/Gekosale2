@@ -103,10 +103,10 @@ class DotpayModel extends Component\Model
 		$Data = Array();
 
 		if (isset($order['orderData']['priceWithDispatchMethodPromo'])){
-			$kwota = $this->formatPrice($order['orderData']['priceWithDispatchMethodPromo']);
+			$kwota = $order['orderData']['priceWithDispatchMethodPromo'];
 		}
 		else{
-			$kwota = $this->formatPrice($order['orderData']['priceWithDispatchMethod']);
+			$kwota = $order['orderData']['priceWithDispatchMethod'];
 		}
 
 		if ($settings){
@@ -115,7 +115,8 @@ class DotpayModel extends Component\Model
 				'idsprzedawcy' => $settings['idsprzedawcy'],
 				'pin' => $settings['pin'],
 				'crc' => $crc,
-				'md5sum' => md5($settings['idsprzedawcy'] . $kwota . $crc . $settings['pin'])
+        'amount' => number_format($kwota, 2, '.', ''),
+				//'md5sum' => md5($settings['idsprzedawcy'] . $kwota . $crc . $settings['pin'])
 			);
 		}
 		return $Data;

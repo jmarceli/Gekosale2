@@ -59,7 +59,7 @@
 								{{ forms.input(form.children.billing_surname, 'span12') }}
 							</div>
 						</div>
-						<div class="row-fluid collapse {% if formBilling.children.clienttype.value == 2 %}in{% endif %}" id="billing-company-data">
+						<div class="row-fluid collapse {% if form.children.billing_clienttype.value == 2 %}in{% endif %}" id="billing-company-data">
 							<div class="span6">
 								{{ forms.input(form.children.billing_companyname, 'span12') }}
 							</div>
@@ -191,7 +191,10 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
+  {% if form.children.billing_clienttype.value != 2 %}
 	$('#billing-company-data').find('input').attr('tabindex', -1);
+  {% endif %}
+
 	$("#{{ form.name }} input[name='billing_clienttype']").unbind('change').bind('change', function(){
 		$('#billing-company-data').collapse($(this).val() == 2 ? 'show' : 'hide');
 		if($(this).val() == 2){

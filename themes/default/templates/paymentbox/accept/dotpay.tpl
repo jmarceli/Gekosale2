@@ -10,7 +10,7 @@
 </div>
 <form action="https://ssl.dotpay.pl/" method="post" id="dotpay">
 	<input type="hidden" name="id" value="{{ content.idsprzedawcy }}">
-	<input type="hidden" name="amount" value="{{ orderData.priceWithDispatchMethod }}">
+	<input type="hidden" name="amount" value="{{ content.amount }}">
 	<input type="hidden" name="currency" value="{{ currencySymbol }}">
 	<input type="hidden" name="description" value="{% trans %}TXT_ORDER{% endtrans %} {{ orderId }}">
 	<input type="hidden" name="lang" value="{{ languageCode }}">
