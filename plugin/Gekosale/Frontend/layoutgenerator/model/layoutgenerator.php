@@ -221,8 +221,7 @@ class LayoutGeneratorModel extends Component\Model
 			$queryCSS = '
 					SELECT
 						CS.variable AS variable,
-						CS.value AS value,
-            CS.viewid
+						CS.value AS value
 					FROM
 						layoutboxcontentspecificvalue AS CS
 					WHERE
