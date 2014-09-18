@@ -4277,8 +4277,8 @@ GF_Datagrid = GF_Instance.GF_Extend('GF_Datagrid', function(jTarget, oOptions) {
 		}
 		
 		if (dDg.m_oOptions.mechanics.save_column_modification) {
-			GCookie('GF_Datagrid_Columns_' + dDg.m_oOptions.id, JSON.stringify(dDg.m_aiColumnsOrder), 7);
-			GCookie('GF_Datagrid_Widths_' + dDg.m_oOptions.id, JSON.stringify(aiWidths), 7);
+			GCookie('GF_Datagrid_Columns_' + dDg.m_oOptions.id, JSON.stringify(dDg.m_aiColumnsOrder), {expires: 2000});
+			GCookie('GF_Datagrid_Widths_' + dDg.m_oOptions.id, JSON.stringify(aiWidths), {expires: 2000});
 		}
 		
 		dDg.m_jTarget.find('.header thead .GF_Datagrid_Col__modify_columns a').click();
