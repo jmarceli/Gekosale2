@@ -881,4 +881,9 @@ class OrderController extends Component\Controller\Admin
 		$tpl = $this->loadTemplate('confirm.tpl');
 		App::getModel('order')->getPrintableOrderById((int) $this->registry->core->getParam(), $tpl);
 	}
+
+  public function view ()
+  {
+    App::redirect(__ADMINPANE__ . '/order/edit/' . (int) $this->registry->core->getParam());
+  }
 }
