@@ -608,7 +608,6 @@ class OrderModel extends Component\Model
 				WHERE OP.orderid=:id";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('id', $id);
-		$stmt->bindValue('encryptionKey', Session::getActiveEncryptionKeyValue());
 		$stmt->execute();
 		$Data = Array();
 		while ($rs = $stmt->fetch()){
