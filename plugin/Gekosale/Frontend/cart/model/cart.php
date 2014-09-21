@@ -369,13 +369,12 @@ class CartModel extends Component\Model
 					}
 					// product with attributes
 					if ($this->Cart[$idproduct]['attributes'] != NULL && $attr != NULL){
-						$modulo = $newqty % $this->Cart[$idproduct]['attributes'][$attr]['packagesize'];
-						$newqty = abs(($modulo > 0) ? $newqty - $modulo : $newqty);
+						$newqty = $this->checkPackageQty($newqty, $this->Cart[$idproduct]['attributes'][$attr]['packagesize']);
 						$oldQty = $this->Cart[$idproduct]['attributes'][$attr]['qty'];
 
             // check for trackstocked products
             if ($this->Cart[$idproduct]['attributes'][$attr]['trackstock'] == 1 
-              && $this->Cart[$idproduct]['attributes'][$attr]['qty'] > $this->Cart[$idproduct]['attributes'][$attr]['stock']) {
+              && $newqty > $this->Cart[$idproduct]['attributes'][$attr]['stock']) {
 								$this->Cart[$idproduct]['attributes'][$attr]['qty'] = $this->Cart[$idproduct]['attributes'][$attr]['stock'];
 								$objResponseInc->script('GError("' . _('ERR_COULDNT_INCREASE_QTY') . '<br />' . _('ERR_MAX_STORAGE_STATE_ON_CART') . '");');
             }
