@@ -66,8 +66,5 @@ GMessage('{{ success }}','');
 		</fieldset>
 		{{ formPass.javascript }}
 	</form>
-
-	
-	
 </article>
 {% endblock %}

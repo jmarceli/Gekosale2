@@ -3392,12 +3392,634 @@ INSERT INTO translationdata (translation, translationid, languageid)
   FROM translation
   WHERE name = 'TXT_REGISTER'
     ON DUPLICATE KEY UPDATE translation = 'Zarejestruj się';
+--
+-- translation for TXT_CART_EMPTY_PRODUCTS
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_CART_EMPTY_PRODUCTS'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_CART_EMPTY_PRODUCTS')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Nie czekaj i dodaj do niego produkty z naszej oferty!', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_CART_EMPTY_PRODUCTS'
+    ON DUPLICATE KEY UPDATE translation = 'Nie czekaj i dodaj do niego produkty z naszej oferty!';
+--
+-- translation for TXT_TOTAL_TO_PAY
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_TOTAL_TO_PAY'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_TOTAL_TO_PAY')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Łącznie do zapłaty', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_TOTAL_TO_PAY'
+    ON DUPLICATE KEY UPDATE translation = 'Łącznie do zapłaty';
+--
+-- translation for TXT_PAYMENT_METHOD
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_PAYMENT_METHOD'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_PAYMENT_METHOD')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Metoda płatności', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_PAYMENT_METHOD'
+    ON DUPLICATE KEY UPDATE translation = 'Metoda płatności';
+--
+-- translation for TXT_STEP_1
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_STEP_1'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_STEP_1')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Krok 1. Dane adresowe', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_STEP_1'
+    ON DUPLICATE KEY UPDATE translation = 'Krok 1. Dane adresowe';
+--
+-- translation for TXT_DELIVERY_COST
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_DELIVERY_COST'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_DELIVERY_COST')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Koszt dostawy', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_DELIVERY_COST'
+    ON DUPLICATE KEY UPDATE translation = 'Koszt dostawy';
+--
+-- translation for TXT_SEND_MESSAGE
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_SEND_MESSAGE'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_SEND_MESSAGE')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Wyślij wiadomość', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_SEND_MESSAGE'
+    ON DUPLICATE KEY UPDATE translation = 'Wyślij wiadomość';
+--
+-- translation for TXT_BEST_REGARDS
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_BEST_REGARDS'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_BEST_REGARDS')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Pozdrawiamy', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_BEST_REGARDS'
+    ON DUPLICATE KEY UPDATE translation = 'Pozdrawiamy';
+--
+-- translation for TXT_FORGOT_PASSWORD_MSG
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_FORGOT_PASSWORD_MSG'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_FORGOT_PASSWORD_MSG')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Aby ustalić nowe hasło, wejdź na stronę', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_FORGOT_PASSWORD_MSG'
+    ON DUPLICATE KEY UPDATE translation = 'Aby ustalić nowe hasło, wejdź na stronę';
+--
+-- translation for TXT_EMAIL_HELLO
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_EMAIL_HELLO'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_EMAIL_HELLO')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Witamy serdecznie', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_EMAIL_HELLO'
+    ON DUPLICATE KEY UPDATE translation = 'Witamy serdecznie';
+--
+-- translation for TXT_THANKS_FOR_ORDER
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_THANKS_FOR_ORDER'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_THANKS_FOR_ORDER')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Bardzo dziękujemy za dokonanie zakupu w sklepie', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_THANKS_FOR_ORDER'
+    ON DUPLICATE KEY UPDATE translation = 'Bardzo dziękujemy za dokonanie zakupu w sklepie';
+--
+-- translation for TXT_ON_THE_DAY
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_ON_THE_DAY'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_ON_THE_DAY')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'W dniu', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_ON_THE_DAY'
+    ON DUPLICATE KEY UPDATE translation = 'W dniu';
+--
+-- translation for TXT_WE_RECEIVED_AN_ORDER
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_WE_RECEIVED_AN_ORDER'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_WE_RECEIVED_AN_ORDER')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'otrzymaliśmy nowe zamówienie nr', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_WE_RECEIVED_AN_ORDER'
+    ON DUPLICATE KEY UPDATE translation = 'otrzymaliśmy nowe zamówienie nr';
+--
+-- translation for TXT_ORDER_DETAILS
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_ORDER_DETAILS'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_ORDER_DETAILS')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Oto szczegóły zamówienia', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_ORDER_DETAILS'
+    ON DUPLICATE KEY UPDATE translation = 'Oto szczegóły zamówienia';
+--
+-- translation for TXT_EMAIL_WELCOME
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_EMAIL_WELCOME'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_EMAIL_WELCOME')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Witaj', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_EMAIL_WELCOME'
+    ON DUPLICATE KEY UPDATE translation = 'Witaj';
+--
+-- translation for TXT_CRITICAL_ERROR
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_CRITICAL_ERROR'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_CRITICAL_ERROR')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Wystąpił wyjątek krytyczny', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_CRITICAL_ERROR'
+    ON DUPLICATE KEY UPDATE translation = 'Wystąpił wyjątek krytyczny';
+--
+-- translation for TXT_GEKOSALE_OS
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_GEKOSALE_OS'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_GEKOSALE_OS')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Gekosale - otwarte oprogramowanie sklepu', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_GEKOSALE_OS'
+    ON DUPLICATE KEY UPDATE translation = 'Gekosale - otwarte oprogramowanie sklepu';
+--
+-- translation for TXT_INVALID_URL
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_INVALID_URL'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_INVALID_URL')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Niepoprawny adres', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_INVALID_URL'
+    ON DUPLICATE KEY UPDATE translation = 'Niepoprawny adres';
+--
+-- translation for TXT_PAGE_NOT_EXISTS
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_PAGE_NOT_EXISTS'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_PAGE_NOT_EXISTS')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Taka strona nie istnieje', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_PAGE_NOT_EXISTS'
+    ON DUPLICATE KEY UPDATE translation = 'Taka strona nie istnieje';
+--
+-- translation for TXT_WHAT_TO_DO
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_WHAT_TO_DO'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_WHAT_TO_DO')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Nie wiesz co zrobić?', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_WHAT_TO_DO'
+    ON DUPLICATE KEY UPDATE translation = 'Nie wiesz co zrobić?';
+--
+-- translation for TXT_GO_TO
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_GO_TO'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_GO_TO')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Przejdź na', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_GO_TO'
+    ON DUPLICATE KEY UPDATE translation = 'Przejdź na';
+--
+-- translation for TXT_SERVICE_MAIN_PAGE
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_SERVICE_MAIN_PAGE'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_SERVICE_MAIN_PAGE')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'stronę główną serwisu.', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_SERVICE_MAIN_PAGE'
+    ON DUPLICATE KEY UPDATE translation = 'stronę główną serwisu.';
+--
+-- translation for TXT_CALL_OR_WRITE_ERROR
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_CALL_OR_WRITE_ERROR'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_CALL_OR_WRITE_ERROR')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'W przypadku problemów możesz również zadzwonić lub napisać.', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_CALL_OR_WRITE_ERROR'
+    ON DUPLICATE KEY UPDATE translation = 'W przypadku problemów możesz również zadzwonić lub napisać.';
+--
+-- translation for TXT_WORKING_DAYS
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_WORKING_DAYS'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_WORKING_DAYS')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'pn-pt', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_WORKING_DAYS'
+    ON DUPLICATE KEY UPDATE translation = 'pn-pt';
+--
+-- translation for TXT_STEP_2
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_STEP_2'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_STEP_2')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Krok 2. Podsumowanie zamówienia', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_STEP_2'
+    ON DUPLICATE KEY UPDATE translation = 'Krok 2. Podsumowanie zamówienia';
+--
+-- translation for TXT_ALL_CATEGORIES
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_ALL_CATEGORIES'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_ALL_CATEGORIES')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Wszystkie kategorie', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_ALL_CATEGORIES'
+    ON DUPLICATE KEY UPDATE translation = 'Wszystkie kategorie';
+--
+-- translation for TXT_CONFIRM_THIS
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_CONFIRM_THIS'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_CONFIRM_THIS')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Zatwierdź', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_CONFIRM_THIS'
+    ON DUPLICATE KEY UPDATE translation = 'Zatwierdź';
+--
+-- translation for TXT_STEP_3
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_STEP_3'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_STEP_3')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Krok 3. Potwierdzenie i płatność', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_STEP_3'
+    ON DUPLICATE KEY UPDATE translation = 'Krok 3. Potwierdzenie i płatność';
+--
+-- translation for TXT_PAYMENT_SERVICE_REDIRECT
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_PAYMENT_SERVICE_REDIRECT'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_PAYMENT_SERVICE_REDIRECT')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Trwa przekierowanie na strony systemu płatności. Proszę czekać...', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_PAYMENT_SERVICE_REDIRECT'
+    ON DUPLICATE KEY UPDATE translation = 'Trwa przekierowanie na strony systemu płatności. Proszę czekać...';
+--
+-- translation for TXT_PAYMENT_CANCELLED_CONTACT
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_PAYMENT_CANCELLED_CONTACT'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_PAYMENT_CANCELLED_CONTACT')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Płatność została anulowana. Proszę skontaktować się z administratorem sklepu w celu wybrania innej metody płatności.', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_PAYMENT_CANCELLED_CONTACT'
+    ON DUPLICATE KEY UPDATE translation = 'Płatność została anulowana. Proszę skontaktować się z administratorem sklepu w celu wybrania innej metody płatności.';
+--
+-- translation for TXT_THANKS_FOR_PAYMENT
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_THANKS_FOR_PAYMENT'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_THANKS_FOR_PAYMENT')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Dziękujemy za dokonanie płatności.', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_THANKS_FOR_PAYMENT'
+    ON DUPLICATE KEY UPDATE translation = 'Dziękujemy za dokonanie płatności.';
+--
+-- translation for TXT_SORT_BY
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_SORT_BY'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_SORT_BY')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Sortuj wg', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_SORT_BY'
+    ON DUPLICATE KEY UPDATE translation = 'Sortuj wg';
+--
+-- translation for TXT_VIEW_LABEL
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_VIEW_LABEL'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_VIEW_LABEL')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Widok', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_VIEW_LABEL'
+    ON DUPLICATE KEY UPDATE translation = 'Widok';
+--
+-- translation for TXT_READ
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_READ'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_READ')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Przeczytaj', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_READ'
+    ON DUPLICATE KEY UPDATE translation = 'Przeczytaj';
+--
+-- translation for TXT_OPINIONS_WORD
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_OPINIONS_WORD'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_OPINIONS_WORD')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'opinii', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_OPINIONS_WORD'
+    ON DUPLICATE KEY UPDATE translation = 'opinii';
+--
+-- translation for TXT_BE_THE_FIRST_TO_RATE
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_BE_THE_FIRST_TO_RATE'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_BE_THE_FIRST_TO_RATE')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Bądź pierwszym który oceni ten produkt', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_BE_THE_FIRST_TO_RATE'
+    ON DUPLICATE KEY UPDATE translation = 'Bądź pierwszym który oceni ten produkt';
+--
+-- translation for TXT_NEW_PRODUCT
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_NEW_PRODUCT'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_NEW_PRODUCT')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Nowość', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_NEW_PRODUCT'
+    ON DUPLICATE KEY UPDATE translation = 'Nowość';
+--
+-- translation for TXT_DELIVERY_IN
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_DELIVERY_IN'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_DELIVERY_IN')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Dostawa w ciągu', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_DELIVERY_IN'
+    ON DUPLICATE KEY UPDATE translation = 'Dostawa w ciągu';
+--
+-- translation for TXT_HELP_OTHERS_BY_OPINION
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_HELP_OTHERS_BY_OPINION'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_HELP_OTHERS_BY_OPINION')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Pomóż podjąć decyzję innym - wystaw ocenę i komentarz', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_HELP_OTHERS_BY_OPINION'
+    ON DUPLICATE KEY UPDATE translation = 'Pomóż podjąć decyzję innym - wystaw ocenę i komentarz';
+--
+-- translation for TXT_YOUR_OPINION_HELP_A_LOT
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_YOUR_OPINION_HELP_A_LOT'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_YOUR_OPINION_HELP_A_LOT')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Twoja ocena pomoże innym podjąć decyzję o wyborze odpowiedniego produktu.', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_YOUR_OPINION_HELP_A_LOT'
+    ON DUPLICATE KEY UPDATE translation = 'Twoja ocena pomoże innym podjąć decyzję o wyborze odpowiedniego produktu.';
+--
+-- translation for TXT_OPINION_ABOUT_PRODUCT
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_OPINION_ABOUT_PRODUCT'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_OPINION_ABOUT_PRODUCT')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Co sądzisz o produkcie?', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_OPINION_ABOUT_PRODUCT'
+    ON DUPLICATE KEY UPDATE translation = 'Co sądzisz o produkcie?';
+--
+-- translation for TXT_NAME_NICK
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_NAME_NICK'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_NAME_NICK')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Wpisz imię/nick', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_NAME_NICK'
+    ON DUPLICATE KEY UPDATE translation = 'Wpisz imię/nick';
+--
+-- translation for TXT_NICK_REQUIRED
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_NICK_REQUIRED'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_NICK_REQUIRED')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Aby dodać opinię, musisz podać swój nick.', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_NICK_REQUIRED'
+    ON DUPLICATE KEY UPDATE translation = 'Aby dodać opinię, musisz podać swój nick.';
+--
+-- translation for TXT_PRINT_OFFER
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_PRINT_OFFER'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_PRINT_OFFER')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Wydrukuj ofertę', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_PRINT_OFFER'
+    ON DUPLICATE KEY UPDATE translation = 'Wydrukuj ofertę';
+--
+-- translation for TXT_CONTINUE_SHOPPING
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_CONTINUE_SHOPPING'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_CONTINUE_SHOPPING')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Kontynuuj zakupy', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_CONTINUE_SHOPPING'
+    ON DUPLICATE KEY UPDATE translation = 'Kontynuuj zakupy';
+--
+-- translation for TXT_ALL_RIGHTS_RESERVED
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_ALL_RIGHTS_RESERVED'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_ALL_RIGHTS_RESERVED')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Wszystkie prawa zastrzeżone', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_ALL_RIGHTS_RESERVED'
+    ON DUPLICATE KEY UPDATE translation = 'Wszystkie prawa zastrzeżone';
+--
+-- translation for TXT_PRODUCT_REQUEST
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_PRODUCT_REQUEST'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_PRODUCT_REQUEST')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Zapytaj o produkt', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_PRODUCT_REQUEST'
+    ON DUPLICATE KEY UPDATE translation = 'Zapytaj o produkt';
+--
+-- translation for TXT_MORE_ABOUT_PRODUCT
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_MORE_ABOUT_PRODUCT'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_MORE_ABOUT_PRODUCT')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Więcej o produkcie', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_MORE_ABOUT_PRODUCT'
+    ON DUPLICATE KEY UPDATE translation = 'Więcej o produkcie';
+--
+-- translation for TXT_EMAIL
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_EMAIL'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_EMAIL')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Email', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_EMAIL'
+    ON DUPLICATE KEY UPDATE translation = 'Email';
 
 
 --
 -- Generated with Gekosale translation script by Jan Grzegorowski
---
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

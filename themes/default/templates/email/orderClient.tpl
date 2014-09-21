@@ -1,10 +1,10 @@
 <h1 style="margin-top:0; font-size:18px; color:#231f20; border-bottom:1px solid #e3e3e3; padding-bottom:6px; text-transform:uppercase;">{% trans %}TXT_ACCEPT_AN_ORDER{% endtrans %}</h1>
-<p>Witamy serdecznie,<br/>
+<p>{% trans %}TXT_EMAIL_HELLO{% endtrans %},<br/>
 
-Bardzo dziękujemy za dokonanie zakupu w sklepie <a target="_blank" href="{{ path('frontend.home') }}" title="{{ SHOP_NAME }}" style="color:#f15a25; text-decoration:none;">{{ SHOP_NAME }}</a>.</p>
-<p>W dniu {{ "now"|date("d/m/Y") }} otrzymaliśmy nowe zamówienie nr <strong style="color:#231f20;">{{ orderId }}</strong></p>
+{% trans %}TXT_THANKS_FOR_ORDER{% endtrans %} <a target="_blank" href="{{ path('frontend.home') }}" title="{{ SHOP_NAME }}" style="color:#f15a25; text-decoration:none;">{{ SHOP_NAME }}</a>.</p>
+<p>{% trans %}TXT_ON_THE_DAY{% endtrans %} {{ "now"|date("d/m/Y") }} {% trans %}TXT_WE_RECEIVED_AN_ORDER{% endtrans %} <strong style="color:#231f20;">{{ orderId }}</strong></p>
 
-<p style="margin-top:20px;"><strong style="color:#231f20;">Oto szczegóły zamówienia:</strong></p>
+<p style="margin-top:20px;"><strong style="color:#231f20;">{% trans %}TXT_ORDER_DETAILS{% endtrans %}:</strong></p>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<thead>

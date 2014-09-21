@@ -41,7 +41,7 @@
 				{{ forms.hidden(newsletter.children.__csrf) }}
 			</div>
 			<div class="form-actions form-actions-clean">
-				<button type="submit" class="btn btn-primary btn-large"><i class="icon-envelope icon-white"></i> Zatwierdź</button>
+				<button type="submit" class="btn btn-primary btn-large"><i class="icon-envelope icon-white"></i> {% trans %}TXT_CONFIRM_THIS{% endtrans %}</button>
 			</div>
 		</fieldset>
 		{{ newsletter.javascript }}

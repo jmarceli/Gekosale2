@@ -1,12 +1,12 @@
 {% extends "layoutbox.tpl" %}
 {% block content %}
 <div class="row-fluid row-form">
-	<h1 class="large">Krok 3. Potwierdzenie i płatność</h1>
-	<div class="span11">
-    	<div class="alert alert-block alert-success">
-        	<h3>Trwa przekierowanie na strony systemu płatności Dotpay.pl. Proszę czekać...</h3>
-	</div>
-	</div>
+  <h1 class="large">{% trans %}TXT_STEP_3{% endtrans %}</h1>
+  <div class="span11">
+    <div class="alert alert-block alert-success">
+      <h3>{% trans %}TXT_PAYMENT_SERVICE_REDIRECT{% endtrans %}</h3>
+    </div>
+  </div>
 </div>
 <form action="https://ssl.dotpay.pl/" method="post" id="dotpay">
 	<input type="hidden" name="id" value="{{ content.idsprzedawcy }}">

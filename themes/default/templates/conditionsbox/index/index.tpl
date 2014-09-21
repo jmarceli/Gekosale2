@@ -7,8 +7,8 @@
 		{% for subpage in cms.undercategorybox %}
 		<li><a href="{{ path('frontend.staticcontent', {"param": subpage.id, "slug": subpage.seo}) }}"><span>{{ subpage.name }}</span></a></li>
 		{% endfor %}
-    </ul>
-    {% endif %}
-   	{{ cms.content }}
+  </ul>
+  {% endif %}
+  {{ cms.content }}
 </article>
 {% endblock %}

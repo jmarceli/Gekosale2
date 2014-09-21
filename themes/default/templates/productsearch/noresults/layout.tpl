@@ -3,10 +3,10 @@
 {% autoescape true %}
 	<div id="searchNoResults">
 		<h1>
-			Wynik wyszukiwania dla <strong>"{{ phrase }}"</strong>
+			{% trans %}TXT_SEARCH_RESULTS_FOR_QUERY{% endtrans %} <strong>"{{ phrase }}"</strong>
 		</h1>
 		<h2>
-			Dla "{{ phrase }}" znaleziono <strong>0</strong> pozycji.
+      {% trans %}TXT_FOUND_RESULTS{% endtrans %} <strong>0</strong>.
 		</h2>
 	</div>
 {% endautoescape %}

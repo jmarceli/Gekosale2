@@ -4,12 +4,12 @@
 	<div class="row-fluid row-form">
 		{% if tabbed == 1 %}
 		<div class="relative">
-			<a href="{{ path('frontend.productprint', {"param": product.idproduct}) }}" title="" class="print"><i class="icon-print"></i> Wydrukuj ofertę</a>
+			<a href="{{ path('frontend.productprint', {"param": product.idproduct}) }}" title="" class="print"><i class="icon-print"></i> {% trans %}TXT_PRINT_OFFER{% endtrans %}</a>
 			{% include 'productbox/index/info_tabs.tpl' %}
 		</div>
 		{% else %}
 		<div>
-			<a href="{{ path('frontend.productprint', {"param": product.idproduct}) }}" title="" class="print"><i class="icon-print"></i> Wydrukuj ofertę</a>
+			<a href="{{ path('frontend.productprint', {"param": product.idproduct}) }}" title="" class="print"><i class="icon-print"></i> {% trans %}TXT_PRINT_OFFER{% endtrans %}</a>
 			<div class="clearfix"></div>
 			{% include 'productbox/index/info_notabs.tpl' %}
 		</div>

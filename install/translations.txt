@@ -1,0 +1,57 @@
+TXT_CART_EMPTY_PRODUCTS # Nie czekaj i dodaj do niego produkty z naszej oferty!;
+TXT_TOTAL_TO_PAY # Łącznie do zapłaty;
+TXT_PAYMENT_METHOD # Metoda płatności;
+TXT_STEP_1 # Krok 1. Dane adresowe;
+TXT_DELIVERY_COST # Koszt dostawy;
+TXT_SEND_MESSAGE # Wyślij wiadomość;
+TXT_BEST_REGARDS # Pozdrawiamy;
+TXT_FORGOT_PASSWORD_MSG # Aby ustalić nowe hasło, wejdź na stronę;
+TXT_EMAIL_HELLO # Witamy serdecznie;
+TXT_THANKS_FOR_ORDER # Bardzo dziękujemy za dokonanie zakupu w sklepie;
+TXT_ON_THE_DAY # W dniu;
+TXT_WE_RECEIVED_AN_ORDER # otrzymaliśmy nowe zamówienie nr;
+TXT_ORDER_DETAILS # Oto szczegóły zamówienia;
+TXT_EMAIL_WELCOME # Witaj;
+TXT_CRITICAL_ERROR # Wystąpił wyjątek krytyczny;
+TXT_GEKOSALE_OS # Gekosale - otwarte oprogramowanie sklepu;
+TXT_INVALID_URL # Niepoprawny adres;
+TXT_PAGE_NOT_EXISTS # Taka strona nie istnieje;
+TXT_WHAT_TO_DO # Nie wiesz co zrobić?;
+TXT_GO_TO # Przejdź na;
+TXT_SERVICE_MAIN_PAGE # stronę główną serwisu.;
+sTXT_CALL_OR_WRITE_ERROR # W przypadku problemów możesz również zadzwonić lub napisać.;
+TXT_WORKING_DAYS # pn-pt;
+TXT_STEP_2 # Krok 2. Podsumowanie zamówienia;
+TXT_ALL_CATEGORIES # Wszystkie kategorie;
+TXT_CONFIRM_THIS # Zatwierdź;
+TXT_STEP_3 # Krok 3. Potwierdzenie i płatność;
+TXT_PAYMENT_SERVICE_REDIRECT # Trwa przekierowanie na strony systemu płatności. Proszę czekać...;
+TXT_PAYMENT_CANCELLED_CONTACT # Płatność została anulowana. Proszę skontaktować się z administratorem sklepu w celu wybrania innej metody płatności.;
+TXT_THANKS_FOR_PAYMENT # Dziękujemy za dokonanie płatności.;
+TXT_SORT_BY # Sortuj wg;
+TXT_VIEW_LABEL # Widok;
+TXT_READ # Przeczytaj;
+TXT_OPINIONS_WORD # opinii;
+TXT_BE_THE_FIRST_TO_RATE # Bądź pierwszym który oceni ten produkt;
+TXT_NEW_PRODUCT # Nowość;
+TXT_DELIVERY_IN # Dostawa w ciągu;
+TXT_HELP_OTHERS_BY_OPINION # Pomóż podjąć decyzję innym - wystaw ocenę i komentarz;
+TXT_YOUR_OPINION_HELP_A_LOT # Twoja ocena pomoże innym podjąć decyzję o wyborze odpowiedniego produktu.;
+TXT_OPINION_ABOUT_PRODUCT # Co sądzisz o produkcie?;
+TXT_NAME_NICK # Wpisz imię/nick;
+TXT_NICK_REQUIRED # Aby dodać opinię, musisz podać swój nick.;
+TXT_PRINT_OFFER # Wydrukuj ofertę;
+TXT_CONTINUE_SHOPPING # Kontynuuj zakupy;
+TXT_ALL_RIGHTS_RESERVED # Wszystkie prawa zastrzeżone;
+TXT_PRODUCT_REQUEST # Zapytaj o produkt;
+TXT_MORE_ABOUT_PRODUCT # Więcej o produkcie;
+TXT_EMAIL # Email;
+
+
+
+
+
+
+
+
+

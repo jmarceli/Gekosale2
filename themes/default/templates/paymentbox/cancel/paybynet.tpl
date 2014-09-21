@@ -1,10 +1,14 @@
 {% extends "layoutbox.tpl" %}
 {% block content %}
-	{% if orderId > 0 %}
-		<div>
-			<p>Płatność została anulowana. Proszę skontaktować się z administratorem sklepu w celu wybrania innej metody płatności.<br>
-				Twój numer zamówienia: <strong> {{ orderId }}</strong>
-			</p>
-		</div>
-	{% endif %}
+<div>
+  <p>{% trans %}TXT_PAYMENT_CANCELLED_CONTACT{% endtrans %}<br>
+  {% if orderId > 0 %}
+  {% trans %}TXT_YOUR_ORDER_ID{% endtrans %}: <strong> {{ orderId }}</strong>
+  </p>
+  {% endif %}
+</div>
+{% endif %}
 {% endblock %}
+<div class="buttons">
+	<a href="{{ path('frontend.home') }}" class="button"><span>{% trans %}TXT_BACK_TO_SHOPPING{% endtrans %}</span></a>
+</div>	
