@@ -86,14 +86,9 @@ class ViewForm extends Component\Form
 			)
 		)));
 		
-		$requiredData->AddChild(new FormEngine\Elements\Select(Array(
+		$requiredData->AddChild(new FormEngine\Elements\Hidden(Array(
 			'name' => 'currencyid',
-			'label' => _('TXT_DEFAULT_VIEW_CURRENCY'),
-			'options' => FormEngine\Option::Make(App::getModel('currencieslist')->getCurrencyForSelect()),
-			'rules' => Array(
-				new FormEngine\Rules\Required(_('ERR_EMPTY_KIND_OF_CURRENCY'))
-			)
-		)));
+    )));
 		
 		$requiredData->AddChild(new FormEngine\Elements\Tip(Array(
 			'tip' => '<p align="center">Wybierz domyślny kontakt dla sklepu. Kontaktami możesz zarządzać na stronie <a href="' . App::getURLAdressWithAdminPane() . 'contact' . '" target="_blank">Konfiguracja &raquo; Kontakt</a>.</p>',

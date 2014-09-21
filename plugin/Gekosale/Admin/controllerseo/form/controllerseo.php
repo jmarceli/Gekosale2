@@ -49,10 +49,6 @@ class ControllerSeoForm extends Component\Form
 			'rules' => Array(
 				new FormEngine\Rules\Required(_('ERR_EMPTY_CONTROLLER')),
 				new FormEngine\Rules\Format(_('ERR_WRONG_FORMAT'), '/^[a-zA-Z]+$/'),
-				new FormEngine\Rules\Unique(_('ERR_NAME_ALREADY_EXISTS'), 'controller', 'name', null, Array(
-					'column' => 'idcontroller',
-					'values' => (int) $this->registry->core->getParam()
-				))
 			)
 		)));
 		

@@ -608,7 +608,6 @@ class OrderModel extends Component\Model
 				WHERE OP.orderid=:id";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('id', $id);
-		$stmt->bindValue('encryptionKey', Session::getActiveEncryptionKeyValue());
 		$stmt->execute();
 		$Data = Array();
 		while ($rs = $stmt->fetch()){
@@ -1003,7 +1002,7 @@ class OrderModel extends Component\Model
 				LEFT JOIN orderstatustranslation OST ON OST.orderstatusid = OS.idorderstatus AND OST.languageid = :languageid
 				LEFT JOIN orderstatusorderstatusgroups OSOSG ON O.orderstatusid = OSOSG.orderstatusid
 				LEFT JOIN orderstatusgroups OSG ON OSG.idorderstatusgroups = OSOSG.orderstatusgroupsid
-				WHERE O.clientid= :clientid ';
+				WHERE O.clientid= :clientid ORDER BY O.adddate DESC';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('clientid', Session::getActiveClientid());
 		$stmt->bindValue('languageid', Helper::getLanguageId());
