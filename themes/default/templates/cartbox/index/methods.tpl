@@ -18,8 +18,3 @@
 	<td colspan="2" class="alignright">{% trans %}TXT_COST_OF_DELIVERY{% endtrans %}</td>
 	<td colspan="2" class="center"><strong>{{ order.dispatchmethod.dispatchmethodcost|priceFormat }}</strong></td>
 </tr>
-						
-						
-
-
-

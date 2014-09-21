@@ -17,7 +17,7 @@
 		{% endif %}
 		{% endfor %}
 	{% endif %}
-    <li class="all"><a href="{{ path('frontend.sitemap') }}">Wszystkie kategorie</a></li>
+    <li class="all"><a href="{{ path('frontend.sitemap') }}">{% trans %}TXT_ALL_CATEGORIES{% endtrans %}</a></li>
 </ul>
 {% endif %}
 {% endblock %}

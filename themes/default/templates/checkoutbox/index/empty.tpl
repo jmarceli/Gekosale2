@@ -8,7 +8,7 @@
 			<div class="alert alert-block alert-success">
 				<h4>
 					<strong>{% trans %}TXT_CART_IS_EMPTY{% endtrans %}</strong>
-					<br />Nie czekaj i dodaj do niego produkty z naszej oferty!
+          <br />{% trans %}TXT_CART_EMPTY_PRODUCTS{% endtrans %}
 				</h4>
 			</div>
 		</div>

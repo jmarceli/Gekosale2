@@ -1,1 +1,1 @@
-<p>Aby ustalić nowe hasło, wejdź na stronę <a href="{{ link }}">{{ link }}</a></p>
+<p>{% trans %}TXT_FORGOT_PASSWORD_MSG{% endtrans %} <a href="{{ link }}">{{ link }}</a></p>

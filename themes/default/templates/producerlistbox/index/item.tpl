@@ -17,12 +17,12 @@
 	{% if product.opinions > 0 %}
 	<p class="rating">
 		<span class="stars"><img src="{{ DESIGNPATH }}_images_frontend/core/icons/stars-{{ product.rating }}.png" alt="Ocena Klientów: 4"/></span>
-		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">Przeczytaj {{ product.opinions }} opinii</a>
+		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">{% trans %}TXT_READ{% endtrans %} {{ product.opinions }} {% trans %}TXT_OPINIONS_WORD{% endtrans %}</a>
 	</p>
 	{% else %}
 	<p class="rating">
 		<span class="stars"><img src="{{ DESIGNPATH }}_images_frontend/core/icons/stars-0.png" alt="Ocena Klientów: 0"/></span>
-		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">Bądź pierwszym który oceni ten produkt</a>
+		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">{% trans %}TXT_BE_THE_FIRST_TO_RATE{% endtrans %}</a>
 	</p>
 	{% endif %}
 	<div class="description">
@@ -48,12 +48,12 @@
 	{% if product.opinions > 0 %}
 	<p class="rating">
 		<span class="stars"><img src="{{ DESIGNPATH }}_images_frontend/core/icons/stars-{{ product.rating }}.png" alt="Ocena Klientów: 4"/></span>
-		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">Przeczytaj {{ product.opinions }} opinii</a>
+		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">{% trans %}TXT_READ{% endtrans %} {{ product.opinions }} {% trans %}TXT_OPINIONS_WORD{% endtrans %}</a>
 	</p>
 	{% else %}
 	<p class="rating">
 		<span class="stars"><img src="{{ DESIGNPATH }}_images_frontend/core/icons/stars-0.png" alt="Ocena Klientów: 0"/></span>
-		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">Bądź pierwszym który oceni ten produkt</a>
+		<a href="{{ path('frontend.productcart') }}/{{ product.id }}/{{ product.seo }}#product-opinions">{% trans %}TXT_BE_THE_FIRST_TO_RATE{% endtrans %}</a>
 	</p>
 	{% endif %}
 	<div class="description">
