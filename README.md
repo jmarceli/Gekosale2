@@ -64,6 +64,8 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Poprawka błędu dotyczącego tłumaczenia zawartości boksów w konfiguracji multilanguage w multistore
 * Poprawka płatności DotPay
 * Poprawka sortowania zamówień widocznych dla klienta na jego koncie
+* Dodanie brakujących tłumaczeń
+* Dodanie możliwości tłumaczenia nazw państw, przypisanie do każdego kraju odpowiedniego symbolu ISO 3166
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
