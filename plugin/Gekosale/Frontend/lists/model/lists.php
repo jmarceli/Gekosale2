@@ -24,24 +24,12 @@ class ListsModel extends Component\Model
 
 	public function getCountries ()
 	{
-		$sql = 'SELECT 
-					C.idcountry as countryid, 
-					C.name
-				FROM country C';
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->execute();
-		return $stmt->fetchAll();
+    return App::getModel('Admin/countrieslist/countrieslist')->getCountries();
 	}
 
 	public function getCountryForSelect ()
 	{
-		$results = $this->getCountries();
-		$Data = Array();
-		
-		foreach ($results as $value){
-			$Data[$value['countryid']] = $value['name'];
-		}
-		return $Data;
+    return App::getModel('Admin/countrieslist/countrieslist')->getCountryForSelect();
 	}
 
 }

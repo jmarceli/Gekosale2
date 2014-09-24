@@ -39,7 +39,7 @@ class CountriesListModel extends Component\Model
 		$Data = Array();
 		
 		foreach ($results as $value){
-			$Data[$value['countryid']] = $value['name'];
+			$Data[$value['countryid']] = _($value['name']);
 		}
 		return $Data;
 	}
