@@ -70,6 +70,7 @@
               </ul>
             </div>
           </div>
+          <div class="clearfix"></div>
           <div class="row pull-right">
             <div class="span3 nomargin pull-right">
               <div id="topBasket">
