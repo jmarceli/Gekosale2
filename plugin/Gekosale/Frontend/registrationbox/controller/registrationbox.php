@@ -82,13 +82,18 @@ class RegistrationBoxController extends Component\Controller\Box
 				else{
 					Session::setVolatileRegistrationOk(1, false);
 					$result = App::getModel('clientlogin')->authProccess($formData['email'], $formData['password']);
-					if ($result != 0){
+					if ($result > 0){
 						Session::setActiveClientid($result);
 						App::getModel('clientlogin')->checkClientGroup();
 						$this->model->saveClientData();
 					}
-					Session::setVolatileRegistrationOk(1, false);
-					App::redirectUrl($this->registry->router->generate('frontend.clientsettings', true));
+          elseif ($result < 0) {
+            Session::setVolatileActivationRequired(1, false);
+          }
+          else {
+            Session::setVolatileRegistrationOk(1, false);
+            App::redirectUrl($this->registry->router->generate('frontend.clientsettings', true));
+          }
 				}
 			}
 			else{
@@ -100,8 +105,12 @@ class RegistrationBoxController extends Component\Controller\Box
 					Session::setVolatileRegistrationOk(1, false);
 					App::redirectUrl($this->registry->router->generate('frontend.clientsettings', true));
 				}
-
-				Session::setVolatileRecureMail(1, false);
+        elseif ($result < 0) {
+          Session::setVolatileActivationRequired(1, false);
+        }
+        else {
+          Session::setVolatileRecureMail(1, false);
+        }
 			}
 		}
 
@@ -110,21 +119,25 @@ class RegistrationBoxController extends Component\Controller\Box
 		$activationrequired = Session::getVolatileActivationRequired();
 		if ($activationrequired[0] == 1){
 			$this->registry->template->assign('error', _('TXT_ACTIVATION_REQUIRED'));
+			$this->registry->template->assign('error_msg', _('TXT_ACTIVATION_REQUIRED_MSG'));
 		}
 
 		$recureMailError = Session::getVolatileRecureMail();
 		if ($recureMailError[0] == 1){
 			$this->registry->template->assign('error', _('ERR_DUPLICATE_EMAIL'));
+			$this->registry->template->assign('error', _('ERR_DUPLICATE_EMAIL_MSG'));
 		}
 
 		$forbiddenCode = Session::getVolatileForbiddenCode();
 		if ($forbiddenCode[0] == 1){
 			$this->registry->template->assign('error', _('TXT_ERROR_FORBIDDEN_CODE'));
+			$this->registry->template->assign('error', _('TXT_ERROR_FORBIDDEN_CODE_MSG'));
 		}
 
 		$passwdGenError = Session::getVolatilePasswordGenerateError();
 		if ($passwdGenError[0] == 1){
 			$this->registry->template->assign('error', _('ERROR_PASSWORD_GENERATE'));
+			$this->registry->template->assign('error', _('ERROR_PASSWORD_GENERATE_MSG'));
 		}
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}

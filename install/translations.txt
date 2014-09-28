@@ -46,11 +46,10 @@ TXT_ALL_RIGHTS_RESERVED # Wszystkie prawa zastrzeżone;
 TXT_PRODUCT_REQUEST # Zapytaj o produkt;
 TXT_MORE_ABOUT_PRODUCT # Więcej o produkcie;
 TXT_EMAIL # Email;
-
-
-
-
-
+TXT_ACTIVATION_REQUIRED_MSG # Musisz aktywować konto za pomocą otrzymanego mailem linku w celu poprawnego zalogowania się w sklepie;
+ERR_DUPLICATE_EMAIL_MSG # Jeśli to twój adres email możesz skorzystać z opcji przymnienia hasła;
+TXT_ERROR_FORBIDDEN_CODE_MSG # Upewnij się że w pole hasła nie zostały wpisane żadne niedozwolone znaki;
+ERROR_PASSWORD_GENERATE_MSG # Nie udało się wygenerować hasła dla Twojego konta. Skontaktuj się z obsługą sklepu;
 
 
 

@@ -4264,7 +4264,58 @@ INSERT INTO translationdata (translation, translationid, languageid)
   FROM translation
   WHERE name = 'TXT_EMAIL'
     ON DUPLICATE KEY UPDATE translation = 'Email';
-
+--
+-- translation for TXT_ACTIVATION_REQUIRED_MSG
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_ACTIVATION_REQUIRED_MSG'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_ACTIVATION_REQUIRED_MSG')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Musisz aktywować konto za pomocą otrzymanego mailem linku w celu poprawnego zalogowania się w sklepie', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_ACTIVATION_REQUIRED_MSG'
+    ON DUPLICATE KEY UPDATE translation = 'Musisz aktywować konto za pomocą otrzymanego mailem linku w celu poprawnego zalogowania się w sklepie';
+--
+-- translation for ERR_DUPLICATE_EMAIL_MSG
+--
+INSERT INTO translation (name)
+  SELECT 'ERR_DUPLICATE_EMAIL_MSG'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'ERR_DUPLICATE_EMAIL_MSG')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Jeśli to twój adres email możesz skorzystać z opcji przymnienia hasła', idtranslation, 1
+  FROM translation
+  WHERE name = 'ERR_DUPLICATE_EMAIL_MSG'
+    ON DUPLICATE KEY UPDATE translation = 'Jeśli to twój adres email możesz skorzystać z opcji przymnienia hasła';
+--
+-- translation for TXT_ERROR_FORBIDDEN_CODE_MSG
+--
+INSERT INTO translation (name)
+  SELECT 'TXT_ERROR_FORBIDDEN_CODE_MSG'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_ERROR_FORBIDDEN_CODE_MSG')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Upewnij się że w pole hasła nie zostały wpisane żadne niedozwolone znaki', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_ERROR_FORBIDDEN_CODE_MSG'
+    ON DUPLICATE KEY UPDATE translation = 'Upewnij się że w pole hasła nie zostały wpisane żadne niedozwolone znaki';
+--
+-- translation for ERROR_PASSWORD_GENERATE_MSG
+--
+INSERT INTO translation (name)
+  SELECT 'ERROR_PASSWORD_GENERATE_MSG'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'ERROR_PASSWORD_GENERATE_MSG')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Nie udało się wygenerować hasła dla Twojego konta. Skontaktuj się z obsługą sklepu', idtranslation, 1
+  FROM translation
+  WHERE name = 'ERROR_PASSWORD_GENERATE_MSG'
+    ON DUPLICATE KEY UPDATE translation = 'Nie udało się wygenerować hasła dla Twojego konta. Skontaktuj się z obsługą sklepu';
 
 --
 -- Generated with Gekosale translation script by Jan Grzegorowski

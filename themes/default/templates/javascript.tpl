@@ -35,7 +35,7 @@
 		}); 
 
 		{% if error is defined %}
-		GError('{{ error }}');
+    GError('{{ error }}', '{{ error_msg }}');
 		{% endif %}
 
     $('#order button[type=submit]').click(function() {

@@ -53,4 +53,3 @@ class CartPreviewBoxController extends Component\Controller\Box
 		return 'layout-box-type-cart-summary';
 	}
 }
-?>

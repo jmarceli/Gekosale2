@@ -67,8 +67,7 @@ class GlobalsettingsController extends Component\Controller\Admin
 					App::redirect('');
 				}
 				else{
-					$sUrl = __ADMINPANE__ . '/globalsettings';
-					echo "<script>window.location.href({$sUrl});</script>";
+					App::redirect(__ADMINPANE__ . '/globalsettings');
 				}
 			}
 			catch (Exception $e){
