@@ -28,11 +28,9 @@ class CartBoxController extends Component\Controller\Box
 	public function __construct ($registry, $box)
 	{
 		parent::__construct($registry, $box);
-		$this->clientModel = App::getModel('client');
 		$this->cartModel = App::getModel('cart');
 		$this->paymentModel = App::getModel('payment');
 		$this->deliveryModel = App::getModel('delivery');
-		$this->dispatchMethods = $this->deliveryModel->getDispatchmethodPrice();
 	}
 
 	public function index ()
@@ -55,44 +53,8 @@ class CartBoxController extends Component\Controller\Box
 			'changeQuantity'
 		));
 		
-		$globalprice = $this->cartModel->getGlobalPrice();
-		
-		$checkRulesCart = App::getModel('cart')->checkRulesCart();
-		if (is_array($checkRulesCart) && count($checkRulesCart) > 0){
-			$this->registry->template->assign('checkRulesCart', $checkRulesCart);
-		}
-		if (Session::getActiveDispatchmethodChecked() == NULL){
-			$default = current($this->dispatchMethods);
-			App::getModel('delivery')->setDispatchmethodChecked($default['dispatchmethodid']);
-		}
-		
-		$paymentMethods = App::getModel('payment')->getPaymentMethods();
-		if (Session::getActivePaymentMethodChecked() == 0){
-			if (isset($paymentMethods[0])){
-				App::getModel('payment')->setPaymentMethodChecked($paymentMethods[0]['idpaymentmethod'], $paymentMethods[0]['name']);
-			}
-		}
-		
-		$minimumordervalue = App::getModel('cart')->getMinimumOrderValue();
-		
-		$order = App::getModel('finalization')->setClientOrder();
-		
-		$assignData = Array(
-			'deliverymethods' => $this->dispatchMethods,
-			'checkedDelivery' => Session::getActiveDispatchmethodChecked(),
-			'checkedPayment' => Session::getActivePaymentMethodChecked(),
-			'checkedDeliveryOption' => Session::getActiveDispatchmethodOption(),
-			'payments' => $paymentMethods,
-			'minimumordervalue' => $minimumordervalue,
-			'priceWithDispatchMethod' => Session::getActiveglobalPriceWithDispatchmethod(),
-			'summary' => App::getModel('finalization')->getOrderSummary(),
-			'order' => Session::getActiveClientOrder(),
-		);
-		
-		foreach ($assignData as $key => $assign){
-			$this->registry->template->assign($key, $assign);
-		}
-		
+	  $this->cartModel->getCartVariables();	
+
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
 }

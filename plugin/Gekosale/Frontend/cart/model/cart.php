@@ -401,18 +401,15 @@ class CartModel extends Component\Model
     return $objResponseInc;
 	}
 
-	public function getCartTableTemplate ()
-	{
+  public function getCartVariables() {
     $method = Session::getActiveDispatchmethodChecked();
     $payment = Session::getActivePaymentMethodChecked();
 
 		$this->clientModel = App::getModel('client');
 		$this->paymentModel = App::getModel('payment');
 		$this->deliveryModel = App::getModel('delivery');
-		$this->dispatchMethods = $this->deliveryModel->getDispatchmethodPrice();
-		
-		$globalprice = $this->getGlobalPrice();
-		
+    $this->dispatchMethods = $this->deliveryModel->getDispatchmethodPrice();
+    
     // check rules
 		$checkRulesCart = App::getModel('cart')->checkRulesCart();
 		if (is_array($checkRulesCart) && count($checkRulesCart) > 0){
@@ -444,17 +441,12 @@ class CartModel extends Component\Model
     else {
       App::getModel('payment')->setPaymentMethodChecked($payment['idpaymentmethod'], $payment['paymentmethodname']);
     }
-		
+
 		$minimumordervalue = $this->getMinimumOrderValue();
 		
 		$order = App::getModel('finalization')->setClientOrder();
 		
-		$productCart = $this->getShortCartList();
-		$productCart = $this->getProductCartPhotos($productCart);
-		
 		$assignData = Array(
-			'globalPrice' => $this->getGlobalPrice(),
-			'productCart' => $productCart,
 			'deliverymethods' => $this->dispatchMethods,
 			'checkedDelivery' => Session::getActiveDispatchmethodChecked(),
 			'checkedPayment' => Session::getActivePaymentMethodChecked(),
@@ -463,12 +455,23 @@ class CartModel extends Component\Model
 			'minimumordervalue' => $minimumordervalue,
 			'priceWithDispatchMethod' => Session::getActiveglobalPriceWithDispatchmethod(),
 			'summary' => App::getModel('finalization')->getOrderSummary(),
-			'order' => Session::getActiveClientOrder()
+			'order' => Session::getActiveClientOrder(),
 		);
 		
 		foreach ($assignData as $key => $assign){
 			$this->registry->template->assign($key, $assign);
 		}
+	}
+
+	public function getCartTableTemplate ()
+	{
+    $this->getCartVariables();
+		$productCart = $this->getShortCartList();
+		$productCart = $this->getProductCartPhotos($productCart);
+
+    $this->registry->template->assign('productCart', $productCart);
+    $this->registry->template->assign('globalPrice', $this->getGlobalPrice());
+
 		return $this->registry->template->fetch('cartbox/index/table.tpl');
 	}
   
@@ -1194,7 +1197,8 @@ class CartModel extends Component\Model
 	public function getCartPreviewTemplate ()
 	{
 		$productCart = $this->getShortCartList();
-		$productCart = $this->getProductCartPhotos($productCart);
+    $productCart = $this->getProductCartPhotos($productCart);
+
 		$this->registry->template->assign('count', $this->getProductAllCount());
 		$this->registry->template->assign('globalPrice', $this->getGlobalPrice());
 		$this->registry->template->assign('productCart', $productCart);
