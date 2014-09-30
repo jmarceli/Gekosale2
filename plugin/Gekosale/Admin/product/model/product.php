@@ -957,7 +957,7 @@ class ProductModel extends Component\Model\Datagrid
 				WHERE idproduct = :id';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('id', $id);
-		$stmt->bindValue('stock', $Data['stock']);
+		$stmt->bindValue('stock', (isset($Data['stock']))? $Data['stock'] : 0);
 		$stmt->bindValue('trackstock', ((int) $Data['trackstock'] == 1) ? 1 : 0);
 		if ($Data['availablityid'] > 0){
 			$stmt->bindValue('availablityid', $Data['availablityid']);
