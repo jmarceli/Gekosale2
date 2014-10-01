@@ -119,8 +119,7 @@ class ProductSearchModel extends Component\Model\Dataset
 		$Data = $stmt->fetchAll();
 		foreach ($Data as $key => $value){
 			try{
-				$Image = App::getModel('gallery')->getSmallImageById($value['mainphotoid']);
-				$Data[$key]['photo'] = App::getModel('gallery')->getImagePath($Image);
+				$Data[$key]['photo'] = App::getModel('product')->getImagePath($value['mainphotoid']);
 			}
 			catch (Exception $e){
 				echo $e->getMessage();

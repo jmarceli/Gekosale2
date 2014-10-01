@@ -28,8 +28,8 @@ class ShowcaseBoxModel extends Component\Model\Dataset
     $dataset->queryColumns['photo'] = Array(
       'source' => 'Photo.photoid',
       'processFunction' => Array(
-        App::getModel('showcasebox'),
-        'getImagePath'
+        App::getModel('product'),
+        'getNormalImagePath'
       ),
     );
 
@@ -51,12 +51,6 @@ class ShowcaseBoxModel extends Component\Model\Dataset
 		$dataset->setGroupBy('
 			P.idproduct
 		');
-	}
-
-	public function getImagePath ($id)
-	{
-		$Image = App::getModel('gallery')->getNormalImageById($id);
-		return App::getModel('gallery')->getImagePath($Image);
 	}
 
 	public function getProductDataset ()
