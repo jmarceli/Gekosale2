@@ -69,10 +69,10 @@
     <div class="span3">
       <div id="addToCart" class="well well-small" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
         {% if ( product.discountprice != NULL and product.discountprice != product.price ) %}
-        <span class="price price-large" id="changeprice" itemprop="price">{% if showtax == 0 %}{{ product.discountpricenetto|priceFormat }}{% else %}{{ product.discountprice|priceFormat }}{% endif %}</span>
-        <span class="price price-small" id="changeprice-old">{% if showtax == 0 %}{{ product.pricenetto|priceFormat }}{% else %}{{ product.price|priceFormat }}{% endif %}</span>
+        <span class="price price-large" id="changeprice{% if showtax == 0 %}-netto{% endif %}" itemprop="price">{% if showtax == 0 %}{{ product.discountpricenetto|priceFormat }}{% else %}{{ product.discountprice|priceFormat }}{% endif %}</span>
+        <span class="price price-small" id="changeprice{% if showtax == 0 %}-netto{% endif %}-old">{% if showtax == 0 %}{{ product.pricenetto|priceFormat }}{% else %}{{ product.price|priceFormat }}{% endif %}</span>
         {% else %}
-        <span class="price price-large" id="changeprice" itemprop="price">{% if showtax == 0 %}{{ product.pricewithoutvat|priceFormat }}{% else %}{{ product.price|priceFormat }}{% endif %}</span>
+        <span class="price price-large" id="changeprice{% if showtax == 0 %}-netto{% endif %}" itemprop="price">{% if showtax == 0 %}{{ product.pricewithoutvat|priceFormat }}{% else %}{{ product.price|priceFormat }}{% endif %}</span>
         {% endif %}
         <div class="hr"></div>
         <ul>
