@@ -21,219 +21,25 @@ namespace Gekosale;
 
 class ProductsSimilarBoxModel extends Component\Model\Dataset
 {
+  public function initDataset ($dataset)
+  {
+    App::getModel('product')->productsDataset($dataset);
+    $dataset->queryColumns['id'] = Array(
+      'source' => 'SP.relatedproductid'
+    );
+    $dataset->queryColumns['hierarchy'] = Array(
+      'source' => 'SP.hierarchy'
+		);
+			
+    $dataset->queryFrom = '
+      similarproduct SP
+      LEFT JOIN product P ON SP.relatedproductid = P.idproduct
+      LEFT JOIN productcategory PC ON PC.productid = P.idproduct
+      LEFT JOIN viewcategory VC ON PC.categoryid = VC.categoryid
+      LEFT JOIN productnew PN ON P.idproduct = PN.productid
+    ' . $dataset->queryFrom;
 
-	public function initDataset ($dataset)
-	{
-		$clientGroupId = Session::getActiveClientGroupid();
-		
-		if (! empty($clientGroupId)){
 			
-			$dataset->setTableData(Array(
-				'id' => Array(
-					'source' => 'SP.relatedproductid'
-				),
-				'adddate' => Array(
-					'source' => 'P.adddate'
-				),
-				'hierarchy' => Array(
-					'source' => 'SP.hierarchy'
-				),
-				'name' => Array(
-					'source' => 'PT.name'
-				),
-				'ean' => Array(
-					'source' => 'P.ean'
-				),
-				'delivelercode' => Array(
-					'source' => 'P.delivelercode'
-				),
-				'shortdescription' => Array(
-					'source' => 'PT.shortdescription'
-				),
-				'seo' => Array(
-					'source' => 'PT.seo'
-				),
-				'categoryname' => Array(
-					'source' => 'CT.name'
-				),
-				'categoryseo' => Array(
-					'source' => 'CT.seo'
-				),
-				'onstock' => Array(
-					'source' => 'IF(P.trackstock = 1, IF(P.stock > 0, 1, 0), 1)'
-				),
-				'pricenetto' => Array(
-					'source' => 'IF(PGP.groupprice = 1, 
-								 	PGP.sellprice, 
-								 	P.sellprice
-								 ) * CR.exchangerate'
-				),
-				'price' => Array(
-					'source' => 'IF(PGP.groupprice = 1, 
-									PGP.sellprice, 
-									P.sellprice
-								 ) * (1 + (V.value / 100)) * CR.exchangerate'
-				),
-				'buypricenetto' => Array(
-					'source' => 'P.buyprice * CR.exchangerate'
-				),
-				'buyprice' => Array(
-					'source' => 'P.buyprice * (1 + (V.value / 100)) * CR.exchangerate'
-				),
-				'discountpricenetto' => Array(
-					'source' => 'IF(PGP.promotion = 1 AND IF(PGP.promotionstart IS NOT NULL, PGP.promotionstart <= CURDATE(), 1) AND IF(PGP.promotionend IS NOT NULL, PGP.promotionend >= CURDATE(), 1),
-								 	PGP.discountprice,
-								 	IF(PGP.groupprice IS NULL AND P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), P.discountprice, NULL)
-								 ) * CR.exchangerate'
-				),
-				'discountprice' => Array(
-					'source' => 'IF(PGP.promotion = 1 AND IF(PGP.promotionstart IS NOT NULL, PGP.promotionstart <= CURDATE(), 1) AND IF(PGP.promotionend IS NOT NULL, PGP.promotionend >= CURDATE(), 1),
-								 	PGP.discountprice,
-								 	IF(PGP.groupprice IS NULL AND P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), P.discountprice, NULL)
-								 ) * (1 + (V.value / 100)) * CR.exchangerate'
-				),
-				'photo' => Array(
-					'source' => 'Photo.photoid',
-					'processFunction' => Array(
-						App::getModel('product'),
-						'getImagePath'
-					)
-				),
-				'opinions' => Array(
-					'source' => 'COUNT(DISTINCT PREV.idproductreview)'
-				),
-				'rating' => Array(
-					'source' => 'IF(CEILING(AVG(PRANGE.value)) IS NULL, 0, CEILING(AVG(PRANGE.value)))'
-				),
-				'new' => Array(
-					'source' => 'IF(PN.active = 1 AND (PN.startdate IS NULL OR PN.startdate <= CURDATE()) AND (PN.enddate IS NULL OR PN.enddate >= CURDATE()), 1, 0)'
-				),
-				'dateto' => Array(
-					'source' => 'IF(PGP.promotionend IS NOT NULL, PGP.promotionend, IF(P.promotionend IS NOT NULL, P.promotionend, NULL))'
-				),
-				'statuses' => Array(
-					'source' => 'P.idproduct',
-					'processFunction' => Array(
-						App::getModel('product'),
-						'getProductStatuses'
-					)
-				)
-			));
-			
-			$dataset->setFrom('
-				similarproduct SP
-	           	LEFT JOIN product P ON SP.relatedproductid = P.idproduct
-	           	LEFT JOIN productgroupprice PGP ON PGP.productid = P.idproduct AND PGP.clientgroupid = :clientgroupid
-	           	LEFT JOIN producttranslation PT ON P.idproduct = PT.productid AND PT.languageid = :languageid
-				LEFT JOIN productcategory PC ON PC.productid = P.idproduct
-	           	LEFT JOIN viewcategory VC ON PC.categoryid = VC.categoryid
-	           	LEFT JOIN categorytranslation CT ON PC.categoryid = CT.categoryid AND CT.languageid = :languageid
-				LEFT JOIN vat V ON V.idvat = P.vatid
-	           	LEFT JOIN productphoto Photo ON Photo.productid = P.idproduct AND Photo.mainphoto = 1
-	           	LEFT JOIN productnew PN ON P.idproduct = PN.productid
-	           	LEFT JOIN productreview PREV ON PREV.productid = P.idproduct
-				LEFT JOIN productrange PRANGE ON PRANGE.productid = P.idproduct
-				LEFT JOIN currencyrates CR ON CR.currencyfrom = P.sellcurrencyid AND CR.currencyto = :currencyto
-			');
-		}
-		else{
-			
-			$dataset->setTableData(Array(
-				'id' => Array(
-					'source' => 'SP.relatedproductid'
-				),
-				'adddate' => Array(
-					'source' => 'P.adddate'
-				),
-				'hierarchy' => Array(
-					'source' => 'SP.hierarchy'
-				),
-				'name' => Array(
-					'source' => 'PT.name'
-				),
-				'ean' => Array(
-					'source' => 'P.ean'
-				),
-				'delivelercode' => Array(
-					'source' => 'P.delivelercode'
-				),
-				'shortdescription' => Array(
-					'source' => 'PT.shortdescription'
-				),
-				'seo' => Array(
-					'source' => 'PT.seo'
-				),
-				'categoryname' => Array(
-					'source' => 'CT.name'
-				),
-				'categoryseo' => Array(
-					'source' => 'CT.seo'
-				),
-				'onstock' => Array(
-					'source' => 'IF(P.trackstock = 1, IF(P.stock > 0, 1, 0), 1)'
-				),
-				'pricenetto' => Array(
-					'source' => 'P.sellprice * CR.exchangerate'
-				),
-				'price' => Array(
-					'source' => 'P.sellprice * (1 + (V.value / 100)) * CR.exchangerate'
-				),
-				'buypricenetto' => Array(
-					'source' => 'ROUND(P.buyprice * CR.exchangerate, 2)'
-				),
-				'buyprice' => Array(
-					'source' => 'ROUND((P.buyprice + (P.buyprice * V.`value`)/100) * CR.exchangerate, 2)'
-				),
-				'discountpricenetto' => Array(
-					'source' => 'IF(P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), P.discountprice * CR.exchangerate, NULL)'
-				),
-				'discountprice' => Array(
-					'source' => 'IF(P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), P.discountprice * (1 + (V.value / 100)) * CR.exchangerate, NULL)'
-				),
-				'photo' => Array(
-					'source' => 'Photo.photoid',
-					'processFunction' => Array(
-						App::getModel('product'),
-						'getImagePath'
-					)
-				),
-				'opinions' => Array(
-					'source' => 'COUNT(DISTINCT PREV.idproductreview)'
-				),
-				'rating' => Array(
-					'source' => 'IF(CEILING(AVG(PRANGE.value)) IS NULL, 0, CEILING(AVG(PRANGE.value)))'
-				),
-				'new' => Array(
-					'source' => 'IF(PN.active = 1 AND (PN.startdate IS NULL OR PN.startdate <= CURDATE()) AND (PN.enddate IS NULL OR PN.enddate >= CURDATE()), 1, 0)'
-				),
-				'dateto' => Array(
-					'source' => 'IF(P.promotionend IS NOT NULL, P.promotionend, NULL)'
-				),
-				'statuses' => Array(
-					'source' => 'P.idproduct',
-					'processFunction' => Array(
-						App::getModel('product'),
-						'getProductStatuses'
-					)
-				)
-			));
-			
-			$dataset->setFrom('
-				similarproduct SP
-	           	LEFT JOIN product P ON SP.relatedproductid = P.idproduct
-            	LEFT JOIN producttranslation PT ON P.idproduct = PT.productid AND PT.languageid = :languageid
-				LEFT JOIN productcategory PC ON PC.productid = P.idproduct
-            	LEFT JOIN viewcategory VC ON PC.categoryid = VC.categoryid
-            	LEFT JOIN categorytranslation CT ON PC.categoryid = CT.categoryid AND CT.languageid = :languageid
-				LEFT JOIN vat V ON V.idvat = P.vatid
-            	LEFT JOIN productphoto Photo ON Photo.productid = P.idproduct AND Photo.mainphoto = 1
-            	LEFT JOIN productnew PN ON P.idproduct = PN.productid
-            	LEFT JOIN productreview PREV ON PREV.productid = P.idproduct
-				LEFT JOIN productrange PRANGE ON PRANGE.productid = P.idproduct
-				LEFT JOIN currencyrates CR ON CR.currencyfrom = P.sellcurrencyid AND CR.currencyto = :currencyto
-			');
-		}
-		
 		if ($this->registry->router->getCurrentController() == 'cart'){
 			$dataset->setAdditionalWhere('
 				SP.productid  IN (:ids) AND 
@@ -260,7 +66,7 @@ class ProductsSimilarBoxModel extends Component\Model\Dataset
 		$dataset->setGroupBy('
 			SP.relatedproductid
 		');
-	}
+  }
 
 	public function getProductDataset ()
 	{
