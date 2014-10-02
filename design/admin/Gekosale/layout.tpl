@@ -50,7 +50,7 @@
 		{% if error is defined %}
 		<script type="text/javascript">
 		$(document).ready(function(){
-			GError('{% trans %}TXT_ERROR_OCCURED{% endtrans %}', '{{ error }}');
+			GError('{% trans %}TXT_ERROR_OCCURED{% endtrans %}', '{{ error|e }}');
 		});
 		</script>
 		{% endif %}
@@ -135,7 +135,9 @@
 		$(document).ready(function(){
 			setTimeout(function() {
 				var id = $('form').find('input[type="text"]:first-child').attr('id');
-				$('#' + id).focus();
+        if (id) {
+          $('#' + id).focus();
+        }
 			}, 1000);
 			
 		});
