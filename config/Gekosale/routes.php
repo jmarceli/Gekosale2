@@ -191,15 +191,6 @@ $this->routes->add('frontend.invoice', new Route('/' . Seo::getSeo('invoice') . 
 	'_scheme' => SSLNAME
 )));
 
-$this->routes->add('frontend.searchresults', new Route('/searchresults/{param}', array(
-	'mode' => 'frontend',
-	'controller' => 'searchresults',
-	'action' => 'index',
-	'param' => NULL
-), array(
-	'_scheme' => 'http'
-)));
-
 $this->routes->add('frontend.productcart', new Route('/' . Seo::getSeo('productcart') . '/{param}', array(
 	'mode' => 'frontend',
 	'controller' => 'productcart',
