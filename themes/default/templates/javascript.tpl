@@ -32,7 +32,7 @@
 		}); 
 
 		{% if error is defined %}
-    GError('{{ error }}', '{{ error_msg }}');
+    GError('{{ error|e }}', '{{ error_msg|e }}');
 		{% endif %}
 
     $('#order button[type=submit]').click(function() {
