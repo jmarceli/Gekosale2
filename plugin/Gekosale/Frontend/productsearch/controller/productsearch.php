@@ -24,7 +24,7 @@ class ProductSearchController extends Component\Controller\Frontend
 
 	public function index ()
 	{
-		$this->Render('Productsearchlist');
+    $this->Render('Productsearchlist');
 	}
 
 	public function noresults ()

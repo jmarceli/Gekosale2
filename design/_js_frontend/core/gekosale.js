@@ -551,17 +551,15 @@ var oDefaults = {
 	fOpacity: .75,
 	iZIndex: 1001,
 	iDuration: 200,
-	sDefaultText: 'Szukaj produktu...',
-	sViewUrl:'/index.php/searchresults/view/',
-	sPlaceholder: 'live-search-results'
+	sPlaceholder: 'live-search-results',
 };
 
 var GSearch = function() {
 	
 	var gThis = this;
 	gThis._Constructor = function() {
-		gThis.m_oOptions.sViewUrl = gThis.m_oOptions.path;
 		gThis.m_jInput = $(this);
+		gThis.m_oOptions.sDefaultText = gThis.m_jInput.attr('placeholder');
 		gThis.sLastValue = gThis.m_jInput.val();
 		gThis.m_jInput.attr('autocomplete','off');
 		gThis.m_jLiveSearch = $('<div>').attr('id', gThis.m_oOptions.sPlaceholder).appendTo($('#content')).hide().slideUp(0);
@@ -646,10 +644,11 @@ var GSearch = function() {
 	
 	gThis.LoadResults = function() {
 		gThis.sLastValue = gThis.m_jInput.val();
-		$.get(gThis.m_oOptions.sViewUrl + gThis.m_jInput.val(), function (data){
-			gThis.m_jLiveSearch.html(data);
-			gThis.ShowLiveSearch();
-		});
+    gThis.m_jLiveSearch.html(xajax_doSearchQuery({
+      'form': gThis.m_oOptions.form.serialize(),
+      'container': gThis.m_oOptions.sPlaceholder,
+    }));
+    gThis.ShowLiveSearch();
 	};
 	
 	gThis._Constructor();

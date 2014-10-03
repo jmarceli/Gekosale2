@@ -26,9 +26,12 @@
 	$(document).ready(function(){
     GCore.Init();
 
+    $('#product-search').submit(function() {
+      $(this).attr('action', $(this).attr('action') + '/' + $('#product-search-phrase').val());
+    });
+
 		$('#product-search-phrase').GSearch({
-			'path': "{{ path('frontend.searchresults') }}/",
-			'phrase': $('#product-search-phrase').val()
+      'form': $('#product-search')
 		}); 
 
 		{% if error is defined %}

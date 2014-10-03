@@ -29,7 +29,7 @@
     </ul>
     <form id="product-search" class="navbar-search form-search pull-right" action="{{ path('frontend.productsearch', {'action' : 'index'}) }}" method="post">
       <div class="input-append">
-        <input id="product-search-phrase" name="query" type="text" class="search-query span2" placeholder="Szukaj produktu..."><button class="btn" type="submit"><i class="icon-search"></i></button>
+        <input id="product-search-phrase" name="query" type="text" class="search-query span2" placeholder="{% trans %}TXT_SEARCH_PRODUCT{% endtrans %}"><button class="btn" type="submit"><i class="icon-search"></i></button>
       </div>
     </form>
   </div>
