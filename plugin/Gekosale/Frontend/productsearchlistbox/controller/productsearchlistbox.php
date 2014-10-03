@@ -31,6 +31,8 @@ class ProductSearchListBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
+		$this->searchPhrase = App::getModel('formprotection')->cropDangerousCode($_POST['query']);
+
 		$this->orderBy = $this->getParam('orderBy', 'default');
 		$this->orderDir = $this->getParam('orderDir', 'asc');
 		$this->currentPage = $this->getParam('currentPage', 1);
@@ -54,7 +56,6 @@ class ProductSearchListBoxController extends Component\Controller\Box
 			'orderDir' => $this->orderDir
 		);
 		
-		$this->searchPhrase = str_replace('_', '', App::getModel('formprotection')->cropDangerousCode($this->getParam()));
 		$this->getProductsTemplate();
 		
 		$this->registry->template->assign('searchPhrase', $this->searchPhrase);

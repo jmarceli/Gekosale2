@@ -25,9 +25,6 @@
 
 	$(document).ready(function(){
     GCore.Init();
-		$('#product-search').submit(function(){
-			return xajax_doSearchQuery($('#product-search-phrase').val());
-		});
 
 		$('#product-search-phrase').GSearch({
 			'path': "{{ path('frontend.searchresults') }}/",
