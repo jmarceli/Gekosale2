@@ -43,36 +43,36 @@ class ProductSearchListBoxModel extends Component\Model
 			'label' => _('TXT_PAGINATION')
 		)));
 		
-		$ct_ProductSearchListBox->AddChild(new FormEngine\Elements\Select(Array(
-			'name' => 'view',
-			'label' => 'Domyślny widok',
-			'options' => Array(
-				new FormEngine\Option('0', 'Siatka'),
-				new FormEngine\Option('1', 'Lista')
-			)
-		)));
+		//$ct_ProductSearchListBox->AddChild(new FormEngine\Elements\Select(Array(
+			//'name' => 'view',
+			//'label' => 'Domyślny widok',
+			//'options' => Array(
+				//new FormEngine\Option('0', 'Siatka'),
+				//new FormEngine\Option('1', 'Lista')
+			//)
+		//)));
 		
-		$ct_ProductSearchListBox->AddChild(new FormEngine\Elements\Select(Array(
-			'name' => 'orderBy',
-			'label' => 'Domyślne sortowanie',
-			'options' => Array(
-				new FormEngine\Option('id', 'ID produktu'),
-				new FormEngine\Option('name', 'Nazwa'),
-				new FormEngine\Option('price', 'Cena'),
-				new FormEngine\Option('rating', 'Ocena klientów'),
-				new FormEngine\Option('opinions', 'Ilość recenzji'),
-				new FormEngine\Option('adddate', 'Data dodania')
-			)
-		)));
+		//$ct_ProductSearchListBox->AddChild(new FormEngine\Elements\Select(Array(
+			//'name' => 'orderBy',
+			//'label' => 'Domyślne sortowanie',
+			//'options' => Array(
+				//new FormEngine\Option('id', 'ID produktu'),
+				//new FormEngine\Option('name', 'Nazwa'),
+				//new FormEngine\Option('price', 'Cena'),
+				//new FormEngine\Option('rating', 'Ocena klientów'),
+				//new FormEngine\Option('opinions', 'Ilość recenzji'),
+				//new FormEngine\Option('adddate', 'Data dodania')
+			//)
+		//)));
 		
-		$ct_ProductSearchListBox->AddChild(new FormEngine\Elements\Select(Array(
-			'name' => 'orderDir',
-			'label' => 'Kolejność sortowania',
-			'options' => Array(
-				new FormEngine\Option('asc', 'Rosnąco'),
-				new FormEngine\Option('desc', 'Malejąco')
-			)
-		)));
+		//$ct_ProductSearchListBox->AddChild(new FormEngine\Elements\Select(Array(
+			//'name' => 'orderDir',
+			//'label' => 'Kolejność sortowania',
+			//'options' => Array(
+				//new FormEngine\Option('asc', 'Rosnąco'),
+				//new FormEngine\Option('desc', 'Malejąco')
+			//)
+		//)));
 	
 	}
 
