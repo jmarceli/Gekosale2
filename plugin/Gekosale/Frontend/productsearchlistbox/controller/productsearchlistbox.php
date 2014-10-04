@@ -70,12 +70,12 @@ class ProductSearchListBoxController extends Component\Controller\Box
 		$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		
-		if ($this->dataset['total'] == 0){
-			App::redirectUrl($this->registry->router->generate('frontend.productsearch', true, Array(
-				'action' => 'noresults',
-				'param' => $this->searchPhrase
-			)));
-		}
+		//if ($this->dataset['total'] == 0){
+			//App::redirectUrl($this->registry->router->generate('frontend.productsearch', true, Array(
+				//'action' => 'noresults',
+				//'param' => $this->searchPhrase
+			//)));
+		//}
 		
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}

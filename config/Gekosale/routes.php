@@ -337,6 +337,7 @@ $this->routes->add('frontend.productsearch', new Route('/' . Seo::getSeo('produc
 	'currentPage' => '\d{1,10}',
 	'orderBy' => '[\w-\/]+',
 	'orderDir' => 'asc|desc',
+	'viewType' => '\d',
 	'priceFrom' => '[\d+\.]+',
 	'priceTo' => '[\d+\.]+',
 	'producers' => '[\d+_]+',

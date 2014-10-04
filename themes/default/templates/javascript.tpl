@@ -26,8 +26,9 @@
 	$(document).ready(function(){
     GCore.Init();
 
-    $('#product-search').submit(function() {
-      $(this).attr('action', $(this).attr('action') + '/' + $('#product-search-phrase').val());
+    $('#product-search').submit(function(e) {
+      e.preventDefault();
+      window.location = $(this).attr('action') + '/' + $('#product-search-phrase').val();
     });
 
 		$('#product-search-phrase').GSearch({
