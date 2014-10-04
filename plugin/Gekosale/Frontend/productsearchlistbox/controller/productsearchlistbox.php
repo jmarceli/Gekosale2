@@ -56,7 +56,7 @@ class ProductSearchListBoxController extends Component\Controller\Box
       'orderDir' => $this->orderDir
     );
 		
-    $this->dataset = App::getModel('productsearch')->search($this->searchPhrase, $this->producers, $this->attributes, $this->priceFrom, $this->priceTo, $this->_boxAttributes['productsCount'], $this->currentPage);
+    $this->dataset = App::getModel('productsearch')->search($this->searchPhrase, $this->producers, $this->attributes, $this->priceFrom, $this->priceTo, $this->_boxAttributes['productsCount'], $this->currentPage, 0, $this->orderBy, $this->orderDir);
 		
 		$this->registry->template->assign('phrase', $this->searchPhrase);
 		$this->registry->template->assign('showpagination', $this->_boxAttributes['pagination']);
