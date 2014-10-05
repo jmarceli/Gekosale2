@@ -35,7 +35,7 @@ class DispatchmethodModel extends Component\Model\Datagrid
 				'source' => 'D.iddispatchmethod'
 			),
 			'name' => Array(
-				'source' => 'D.name',
+				'source' => 'DMT.name',
 				'prepareForAutosuggest' => true,
 				'processLanguage' => true
 			),
@@ -53,6 +53,7 @@ class DispatchmethodModel extends Component\Model\Datagrid
 		$datagrid->setFrom('
 			dispatchmethod D
 			LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
+      LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 		');
 		
 		$datagrid->setGroupBy('
@@ -130,16 +131,19 @@ class DispatchmethodModel extends Component\Model\Datagrid
 	 */
 	public function getDispatchmethod ($id)
 	{
-		$sql = 'SELECT iddispatchmethod AS id, name, maximumweight, freedelivery, type FROM dispatchmethod where iddispatchmethod = :id';
+    $sql = 'SELECT iddispatchmethod AS id, DMT.name, maximumweight, freedelivery, type 
+      FROM dispatchmethod D
+      LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
+      WHERE iddispatchmethod = :id';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('id', $id);
-		
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$data = null;
 		$stmt->execute();
 		if ($rs = $stmt->fetch()){
 			$data = Array(
 				'id' => $rs['id'],
-				'name' => _($rs['name']),
+				'name' => $rs['name'],
 				'maximumweight' => $rs['maximumweight'],
 				'freedelivery' => $rs['freedelivery'],
 				'type' => $rs['type']
@@ -151,14 +155,32 @@ class DispatchmethodModel extends Component\Model\Datagrid
 
 	public function getDispatchmethodAll ()
 	{
-		$sql = 'SELECT iddispatchmethod AS id, name FROM dispatchmethod';
+    $sql = 'SELECT iddispatchmethod AS id, DMT.name 
+      FROM dispatchmethod D
+      LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid';
 		$Data = Array();
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		while ($rs = $stmt->fetch()){
 			$Data[] = Array(
 				'id' => $rs['id'],
-				'name' => _($rs['name'])
+				'name' => $rs['name']
+			);
+		}
+		return $Data;
+	}
+
+	public function getDispatchmethodTranslation ($id)
+	{
+		$sql = "SELECT * FROM dispatchmethodtranslation WHERE dispatchmethodid =:id";
+		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('id', $id);
+		$stmt->execute();
+		$Data = Array();
+		while ($rs = $stmt->fetch()){
+			$Data[$rs['languageid']] = Array(
+				'name' => $rs['name'],
 			);
 		}
 		return $Data;
@@ -201,6 +223,7 @@ class DispatchmethodModel extends Component\Model\Datagrid
 		Db::getInstance()->beginTransaction();
 		try{
 			$this->updateDispatchmethod($Data, $id);
+			$this->updateDispatchmethodTranslation($Data, $id);
 			$this->updateDispatchmethodPaymentmethod($Data['paymentmethodname'], $id);
 			if ($Data['type'] == 1){
 				$this->updateDispatchmethodPrice($Data, $id);
@@ -325,7 +348,6 @@ class DispatchmethodModel extends Component\Model\Datagrid
 	{
 		try{
 			$sql = 'UPDATE dispatchmethod SET 
-						name=:name, 
 						description=:description,
 						type = :type, 
 						maximumweight = :maximumweight, 
@@ -334,7 +356,6 @@ class DispatchmethodModel extends Component\Model\Datagrid
 						currencyid = :currencyid
 					WHERE iddispatchmethod = :id';
 			$stmt = Db::getInstance()->prepare($sql);
-			$stmt->bindValue('name', $Data['name']);
 			$stmt->bindValue('description', $Data['description']);
 			$stmt->bindValue('type', $Data['type']);
 			if ($Data['maximumweight'] != NULL){
@@ -362,6 +383,27 @@ class DispatchmethodModel extends Component\Model\Datagrid
 		catch (Exception $e){
 			throw new CoreException(_('ERR_DISPATCHMETHOD_EDIT'), 10, $e->getMessage());
 		}
+	}
+
+	public function updateDispatchmethodTranslation ($Data, $id)
+	{
+		foreach ($Data['name'] as $key => $val){
+      $sql = 'INSERT INTO dispatchmethodtranslation SET name=:name 
+        ,dispatchmethodid = :id, languageid = :languageid
+        ON DUPLICATE KEY UPDATE name=:name';
+      $stmt = Db::getInstance()->prepare($sql);
+      $stmt->bindValue('id', $id);
+      $stmt->bindValue('name', $val);
+      $stmt->bindValue('languageid', $key);
+      try{
+        $stmt->execute();
+      }
+      catch (Exception $e){
+        echo $e->getMessage();
+        return false;
+      }
+    }
+		return true;
 	}
 
 	public function updateDispatchmethodPhoto ($Data, $id)
@@ -392,7 +434,6 @@ class DispatchmethodModel extends Component\Model\Datagrid
 	{
 		$sql = "SELECT 
 					iddispatchmethod AS id, 
-					name, 
 					description, 
 					photo, 
 					type, 
@@ -400,11 +441,13 @@ class DispatchmethodModel extends Component\Model\Datagrid
 					freedelivery,
 					countryids,
 					currencyid
-				FROM dispatchmethod
-				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = iddispatchmethod
-				WHERE iddispatchmethod = :id";
+				FROM dispatchmethod D
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
+				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
+				WHERE D.iddispatchmethod = :id";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('id', $id);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		$rs = $stmt->fetch();
 		$Data = Array();
@@ -414,7 +457,7 @@ class DispatchmethodModel extends Component\Model\Datagrid
 				$countryids = explode(',', $rs['countryids']);
 			}
 			$Data = Array(
-				'name' => $rs['name'],
+        'language' => $this->getDispatchmethodTranslation($id),
 				'description' => $rs['description'],
 				'type' => $rs['type'],
 				'currencyid' => $rs['currencyid'],
@@ -577,7 +620,7 @@ class DispatchmethodModel extends Component\Model\Datagrid
 	{
 		$sql = 'INSERT INTO `dispatchmethod` (name,currencyid, description,type,maximumweight,freedelivery, photo,countryids) VALUES (:name,:currencyid, :description,:type,:maximumweight,:freedelivery, :photo,:countryids)';
 		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('name', $Data['name']);
+    $stmt->bindValue('name', date('Ymdhsi'));
 		$stmt->bindValue('description', $Data['description']);
 		
 		$stmt->bindValue('currencyid', $Data['currencyid']);
@@ -638,6 +681,7 @@ class DispatchmethodModel extends Component\Model\Datagrid
 		Db::getInstance()->beginTransaction();
 		try{
 			$newDispatchmethodid = $this->addDispatchmethod($Data);
+      $this->updateDispatchmethodTranslation($Data, $newDispatchmethodid);
 			if (is_array($Data['paymentmethodname']) && ! empty($Data['paymentmethodname'])){
 				$this->addPaymentmethodToDispatchmethod($Data['paymentmethodname'], $newDispatchmethodid);
 			}

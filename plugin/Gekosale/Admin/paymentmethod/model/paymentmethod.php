@@ -210,11 +210,13 @@ class PaymentmethodModel extends Component\Model\Datagrid
 
 	public function DispatchmethodPaymentmethod ($id)
 	{
-		$sql = 'SELECT DM.iddispatchmethod AS id, DM.name AS dispatchmethodname
+		$sql = 'SELECT DM.iddispatchmethod AS id, DMT.name AS dispatchmethodname
 					FROM dispatchmethodpaymentmethod DPM
 					LEFT JOIN dispatchmethod DM ON DPM.dispatchmethodid = DM.iddispatchmethod
+          LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = DM.iddispatchmethod AND DMT.languageid = :languageid
 					WHERE DPM.paymentmethodid=:id';
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('id', $id);
 		$stmt->execute();
 		$Data = Array();

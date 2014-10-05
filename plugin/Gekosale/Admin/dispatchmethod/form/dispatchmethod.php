@@ -42,14 +42,19 @@ class DispatchmethodForm extends Component\Form
 			'name' => 'required_data',
 			'label' => _('TXT_MAIN_DATA')
 		)));
+
+		$basicLanguageData = $requiredData->AddChild(new FormEngine\Elements\FieldsetLanguage(Array(
+			'name' => 'language_data',
+			'label' => _('TXT_LANGUAGE_DATA')
+		)));
 		
-		$requiredData->AddChild(new FormEngine\Elements\TextField(Array(
+		$basicLanguageData->AddChild(new FormEngine\Elements\TextField(Array(
 			'name' => 'name',
 			'label' => _('TXT_NAME'),
 			'rules' => Array(
 				new FormEngine\Rules\Required(_('ERR_EMPTY_NAME')),
-				new FormEngine\Rules\Unique(_('ERR_NAME_ALREADY_EXISTS'), 'dispatchmethod', 'name', null, Array(
-					'column' => 'iddispatchmethod',
+				new FormEngine\Rules\Unique(_('ERR_NAME_ALREADY_EXISTS'), 'dispatchmethodtranslation', 'name', null, Array(
+					'column' => 'dispatchmethodid',
 					'values' => (int) $this->registry->core->getParam()
 				))
 			)

@@ -938,6 +938,23 @@ CREATE TABLE `dispatchmethod` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 INSERT INTO `dispatchmethod` (`iddispatchmethod`, `name`, `adddate`, `description`, `photo`, `type`, `maximumweight`, `freedelivery`, `countryids`, `currencyid`, `hierarchy`, `subiektsymbol`) VALUES (15,'Kurier Standard','2012-09-17 23:09:52','',17,1,20.0000,123.00,'',28,0,''),(17,'Poczta Polska','2012-08-31 15:07:38','',0,1,NULL,NULL,'',28,0,'');
+
+DROP TABLE IF EXISTS `dispatchmethodtranslation`;
+CREATE TABLE IF NOT EXISTS `dispatchmethodtranslation` (
+`iddispatchmethodtranslation` int(10) unsigned NOT NULL,
+  `dispatchmethodid` int(10) unsigned NOT NULL,
+  `languageid` int(10) unsigned NOT NULL,
+  `name` varchar(64) CHARACTER SET utf8 NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `dispatchmethodtranslation` (`iddispatchmethodtranslation`, `dispatchmethodid`, `languageid`, `name`) VALUES (1, 15, 1, 'Kurier Standard'), (2, 17, 1, 'Poczta Polska');
+ALTER TABLE `dispatchmethodtranslation`
+ ADD PRIMARY KEY (`iddispatchmethodtranslation`), ADD UNIQUE KEY `dispatchmethodid_2` (`dispatchmethodid`,`languageid`), ADD KEY `dispatchmethodid` (`dispatchmethodid`), ADD KEY `languageid` (`languageid`);
+
+ALTER TABLE `dispatchmethodtranslation`
+MODIFY `iddispatchmethodtranslation` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+
 DROP TABLE IF EXISTS `dispatchmethodpaymentmethod`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
