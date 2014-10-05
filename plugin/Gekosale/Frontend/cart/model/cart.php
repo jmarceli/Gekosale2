@@ -1094,10 +1094,11 @@ class CartModel extends Component\Model
 	{
 		$dispatchmethodname = '';
 		$sql = "SELECT 
-					DM.name
-				FROM dispatchmethod DM
-				WHERE DM.iddispatchmethod = :iddispatchmethod";
+        name
+        FROM dispatchmethodtranslation 
+				WHERE dispatchmethodid = :iddispatchmethod AND languageid = :languageid";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('iddispatchmethod', $iddispatchmethod);
 		try{
 			$stmt->execute();

@@ -33,20 +33,22 @@ class DeliveryModel extends Component\Model
 	public function getDispatchmethod ()
 	{
 		$sql = "SELECT 
-					DP.name, 
-					DP.iddispatchmethod
-				FROM dispatchmethod DP 
+					DMT.name, 
+					D.iddispatchmethod
+				FROM dispatchmethod D
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = iddispatchmethod
 				WHERE DV.viewid=:viewid
 				ORDER BY DP.hierarchy ASC";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('viewid', Helper::getViewId());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		try{
 			$stmt->execute();
 			$Data = Array();
 			while ($rs = $stmt->fetch()){
 				$Data[] = Array(
-					'name' => _($rs['name']),
+					'name' => $rs['name'],
 					'iddispatchmethod' => $rs['iddispatchmethod']
 				);
 			}
@@ -80,22 +82,24 @@ class DeliveryModel extends Component\Model
 					ROUND(DP.dispatchmethodcost * CR.exchangerate, 4) AS dispatchmethodcostnetto,
 					IF(DP.vat IS NOT NULL, ROUND((DP.dispatchmethodcost + (DP.dispatchmethodcost*(V.`value`/100))) * CR.exchangerate,4), DP.dispatchmethodcost * CR.exchangerate) as dispatchmethodcost,
 					CASE
-  						WHEN (`from`<>0 AND `from`<:globalprice AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
- 					 	WHEN (:globalprice BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from`<:globalprice AND DP.dispatchmethodcost <> 0) THEN D.name
-  						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
+  						WHEN (`from`<>0 AND `from`<:globalprice AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
+ 					 	WHEN (:globalprice BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from`<:globalprice AND DP.dispatchmethodcost <> 0) THEN DMT.name
+  						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 					END as name,
 					D.description,
 					D.photo,
 					D.countryids
 				FROM dispatchmethodprice DP
 				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN currencyrates CR ON CR.currencyfrom = D.currencyid AND CR.currencyto = :currencyto
 				LEFT JOIN vat V ON V.idvat = DP.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				WHERE DV.viewid= :viewid AND IF(D.maximumweight IS NOT NULL, D.maximumweight >= :globalweight, 1) AND D.type = 1
 				ORDER BY D.hierarchy ASC";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('globalprice', $globalprice);
 		$stmt->bindValue('globalweight', $globalweight);
 		$stmt->bindValue('currencyto', Session::getActiveCurrencyId());
@@ -133,10 +137,10 @@ class DeliveryModel extends Component\Model
 					IF(DW.vat IS NOT NULL, ROUND((DW.cost+(DW.cost*(V.`value`/100))) * CR.exchangerate,4), DW.cost * CR.exchangerate) as dispatchmethodcost, 
 					D.freedelivery,
 					CASE
-  						WHEN (`from`<>0 AND `from`<:globalweight AND `to`=0 AND DW.cost =0) THEN D.name
- 					 	WHEN (:globalweight BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from`<:globalweight AND DW.cost <> 0) THEN D.name
-  						WHEN (`from`=0 AND `to`=0 AND DW.cost = 0) THEN D.name
+  						WHEN (`from`<>0 AND `from`<:globalweight AND `to`=0 AND DW.cost =0) THEN DMT.name
+ 					 	WHEN (:globalweight BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from`<:globalweight AND DW.cost <> 0) THEN DMT.name
+  						WHEN (`from`=0 AND `to`=0 AND DW.cost = 0) THEN DMT.name
 					END as name,
 					D.description,
 					D.photo,
@@ -144,6 +148,7 @@ class DeliveryModel extends Component\Model
 					D.countryids
 				FROM dispatchmethodweight DW
 				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN currencyrates CR ON CR.currencyfrom = D.currencyid AND CR.currencyto = :currencyto
 				LEFT JOIN vat V ON V.idvat = DW.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
@@ -154,6 +159,7 @@ class DeliveryModel extends Component\Model
 		$stmt->bindValue('globalweight', $globalweight);
 		$stmt->bindValue('currencyto', Session::getActiveCurrencyId());
 		$stmt->bindValue('viewid', Helper::getViewId());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		while ($rs = $stmt->fetch()){
 			$dispatchmethodid = $rs['dispatchmethodid'];
@@ -199,19 +205,21 @@ class DeliveryModel extends Component\Model
 					DP.iddispatchmethodprice,
 					IF(DP.vat IS NOT NULL, ROUND(DP.dispatchmethodcost + (DP.dispatchmethodcost * (V.`value`/100)), 4), DP.dispatchmethodcost) * CR.exchangerate as dispatchmethodcost,
 					CASE
-  						WHEN (`from` <> 0 AND `from` < :globalprice AND `to`= 0 AND DP.dispatchmethodcost = 0) THEN D.name
- 					 	WHEN (:globalprice BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from` < :globalprice AND DP.dispatchmethodcost <> 0) THEN D.name
-  						WHEN (`from` = 0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
+  						WHEN (`from` <> 0 AND `from` < :globalprice AND `to`= 0 AND DP.dispatchmethodcost = 0) THEN DMT.name
+ 					 	WHEN (:globalprice BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from` < :globalprice AND DP.dispatchmethodcost <> 0) THEN DMT.name
+  						WHEN (`from` = 0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 					END as name
 				FROM dispatchmethodprice DP
 				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN vat V ON V.idvat = DP.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				LEFT JOIN currencyrates CR ON CR.currencyfrom = D.currencyid AND CR.currencyto = :currencyto
 				WHERE DV.viewid= :viewid AND IF(D.maximumweight IS NOT NULL, D.maximumweight >= :globalweight, 1) AND D.type = 1
 				ORDER BY D.hierarchy ASC";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('globalprice', $globalprice);
 		$stmt->bindValue('globalweight', $globalweight);
 		$stmt->bindValue('viewid', Helper::getViewId());
@@ -242,19 +250,21 @@ class DeliveryModel extends Component\Model
 					IF(DW.vat IS NOT NULL, ROUND(DW.cost+(DW.cost*(V.`value`/100)),4), DW.cost) * CR.exchangerate as dispatchmethodcost, 
 					D.freedelivery,
 					CASE
-  						WHEN (`from`<>0 AND `from`<:globalweight AND `to`=0 AND DW.cost =0) THEN D.name
- 					 	WHEN (:globalweight BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from`<:globalweight AND DW.cost <> 0) THEN D.name
-  						WHEN (`from`=0 AND `to`=0 AND DW.cost = 0) THEN D.name
+  						WHEN (`from`<>0 AND `from`<:globalweight AND `to`=0 AND DW.cost =0) THEN DMT.name
+ 					 	WHEN (:globalweight BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from`<:globalweight AND DW.cost <> 0) THEN DMT.name
+  						WHEN (`from`=0 AND `to`=0 AND DW.cost = 0) THEN DMT.name
 					END as name
 				FROM dispatchmethodweight DW
 				LEFT JOIN vat V ON V.idvat = DW.vat
 				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				LEFT JOIN currencyrates CR ON CR.currencyfrom = D.currencyid AND CR.currencyto = :currencyto
 				WHERE DV.viewid= :viewid AND D.type = 2
 				ORDER BY D.hierarchy ASC";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('globalprice', $globalprice);
 		$stmt->bindValue('globalweight', $globalweight);
 		$stmt->bindValue('viewid', Helper::getViewId());
