@@ -942,14 +942,16 @@ class OrderModel extends Component\Model\Datagrid
 
 		$sql = "SELECT
 					PM.idpaymentmethod AS id,
-					PM.name
+					PMT.name
 				FROM paymentmethod PM
+          LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = PM.idpaymentmethod AND PMT.languageid = :languageid
 					LEFT JOIN paymentmethodview PMV ON PMV.paymentmethodid =PM.idpaymentmethod
 					WHERE
 						IF (:idorder>0, PMV.viewid= (SELECT O.viewid FROM `order` O WHERE O.idorder= :idorder),
 							IF(:viewid>0, PMV.viewid= :viewid, 0))";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('viewid', Helper::getViewId());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('idorder', $idorder);
 		$stmt->execute();
 		while ($rs = $stmt->fetch()){
@@ -1480,12 +1482,14 @@ class OrderModel extends Component\Model\Datagrid
 		$paymentmethodId = $Data['additional_data']['payment_data']['payment_method'];
 
 		$sql = "SELECT
-					name as paymentmethodname,
+					PMT.name as paymentmethodname,
 					idpaymentmethod
-				FROM paymentmethod
+				FROM paymentmethod P
+        LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = P.idpaymentmethod AND PMT.languageid = :languageid
 				WHERE idpaymentmethod=:paymentmethodId";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('paymentmethodId', $paymentmethodId);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		$rs = $stmt->fetch();
 		$paymentData = Array();
@@ -1830,12 +1834,14 @@ class OrderModel extends Component\Model\Datagrid
 		$paymentmethodId = $Data['additional_data']['payment_data']['payment_method'];
 
 		$sql = "SELECT
-					name as paymentmethodname,
+					PMT.name as paymentmethodname,
 					idpaymentmethod
-				FROM paymentmethod
+				FROM paymentmethod P
+        LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = P.idpaymentmethod AND PMT.languageid = :languageid
 				WHERE idpaymentmethod=:paymentmethodId";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('paymentmethodId', $paymentmethodId);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		$rs = $stmt->fetch();
 		$paymentData = Array();
