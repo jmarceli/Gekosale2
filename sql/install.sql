@@ -946,7 +946,6 @@ CREATE TABLE IF NOT EXISTS `dispatchmethodtranslation` (
   `languageid` int(10) unsigned NOT NULL,
   `name` varchar(64) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 INSERT INTO `dispatchmethodtranslation` (`iddispatchmethodtranslation`, `dispatchmethodid`, `languageid`, `name`) VALUES (1, 15, 1, 'Kurier Standard'), (2, 17, 1, 'Poczta Polska');
 ALTER TABLE `dispatchmethodtranslation`
@@ -1818,7 +1817,6 @@ CREATE TABLE IF NOT EXISTS `paymentmethodtranslation` (
   `languageid` int(10) unsigned NOT NULL,
   `name` varchar(64) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `paymentmethodtranslation` (`idpaymentmethodtranslation`, `paymentmethodid`, `languageid`, `name`) VALUES (1, 2, 1, 'platnosci.pl'), (6, 4, 1, 'Przelew bankowy'), (13, 5, 1, 'Płatność za pobraniem'), (14, 6, 1, 'Płatność przy odbiorze'), (15, 8, 1, 'Żagiel'), (16, 11, 1, 'Przelewy24'), (17, 12, 1, 'PayU'), (18, 15, 1, 'Transferuj.pl'), (19, 16, 1, 'Dotpay'), (20, 17, 1, 'PayByNet'); 
 ALTER TABLE `paymentmethodtranslation`
  ADD PRIMARY KEY (`idpaymentmethodtranslation`), ADD UNIQUE KEY `paymentmethodid_2` (`paymentmethodid`,`languageid`), ADD KEY `paymentmethodid` (`paymentmethodid`), ADD KEY `languageid` (`languageid`);
