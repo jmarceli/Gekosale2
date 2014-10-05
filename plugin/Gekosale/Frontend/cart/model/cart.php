@@ -1116,11 +1116,12 @@ class CartModel extends Component\Model
 	{
 		$paymentname = '';
 		$sql = "SELECT 
-					PM.name as paymentname
-				FROM paymentmethod PM
-				WHERE PM.idpaymentmethod = :idpaymentmethod";
+					PMT.name as paymentname
+				FROM paymentmethodtranslation PMT
+				WHERE PMT.paymentmethodid = :idpaymentmethod AND PMT.languageid = :languageid";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('idpaymentmethod', $idpaymentmethod);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		try{
 			$stmt->execute();
 			$rs = $stmt->fetch();

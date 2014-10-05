@@ -28,10 +28,11 @@ class PaymentModel extends Component\Model
 	{
 		$iddispatchmethod = Session::getActiveDispatchmethodChecked();
 		$sql = "SELECT 
-					PM.name, 
+					PMT.name, 
 					PM.idpaymentmethod, 
 					PM.controller
 				FROM paymentmethod PM
+				LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = PM.idpaymentmethod AND PMT.languageid = :languageid
 				LEFT JOIN paymentmethodview PV ON PV.paymentmethodid = idpaymentmethod
 				LEFT JOIN dispatchmethodpaymentmethod DMPM ON PM.idpaymentmethod = DMPM.paymentmethodid
 				LEFT JOIN dispatchmethod DM ON DM.iddispatchmethod = DMPM.dispatchmethodid
@@ -39,6 +40,7 @@ class PaymentModel extends Component\Model
 				ORDER BY PM.hierarchy ASC";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('viewid', Helper::getViewId());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('iddispatchmethod', $iddispatchmethod['dispatchmethodid']);
 		try{
 			$stmt->execute();
@@ -46,7 +48,7 @@ class PaymentModel extends Component\Model
 			while ($rs = $stmt->fetch()){
 				$controller = $rs['controller'];
 				$Data[] = Array(
-					'name' => _($rs['name']),
+					'name' => $rs['name'],
 					'idpaymentmethod' => $rs['idpaymentmethod']
 				);
 			}
