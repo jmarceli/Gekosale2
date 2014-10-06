@@ -91,7 +91,7 @@ class DeliveryModel extends Component\Model
 					D.photo,
 					D.countryids
 				FROM dispatchmethodprice DP
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN currencyrates CR ON CR.currencyfrom = D.currencyid AND CR.currencyto = :currencyto
 				LEFT JOIN vat V ON V.idvat = DP.vat
@@ -147,7 +147,7 @@ class DeliveryModel extends Component\Model
 					V.value,
 					D.countryids
 				FROM dispatchmethodweight DW
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN currencyrates CR ON CR.currencyfrom = D.currencyid AND CR.currencyto = :currencyto
 				LEFT JOIN vat V ON V.idvat = DW.vat
@@ -257,7 +257,7 @@ class DeliveryModel extends Component\Model
 					END as name
 				FROM dispatchmethodweight DW
 				LEFT JOIN vat V ON V.idvat = DW.vat
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				LEFT JOIN currencyrates CR ON CR.currencyfrom = D.currencyid AND CR.currencyto = :currencyto

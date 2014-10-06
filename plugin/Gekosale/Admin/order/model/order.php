@@ -218,10 +218,10 @@ class OrderModel extends Component\Model\Datagrid
 			  					WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodprice DP
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
             LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DP.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DP.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
         $stmt->bindValue('languageid', Helper::getLanguageId());
@@ -243,10 +243,10 @@ class OrderModel extends Component\Model\Datagrid
 			  					WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodweight DW
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
             LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DW.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DW.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
         $stmt->bindValue('languageid', Helper::getLanguageId());
@@ -315,10 +315,10 @@ class OrderModel extends Component\Model\Datagrid
 			  					WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodprice DP
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
             LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DP.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DP.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
 				$stmt->bindValue('price', $request['price_for_deliverers']);
@@ -340,10 +340,10 @@ class OrderModel extends Component\Model\Datagrid
 			  					WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodweight DW
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
             LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DW.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DW.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
         $stmt->bindValue('languageid', Helper::getLanguageId());
@@ -747,7 +747,7 @@ class OrderModel extends Component\Model\Datagrid
   						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 					END as name
 				FROM dispatchmethodprice DP
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN vat V ON V.idvat = DP.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
@@ -796,7 +796,7 @@ class OrderModel extends Component\Model\Datagrid
 					END as name
 				FROM dispatchmethodweight DW
 				LEFT JOIN vat V ON V.idvat = DW.vat
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				WHERE
@@ -852,7 +852,7 @@ class OrderModel extends Component\Model\Datagrid
   						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 					END as name
 				FROM dispatchmethodprice DP
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN vat V ON V.idvat = DP.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
@@ -900,7 +900,7 @@ class OrderModel extends Component\Model\Datagrid
 					END as name
 				FROM dispatchmethodweight DW
 				LEFT JOIN vat V ON V.idvat = DW.vat
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				WHERE
