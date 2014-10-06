@@ -66,6 +66,10 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Poprawka sortowania zamówień widocznych dla klienta na jego koncie
 * Dodanie brakujących tłumaczeń
 * Dodanie możliwości tłumaczenia nazw państw, przypisanie do każdego kraju odpowiedniego symbolu ISO 3166
+* Ujednolicenie kodu generującego listy produktów na poszczególnych stronach
+* Poprawka dotycząca wyszukiwarki i filtracji wyników wyszukiwania
+* Dodanie możliwości tłumaczenia metod wysyłki i metod płatności
+* Poprawka problemu dotyczącego tłumaczeń zawierających znak apostrofu '
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
