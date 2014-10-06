@@ -31,33 +31,33 @@ class ProductSearchListBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
-		$this->orderBy = $this->getParam('orderBy', 'default');
-		$this->orderDir = $this->getParam('orderDir', 'asc');
-		$this->currentPage = $this->getParam('currentPage', 1);
+		$this->searchPhrase = App::getModel('formprotection')->cropDangerousCode($this->getParam());
+
 		$this->view = $this->getParam('viewType', $this->_boxAttributes['view']);
 		
+    $this->orderBy = $this->getParam('orderBy', 'default');
+    $this->orderDir = $this->getParam('orderDir', 'asc');
+    $this->currentPage = $this->getParam('currentPage', 1);
 		$this->producers = $this->getParam('producers', 0);
 		$this->attributes = $this->getParam('attributes', 0);
 		
 		$this->priceFrom = $this->getParam('priceFrom', 0);
 		$this->priceTo = $this->getParam('priceTo', Core::PRICE_MAX);
 		
-		$this->_currentParams = Array(
-			'action' => 'index',
-			'param' => $this->getParam(),
-			'currentPage' => $this->currentPage,
-			'viewType' => $this->view,
-			'priceFrom' => $this->priceFrom,
-			'priceTo' => $this->priceTo,
-			'producers' => $this->producers,
-			'orderBy' => $this->orderBy,
-			'orderDir' => $this->orderDir
-		);
+    $this->_currentParams = Array(
+      'action' => 'index',
+      'param' => $this->searchPhrase,
+      'currentPage' => $this->currentPage,
+      'viewType' => $this->view,
+      'priceFrom' => $this->priceFrom,
+      'priceTo' => $this->priceTo,
+      'producers' => $this->producers,
+      'orderBy' => $this->orderBy,
+      'orderDir' => $this->orderDir
+    );
 		
-		$this->searchPhrase = str_replace('_', '', App::getModel('formprotection')->cropDangerousCode($this->getParam()));
-		$this->getProductsTemplate();
+    $this->dataset = App::getModel('productsearch')->search($this->searchPhrase, $this->producers, $this->attributes, $this->priceFrom, $this->priceTo, $this->_boxAttributes['productsCount'], $this->currentPage, 0, $this->orderBy, $this->orderDir);
 		
-		$this->registry->template->assign('searchPhrase', $this->searchPhrase);
 		$this->registry->template->assign('phrase', $this->searchPhrase);
 		$this->registry->template->assign('showpagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('sorting', $this->createSorting());
@@ -70,12 +70,12 @@ class ProductSearchListBoxController extends Component\Controller\Box
 		$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		
-		if ($this->dataset['total'] == 0){
-			App::redirectUrl($this->registry->router->generate('frontend.productsearch', true, Array(
-				'action' => 'noresults',
-				'param' => $this->searchPhrase
-			)));
-		}
+		//if ($this->dataset['total'] == 0){
+			//App::redirectUrl($this->registry->router->generate('frontend.productsearch', true, Array(
+				//'action' => 'noresults',
+				//'param' => $this->searchPhrase
+			//)));
+		//}
 		
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
@@ -83,36 +83,6 @@ class ProductSearchListBoxController extends Component\Controller\Box
 	public function getBoxTypeClassname ()
 	{
 		return 'layout-box-type-product-list';
-	}
-
-	protected function getProductsTemplate ()
-	{
-		$producer = (strlen($this->producers) > 0) ? array_filter(array_values(explode('_', $this->producers))) : Array();
-		$attributes = array_filter((strlen($this->attributes) > 0) ? array_filter(array_values(explode('_', $this->attributes))) : Array());
-		
-		$Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributes);
-		
-		$dataset = App::getModel('productsearch')->getDataset();
-		if ($this->_boxAttributes['productsCount'] > 0){
-			$dataset->setPagination($this->_boxAttributes['productsCount']);
-		}
-		$dataset->setCurrentPage($this->currentPage);
-		$dataset->setOrderBy('name', $this->orderBy);
-		$dataset->setOrderDir('asc', $this->orderDir);
-		
-		$dataset->setSQLParams(Array(
-			'categoryid' => (int) 0,
-			'clientid' => Session::getActiveClientid(),
-			'producer' => $producer,
-			'filterbyproducer' => (! empty($producer)) ? 1 : 0,
-			'pricefrom' => (float) $this->priceFrom,
-			'priceto' => (float) $this->priceTo,
-			'name' => '%' . $this->searchPhrase . '%',
-			'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
-			'products' => $Products
-		));
-		$products = App::getModel('productsearch')->getProductDataset();
-		$this->dataset = $products;
 	}
 
 	protected function createPaginationLinks ()

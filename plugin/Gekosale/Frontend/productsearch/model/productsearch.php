@@ -69,64 +69,65 @@ class ProductSearchModel extends Component\Model\Dataset
 		return $this->getDataset()->getDatasetRecords();
 	}
 
-	public function search ($phrase = '', $categoryid = 0, $type = 0, $sellpricemin = 0, $sellpricemax = 0, $producer = 0, $client = 0)
-	{
-		$sql = 'SELECT 
-						PS.name, 
-						PS.description, 
-						PS.shortdescription, 
-						PS.productid, 
-						P.sellprice as pricewithoutvat, 
-						P.stock, 
-						(SELECT ROUND(P.sellprice+(P.sellprice*vat.`value`)/100, 2)) AS price,
-						PROD.idproducer, 
-						PRODT.seo AS producerwww, 
-						PRODT.name AS producername, 
-						vat.`value`, 
-						PHOTO.photoid AS mainphotoid
-				FROM
-					productsearch PS
-					LEFT JOIN product P ON PS.productid = P.idproduct
-					LEFT JOIN productcategory PC ON PC.productid = P.idproduct
-					LEFT JOIN producer AS PROD ON PROD.idproducer = P.producerid
-					LEFT JOIN producertranslation AS PRODT ON PRODT.producerid = PROD.idproducer
-					LEFT JOIN vat AS vat ON vat.idvat = P.vatid
-					LEFT JOIN productphoto PHOTO ON PHOTO.productid = P.idproduct
-					LEFT JOIN clientdata AS CD ON CD.clientid = :clientid
-					LEFT JOIN clientgroup AS CG ON CG.idclientgroup = CD.clientgroupid
-				WHERE
-					PHOTO.mainphoto = 1
-					AND IF(:categoryid > 0, PC.categoryid = :categoryid, 1)
-					AND IF(:producerid > 0, idproducer = :producerid, 1)
-					AND PS.enable = 1
-					AND PS.languageid = :languageid
-					AND MATCH(PS.name, PS.description, PS.shortdescription, PS.producername, attributes) AGAINST(:phrase) > 0
-					AND P.sellprice BETWEEN :sellpricemin AND :sellpricemax
-				GROUP BY
-					P.idproduct
-				ORDER BY MATCH(PS.name, PS.description, PS.shortdescription, PS.producername, attributes) AGAINST(:phrase) DESC
-				';
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('clientid', Session::getActiveClientid());
-		$stmt->bindValue('languageid', Helper::getLanguageId());
-		$stmt->bindValue('phrase', $phrase);
-		$stmt->bindValue('categoryid', $categoryid);
-		$stmt->bindValue('type', $type);
-		$stmt->bindValue('sellpricemin', $sellpricemin);
-		$stmt->bindValue('sellpricemax', $sellpricemax);
-		$stmt->bindValue('producerid', $producer);
-		$stmt->execute();
-		$Data = $stmt->fetchAll();
-		foreach ($Data as $key => $value){
-			try{
-				$Data[$key]['photo'] = App::getModel('product')->getImagePath($value['mainphotoid']);
-			}
-			catch (Exception $e){
-				echo $e->getMessage();
-			}
-		}
-		return $Data;
-	}
+  // TODO: To remove, probably not used
+	//public function search ($phrase = '', $categoryid = 0, $type = 0, $sellpricemin = 0, $sellpricemax = 0, $producer = 0, $client = 0)
+	//{
+		//$sql = 'SELECT 
+						//PS.name, 
+						//PS.description, 
+						//PS.shortdescription, 
+						//PS.productid, 
+						//P.sellprice as pricewithoutvat, 
+						//P.stock, 
+						//(SELECT ROUND(P.sellprice+(P.sellprice*vat.`value`)/100, 2)) AS price,
+						//PROD.idproducer, 
+						//PRODT.seo AS producerwww, 
+						//PRODT.name AS producername, 
+						//vat.`value`, 
+						//PHOTO.photoid AS mainphotoid
+				//FROM
+					//productsearch PS
+					//LEFT JOIN product P ON PS.productid = P.idproduct
+					//LEFT JOIN productcategory PC ON PC.productid = P.idproduct
+					//LEFT JOIN producer AS PROD ON PROD.idproducer = P.producerid
+					//LEFT JOIN producertranslation AS PRODT ON PRODT.producerid = PROD.idproducer
+					//LEFT JOIN vat AS vat ON vat.idvat = P.vatid
+					//LEFT JOIN productphoto PHOTO ON PHOTO.productid = P.idproduct
+					//LEFT JOIN clientdata AS CD ON CD.clientid = :clientid
+					//LEFT JOIN clientgroup AS CG ON CG.idclientgroup = CD.clientgroupid
+				//WHERE
+					//PHOTO.mainphoto = 1
+					//AND IF(:categoryid > 0, PC.categoryid = :categoryid, 1)
+					//AND IF(:producerid > 0, idproducer = :producerid, 1)
+					//AND PS.enable = 1
+					//AND PS.languageid = :languageid
+					//AND MATCH(PS.name, PS.description, PS.shortdescription, PS.producername, attributes) AGAINST(:phrase) > 0
+					//AND P.sellprice BETWEEN :sellpricemin AND :sellpricemax
+				//GROUP BY
+					//P.idproduct
+				//ORDER BY MATCH(PS.name, PS.description, PS.shortdescription, PS.producername, attributes) AGAINST(:phrase) DESC
+				//';
+		//$stmt = Db::getInstance()->prepare($sql);
+		//$stmt->bindValue('clientid', Session::getActiveClientid());
+		//$stmt->bindValue('languageid', Helper::getLanguageId());
+		//$stmt->bindValue('phrase', $phrase);
+		//$stmt->bindValue('categoryid', $categoryid);
+		//$stmt->bindValue('type', $type);
+		//$stmt->bindValue('sellpricemin', $sellpricemin);
+		//$stmt->bindValue('sellpricemax', $sellpricemax);
+		//$stmt->bindValue('producerid', $producer);
+		//$stmt->execute();
+		//$Data = $stmt->fetchAll();
+		//foreach ($Data as $key => $value){
+			//try{
+				//$Data[$key]['photo'] = App::getModel('product')->getImagePath($value['mainphotoid']);
+			//}
+			//catch (Exception $e){
+				//echo $e->getMessage();
+			//}
+		//}
+		//return $Data;
+	//}
 
 	public function getAllMostSearch ()
 	{
@@ -245,30 +246,49 @@ class ProductSearchModel extends Component\Model\Dataset
 		}
 	}
 
-	public function doSearchQuery ($phrase)
+  // Handles xajax live searching
+	public function doSearchQuery ($request)
 	{
-		$objResponse = new xajaxResponse();
+    $objResponse = new xajaxResponse();
+    parse_str($request['form'], $form); // parse serialized string with form data
+		$phrase = App::getModel('formprotection')->cropDangerousCode($form['query']);
+    $result = $this->search($phrase);
 		
-		$phrase = str_replace('_', '', App::getModel('formprotection')->cropDangerousCode($phrase));
 		
-		$phrase = App::getModel('formprotection')->cropDangerousCode($phrase);
+		$this->registry->template->assign('phrase', $phrase);
+		$this->registry->template->assign('dataset', $result);
 		
-		if (strlen($phrase) > 0){
-			$this->addPhrase($phrase);
-			
-			$url = $this->registry->router->generate('frontend.productsearch', true, Array(
-				'action' => 'index',
-				'param' => $phrase
-			));
-		}
-		else{
-			$url = $this->registry->router->generate('frontend.productsearch', true, Array(
-				'action' => 'noresults',
-				'param' => ''
-			));
-		}
-		
-		$objResponse->script("window.location.href = '{$url}'");
-		return $objResponse;
+		$objResponse->clear($request['container'], "innerHTML");
+		$objResponse->append($request['container'], "innerHTML", $this->registry->template->fetch('productsearch/livesearch/items.tpl'));
+
+    return $objResponse;
 	}
+
+  // Return search results
+	public function search ($phrase, $producers = 0, $attributes = 0, $priceFrom = 0, $priceTo = 0, $pagination = 5, $currentPage = 1, $categoryId = 0, $orderBy = 'default', $orderDir = 'asc')
+  {
+		$producersArray = (strlen($producers) > 0) ? array_filter(array_values(explode('_', $producers))) : Array();
+		$attributesArray = array_filter((strlen($attributes) > 0) ? array_filter(array_values(explode('_', $attributes))) : Array());
+		
+		$Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributesArray);
+		
+		$dataset = $this->getDataset();
+    $dataset->setPagination($pagination); // Number of products in livesearch
+    $dataset->setCurrentPage($currentPage);
+		$dataset->setOrderBy($orderBy, $orderBy);
+		$dataset->setOrderDir($orderDir, $orderDir);
+		
+		$dataset->setSQLParams(Array(
+			'categoryid' => $categoryId,
+			'clientid' => Session::getActiveClientid(),
+			'producer' => $producersArray,
+			'filterbyproducer' => (! empty($producers)) ? 1 : 0,
+			'pricefrom' => (float) $priceFrom,
+			'priceto' => (float) $priceTo,
+			'name' => '%' . $phrase . '%',
+			'enablelayer' => (! empty($Products) && (count($attributesArray) > 0)) ? 1 : 0,
+			'products' => $Products
+		));
+		return $this->getProductDataset();
+  }
 }

@@ -50,7 +50,7 @@ class Translation
 			$stmt->bindValue('languageid', Helper::getLanguageId());
 			$stmt->execute();
 			while ($rs = $stmt->fetch()){
-				self::$translations[$rs['name']] = $rs['translation'];
+				self::$translations[$rs['name']] = htmlspecialchars($rs['translation']);
 			}
 			App::getRegistry()->cache->save('translations', self::$translations);
 		}

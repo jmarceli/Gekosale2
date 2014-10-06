@@ -212,17 +212,19 @@ class OrderModel extends Component\Model\Datagrid
 				$sql = "SELECT
 							IF(DP.vat IS NOT NULL, ROUND(DP.dispatchmethodcost+(DP.dispatchmethodcost*(V.`value`/100)),4), DP.dispatchmethodcost) as dispatchmethodcost,
 							CASE
-			  					WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
-			 				 	WHEN ( :price BETWEEN `from` AND `to`) THEN D.name
-			  					WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN D.name
-			  					WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
+			  					WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
+			 				 	WHEN ( :price BETWEEN `from` AND `to`) THEN DMT.name
+			  					WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN DMT.name
+			  					WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodprice DP
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
+            LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DP.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DP.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
+        $stmt->bindValue('languageid', Helper::getLanguageId());
 				$stmt->bindValue('price', $request['price_for_deliverers']);
 				$stmt->bindValue('dipatchmethodid', $request['delivery_method']);
 				$stmt->execute();
@@ -235,17 +237,19 @@ class OrderModel extends Component\Model\Datagrid
 				$sql = "SELECT
 							IF(DW.vat IS NOT NULL, ROUND(DW.cost+(DW.cost*(V.`value`/100)),4), DW.cost) as cost,
 							CASE
-			  					WHEN (`from`<>0 AND `from`< :weight AND `to`=0 AND DW.cost =0) THEN D.name
-			 				 	WHEN ( :weight BETWEEN `from` AND `to`) THEN D.name
-			  					WHEN (`to` = 0 AND `from`< :weight AND DW.cost <> 0) THEN D.name
-			  					WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN D.name
+			  					WHEN (`from`<>0 AND `from`< :weight AND `to`=0 AND DW.cost =0) THEN DMT.name
+			 				 	WHEN ( :weight BETWEEN `from` AND `to`) THEN DMT.name
+			  					WHEN (`to` = 0 AND `from`< :weight AND DW.cost <> 0) THEN DMT.name
+			  					WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodweight DW
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
+            LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DW.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DW.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
+        $stmt->bindValue('languageid', Helper::getLanguageId());
 				$stmt->bindValue('weight', $request['weight']);
 				$stmt->bindValue('dipatchmethodid', $request['delivery_method']);
 				$stmt->execute();
@@ -305,18 +309,20 @@ class OrderModel extends Component\Model\Datagrid
 				$sql = "SELECT
 							IF(DP.vat IS NOT NULL, ROUND(DP.dispatchmethodcost+(DP.dispatchmethodcost*(V.`value`/100)),4), DP.dispatchmethodcost) as dispatchmethodcost,
 							CASE
-			  					WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
-			 				 	WHEN ( :price BETWEEN `from` AND `to`) THEN D.name
-			  					WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN D.name
-			  					WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
+			  					WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
+			 				 	WHEN ( :price BETWEEN `from` AND `to`) THEN DMT.name
+			  					WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN DMT.name
+			  					WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodprice DP
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
+            LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DP.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DP.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
 				$stmt->bindValue('price', $request['price_for_deliverers']);
+        $stmt->bindValue('languageid', Helper::getLanguageId());
 				$stmt->bindValue('dipatchmethodid', $request['delivery_method']);
 				$stmt->execute();
 				$rs = $stmt->fetch();
@@ -328,17 +334,19 @@ class OrderModel extends Component\Model\Datagrid
 				$sql = "SELECT
 							IF(DW.vat IS NOT NULL, ROUND(DW.cost+(DW.cost*(V.`value`/100)),4), DW.cost) as cost,
 							CASE
-			  					WHEN (`from`<>0 AND `from`< :weight AND `to`=0 AND DW.cost =0) THEN D.name
-			 				 	WHEN ( :weight BETWEEN `from` AND `to`) THEN D.name
-			  					WHEN (`to` = 0 AND `from`< :weight AND DW.cost <> 0) THEN D.name
-			  					WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN D.name
+			  					WHEN (`from`<>0 AND `from`< :weight AND `to`=0 AND DW.cost =0) THEN DMT.name
+			 				 	WHEN ( :weight BETWEEN `from` AND `to`) THEN DMT.name
+			  					WHEN (`to` = 0 AND `from`< :weight AND DW.cost <> 0) THEN DMT.name
+			  					WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN DMT.name
 							END as name
 						FROM dispatchmethodweight DW
-						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+						LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
+            LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 						LEFT JOIN vat V ON V.idvat = DW.vat
-		       			WHERE dispatchmethodid = :dipatchmethodid
+		       			WHERE DW.dispatchmethodid = :dipatchmethodid
 						HAVING name IS NOT NULL";
 				$stmt = Db::getInstance()->prepare($sql);
+        $stmt->bindValue('languageid', Helper::getLanguageId());
 				$stmt->bindValue('weight', $request['weight']);
 				$stmt->bindValue('dipatchmethodid', $request['delivery_method']);
 				$stmt->execute();
@@ -733,13 +741,14 @@ class OrderModel extends Component\Model\Datagrid
 					DP.`to`,
 					IF(DP.vat IS NOT NULL, ROUND(DP.dispatchmethodcost+(DP.dispatchmethodcost*(V.`value`/100)),4), DP.dispatchmethodcost) as dispatchmethodcost,
 					CASE
-  						WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
- 					 	WHEN ( :price BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN D.name
-  						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
+  						WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
+ 					 	WHEN ( :price BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN DMT.name
+  						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 					END as name
 				FROM dispatchmethodprice DP
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN vat V ON V.idvat = DP.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				WHERE
@@ -747,6 +756,7 @@ class OrderModel extends Component\Model\Datagrid
 					D.type = 1 AND
 					IF(D.maximumweight IS NOT NULL, D.maximumweight >= :globalweight, 1)";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('price', $price);
 		$stmt->bindValue('idorder', $idorder);
 		$stmt->bindValue('globalweight', $globalweight);
@@ -779,19 +789,21 @@ class OrderModel extends Component\Model\Datagrid
 					IF(DW.vat IS NOT NULL, ROUND(DW.cost+(DW.cost*(V.`value`/100)),4), DW.cost) as cost,
 					D.freedelivery,
 					CASE
-  						WHEN (`from`<>0 AND `from`< :globalweight AND `to`=0 AND DW.cost =0) THEN D.name
- 					 	WHEN ( :globalweight BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from`< :globalweight AND DW.cost <> 0) THEN D.name
-  						WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN D.name
+  						WHEN (`from`<>0 AND `from`< :globalweight AND `to`=0 AND DW.cost =0) THEN DMT.name
+ 					 	WHEN ( :globalweight BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from`< :globalweight AND DW.cost <> 0) THEN DMT.name
+  						WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN DMT.name
 					END as name
 				FROM dispatchmethodweight DW
 				LEFT JOIN vat V ON V.idvat = DW.vat
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				WHERE
 					(DV.viewid = (SELECT O.viewid FROM `order` O WHERE O.idorder= :idorder) OR DW.dispatchmethodid = (SELECT O.dispatchmethodid FROM `order` O WHERE O.idorder= :idorder)) AND
 					D.type = 2";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('price', $price);
 		$stmt->bindValue('idorder', $idorder);
 		$stmt->bindValue('globalweight', $globalweight);
@@ -834,13 +846,14 @@ class OrderModel extends Component\Model\Datagrid
 					DP.`to`,
 					IF(DP.vat IS NOT NULL, ROUND(DP.dispatchmethodcost+(DP.dispatchmethodcost*(V.`value`/100)),4), DP.dispatchmethodcost) as dispatchmethodcost,
 					CASE
-  						WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
- 					 	WHEN ( :price BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN D.name
-  						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN D.name
+  						WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
+ 					 	WHEN ( :price BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from`< :price AND DP.dispatchmethodcost <> 0) THEN DMT.name
+  						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
 					END as name
 				FROM dispatchmethodprice DP
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DP.dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN vat V ON V.idvat = DP.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				WHERE
@@ -848,6 +861,7 @@ class OrderModel extends Component\Model\Datagrid
 					D.type = 1 AND
 					IF(D.maximumweight IS NOT NULL, D.maximumweight >= :globalweight, 1)";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('price', $price);
 		$stmt->bindValue('globalweight', $globalweight);
 		$stmt->bindValue('viewid', Helper::getViewId());
@@ -879,19 +893,21 @@ class OrderModel extends Component\Model\Datagrid
 					IF(DW.vat IS NOT NULL, ROUND(DW.cost+(DW.cost*(V.`value`/100)),4), DW.cost) as cost,
 					D.freedelivery,
 					CASE
-  						WHEN (`from`<>0 AND `from`< :globalweight AND `to`=0 AND DW.cost =0) THEN D.name
- 					 	WHEN ( :globalweight BETWEEN `from` AND `to`) THEN D.name
-  						WHEN (`to` = 0 AND `from`< :globalweight AND DW.cost <> 0) THEN D.name
-  						WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN D.name
+  						WHEN (`from`<>0 AND `from`< :globalweight AND `to`=0 AND DW.cost =0) THEN DMT.name
+ 					 	WHEN ( :globalweight BETWEEN `from` AND `to`) THEN DMT.name
+  						WHEN (`to` = 0 AND `from`< :globalweight AND DW.cost <> 0) THEN DMT.name
+  						WHEN (`from`=0 AND `to`=0 AND DW.cost =0) THEN DMT.name
 					END as name
 				FROM dispatchmethodweight DW
 				LEFT JOIN vat V ON V.idvat = DW.vat
-				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = dispatchmethodid
+				LEFT JOIN dispatchmethod D ON D.iddispatchmethod = DW.dispatchmethodid
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
 				WHERE
 					DV.viewid = :viewid AND
 					D.type = 2";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('price', $price);
 		$stmt->bindValue('globalweight', $globalweight);
 		$stmt->bindValue('viewid', Helper::getViewId());
@@ -942,14 +958,16 @@ class OrderModel extends Component\Model\Datagrid
 
 		$sql = "SELECT
 					PM.idpaymentmethod AS id,
-					PM.name
+					PMT.name
 				FROM paymentmethod PM
+          LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = PM.idpaymentmethod AND PMT.languageid = :languageid
 					LEFT JOIN paymentmethodview PMV ON PMV.paymentmethodid =PM.idpaymentmethod
 					WHERE
 						IF (:idorder>0, PMV.viewid= (SELECT O.viewid FROM `order` O WHERE O.idorder= :idorder),
 							IF(:viewid>0, PMV.viewid= :viewid, 0))";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('viewid', Helper::getViewId());
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('idorder', $idorder);
 		$stmt->execute();
 		while ($rs = $stmt->fetch()){
@@ -1464,11 +1482,13 @@ class OrderModel extends Component\Model\Datagrid
 		$dispatchmethodId = $Data['additional_data']['payment_data']['delivery_method'];
 
 		$sql = "SELECT
-					D.name as dispatchmethodname,
+					DMT.name as dispatchmethodname,
 					D.iddispatchmethod
 				FROM dispatchmethod D
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				WHERE iddispatchmethod = :dispatchmethodId";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('dispatchmethodId', $dispatchmethodId);
 		$stmt->execute();
 		$rs = $stmt->fetch();
@@ -1480,12 +1500,14 @@ class OrderModel extends Component\Model\Datagrid
 		$paymentmethodId = $Data['additional_data']['payment_data']['payment_method'];
 
 		$sql = "SELECT
-					name as paymentmethodname,
+					PMT.name as paymentmethodname,
 					idpaymentmethod
-				FROM paymentmethod
+				FROM paymentmethod P
+        LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = P.idpaymentmethod AND PMT.languageid = :languageid
 				WHERE idpaymentmethod=:paymentmethodId";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('paymentmethodId', $paymentmethodId);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		$rs = $stmt->fetch();
 		$paymentData = Array();
@@ -1814,11 +1836,13 @@ class OrderModel extends Component\Model\Datagrid
 		$dispatchmethodId = $Data['additional_data']['payment_data']['delivery_method'];
 
 		$sql = "SELECT
-					name as dispatchmethodname,
+					DMT.name as dispatchmethodname,
 					iddispatchmethod
 				FROM dispatchmethod D
+        LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				WHERE iddispatchmethod=:dispatchmethodId";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('dispatchmethodId', $dispatchmethodId);
 		$stmt->execute();
 		$rs = $stmt->fetch();
@@ -1830,12 +1854,14 @@ class OrderModel extends Component\Model\Datagrid
 		$paymentmethodId = $Data['additional_data']['payment_data']['payment_method'];
 
 		$sql = "SELECT
-					name as paymentmethodname,
+					PMT.name as paymentmethodname,
 					idpaymentmethod
-				FROM paymentmethod
+				FROM paymentmethod P
+        LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = P.idpaymentmethod AND PMT.languageid = :languageid
 				WHERE idpaymentmethod=:paymentmethodId";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('paymentmethodId', $paymentmethodId);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		$rs = $stmt->fetch();
 		$paymentData = Array();

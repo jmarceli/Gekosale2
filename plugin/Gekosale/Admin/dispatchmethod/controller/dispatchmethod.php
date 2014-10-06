@@ -84,7 +84,7 @@ class DispatchmethodController extends Component\Controller\Admin
 		
 		$populateData = Array(
 			'required_data' => Array(
-				'name' => $rawDispatchmethodData['name'],
+				'language_data' => $rawDispatchmethodData['language'],
 				'paymentmethodname' => $rawDispatchmethodData['paymentmethods'],
 				'type' => $rawDispatchmethodData['type'],
 				'currencyid' => $rawDispatchmethodData['currencyid']

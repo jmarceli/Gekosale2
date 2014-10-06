@@ -191,15 +191,6 @@ $this->routes->add('frontend.invoice', new Route('/' . Seo::getSeo('invoice') . 
 	'_scheme' => SSLNAME
 )));
 
-$this->routes->add('frontend.searchresults', new Route('/searchresults/{param}', array(
-	'mode' => 'frontend',
-	'controller' => 'searchresults',
-	'action' => 'index',
-	'param' => NULL
-), array(
-	'_scheme' => 'http'
-)));
-
 $this->routes->add('frontend.productcart', new Route('/' . Seo::getSeo('productcart') . '/{param}', array(
 	'mode' => 'frontend',
 	'controller' => 'productcart',
@@ -332,9 +323,9 @@ $this->routes->add('frontend.productsearch', new Route('/' . Seo::getSeo('produc
 	'controller' => 'productsearch',
 	'action' => NULL,
 	'param' => NULL,
-	'orderBy' => NULL,
-	'orderDir' => NULL,
-	'viewType' => NULL,
+	'orderBy' => 'default',
+	'orderDir' => 'desc',
+	'viewType' => 1,
 	'currentPage' => NULL,
 	'priceFrom' => NULL,
 	'priceTo' => NULL,
@@ -346,6 +337,7 @@ $this->routes->add('frontend.productsearch', new Route('/' . Seo::getSeo('produc
 	'currentPage' => '\d{1,10}',
 	'orderBy' => '[\w-\/]+',
 	'orderDir' => 'asc|desc',
+	'viewType' => '\d',
 	'priceFrom' => '[\d+\.]+',
 	'priceTo' => '[\d+\.]+',
 	'producers' => '[\d+_]+',

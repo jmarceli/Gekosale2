@@ -1,6 +1,6 @@
-{% if items|length > 0 %}
+{% if dataset.rows|length > 0 %}
 <div style="z-index: 900000; width: 250px;right: 289px;background: #fff;" > 
-{% for item in items %}
+{% for item in dataset.rows %}
 <div class="product-list row-fluid">
 	<div class="span3 photo">
     	<a href="{{ path('frontend.productcart', {"param": item.seo}) }}" title="{{ item.name }}"><img src="{{ item.photo }}" alt="{{ item.name }}"></a>

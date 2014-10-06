@@ -1094,10 +1094,11 @@ class CartModel extends Component\Model
 	{
 		$dispatchmethodname = '';
 		$sql = "SELECT 
-					DM.name
-				FROM dispatchmethod DM
-				WHERE DM.iddispatchmethod = :iddispatchmethod";
+        name
+        FROM dispatchmethodtranslation 
+				WHERE dispatchmethodid = :iddispatchmethod AND languageid = :languageid";
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('iddispatchmethod', $iddispatchmethod);
 		try{
 			$stmt->execute();
@@ -1116,11 +1117,12 @@ class CartModel extends Component\Model
 	{
 		$paymentname = '';
 		$sql = "SELECT 
-					PM.name as paymentname
-				FROM paymentmethod PM
-				WHERE PM.idpaymentmethod = :idpaymentmethod";
+					PMT.name as paymentname
+				FROM paymentmethodtranslation PMT
+				WHERE PMT.paymentmethodid = :idpaymentmethod AND PMT.languageid = :languageid";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('idpaymentmethod', $idpaymentmethod);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		try{
 			$stmt->execute();
 			$rs = $stmt->fetch();

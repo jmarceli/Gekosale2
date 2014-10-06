@@ -29,7 +29,7 @@ class PaymentmethodModel extends Component\Model\Datagrid
 				'source' => 'P.idpaymentmethod'
 			),
 			'name' => Array(
-				'source' => 'P.name',
+				'source' => 'PMT.name',
 				'prepareForAutosuggest' => true,
 				'processLanguage' => true
 			),
@@ -48,6 +48,7 @@ class PaymentmethodModel extends Component\Model\Datagrid
 		$datagrid->setFrom('
 			paymentmethod P
 			LEFT JOIN paymentmethodview PV ON PV.paymentmethodid = P.idpaymentmethod
+			LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = P.idpaymentmethod AND PMT.languageid = :languageid
 		');
 		
 		$datagrid->setGroupBy('
@@ -158,7 +159,9 @@ class PaymentmethodModel extends Component\Model\Datagrid
 
 	public function getPaymentmethodView ($id)
 	{
-		$sql = "SELECT name,controller FROM paymentmethod WHERE idpaymentmethod = :id";
+    $sql = "SELECT controller 
+      FROM paymentmethod PM
+      WHERE idpaymentmethod = :id";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('id', $id);
 		$stmt->execute();
@@ -166,10 +169,25 @@ class PaymentmethodModel extends Component\Model\Datagrid
 		$Data = Array();
 		if ($rs){
 			$Data = Array(
-				'name' => $rs['name'],
+				'language' => $this->getPaymentmethodTranslation($id),
 				'controller' => $rs['controller'],
 				'dispatchmethod' => $this->DispatchmethodPaymentmethodIds($id),
 				'view' => $this->PaymentmethodView($id)
+			);
+		}
+		return $Data;
+	}
+
+	public function getPaymentmethodTranslation ($id)
+	{
+		$sql = "SELECT * FROM paymentmethodtranslation WHERE paymentmethodid =:id";
+		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('id', $id);
+		$stmt->execute();
+		$Data = Array();
+		while ($rs = $stmt->fetch()){
+			$Data[$rs['languageid']] = Array(
+				'name' => $rs['name'],
 			);
 		}
 		return $Data;
@@ -192,11 +210,13 @@ class PaymentmethodModel extends Component\Model\Datagrid
 
 	public function DispatchmethodPaymentmethod ($id)
 	{
-		$sql = 'SELECT DM.iddispatchmethod AS id, DM.name AS dispatchmethodname
+		$sql = 'SELECT DM.iddispatchmethod AS id, DMT.name AS dispatchmethodname
 					FROM dispatchmethodpaymentmethod DPM
 					LEFT JOIN dispatchmethod DM ON DPM.dispatchmethodid = DM.iddispatchmethod
+          LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = DM.iddispatchmethod AND DMT.languageid = :languageid
 					WHERE DPM.paymentmethodid=:id';
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('id', $id);
 		$stmt->execute();
 		$Data = Array();
@@ -221,14 +241,17 @@ class PaymentmethodModel extends Component\Model\Datagrid
 
 	public function getPaymentmethodAll ()
 	{
-		$sql = 'SELECT idpaymentmethod as id, name, controller FROM paymentmethod';
+    $sql = 'SELECT idpaymentmethod as id, PMT.name, controller 
+      FROM paymentmethod PM
+      LEFT JOIN paymentmethodtranslation PMT ON PMT.paymentmethodid = PM.idpaymentmethod AND languageid = :languageid';
 		$Data = Array();
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 		while ($rs = $stmt->fetch()){
 			$Data[] = Array(
 				'id' => $rs['id'],
-				'name' => _($rs['name']),
+				'name' => $rs['name'],
 				'controller' => $rs['controller']
 			);
 		}
@@ -239,7 +262,7 @@ class PaymentmethodModel extends Component\Model\Datagrid
 	{
 		Db::getInstance()->beginTransaction();
 		try{
-			$this->updatePaymentmethod($Data, $id);
+			$this->updatePaymentmethodTranslation($Data, $id);
 			$this->updateDispatchmethodPaymentmethod($Data['dispatchmethod'], $id);
 			$this->updatePaymentmethodView($Data['view'], $id);
 			Event::notify($this, 'admin.paymentmethod.model.save', Array(
@@ -278,19 +301,24 @@ class PaymentmethodModel extends Component\Model\Datagrid
 		}
 	}
 
-	public function updatePaymentmethod ($Data, $id)
+	public function updatePaymentmethodTranslation ($Data, $id)
 	{
-		$sql = 'UPDATE paymentmethod SET name=:name WHERE idpaymentmethod = :id';
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('id', $id);
-		$stmt->bindValue('name', $Data['name']);
-		try{
-			$stmt->execute();
-		}
-		catch (Exception $e){
-			echo $e->getMessage();
-			return false;
-		}
+		foreach ($Data['name'] as $key => $val){
+      $sql = 'INSERT INTO paymentmethodtranslation SET name=:name 
+        ,paymentmethodid = :id, languageid = :languageid
+        ON DUPLICATE KEY UPDATE name=:name';
+      $stmt = Db::getInstance()->prepare($sql);
+      $stmt->bindValue('id', $id);
+      $stmt->bindValue('name', $val);
+      $stmt->bindValue('languageid', $key);
+      try{
+        $stmt->execute();
+      }
+      catch (Exception $e){
+        echo $e->getMessage();
+        return false;
+      }
+    }
 		return true;
 	}
 
@@ -380,6 +408,7 @@ class PaymentmethodModel extends Component\Model\Datagrid
 		Db::getInstance()->beginTransaction();
 		try{
 			$newPaymentmethodid = $this->addPaymentmethod($Data);
+      $this->addPaymentmethodTranslation($Data, $newPaymentmethodid);
 			if (is_array($Data['dispatchmethod']) && ! empty($Data['dispatchmethod'])){
 				$this->addPaymentmethodToDispatchmethod($Data['dispatchmethod'], $newPaymentmethodid);
 			}
@@ -399,7 +428,7 @@ class PaymentmethodModel extends Component\Model\Datagrid
 	{
 		$sql = 'INSERT INTO paymentmethod (name,controller) VALUES (:name,:controller)';
 		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('name', $Data['name']);
+		$stmt->bindValue('name', date('Ymdhis'));
 		$stmt->bindValue('controller', $Data['controller']);
 		
 		try{
@@ -410,6 +439,24 @@ class PaymentmethodModel extends Component\Model\Datagrid
 		}
 		return Db::getInstance()->lastInsertId();
 	}
+
+  public function addPaymentmethodTranslation ($Data, $id)
+  {
+		foreach ($Data['name'] as $key => $val){
+      $sql = 'INSERT INTO paymentmethodtranslation (paymentmethodid, name, languageid)
+						VALUES (:paymentmethodid, :name, :languageid)';
+			$stmt = Db::getInstance()->prepare($sql);
+			$stmt->bindValue('paymentmethodid', $id);
+			$stmt->bindValue('name', $Data['name'][$key]);
+			$stmt->bindValue('languageid', $key);
+			try{
+				$stmt->execute();
+			}
+			catch (Exception $e){
+				throw new CoreException(_('ERR_PAYMENTMETHOD_TRANSLATION_ADD'), 112, $e->getMessage());
+			}
+		}
+  }
 
 	public function getDispatchmethodPrice ($id)
 	{

@@ -245,7 +245,9 @@ class DatasetModel extends Component\Model
 		}
 		else{
 			$orderString .= 'ORDER BY ' . $this->queryOrderBy . ' ' . $this->queryOrderDir;
-			$limitString .= 'LIMIT ' . $this->queryOffset . ',' . $this->pagination;
+      if($this->pagination > 0) {
+        $limitString .= 'LIMIT ' . $this->queryOffset . ',' . $this->pagination;
+      }
 		}
 		
 		$sql = $selectString . $fromString . $whereString . $groupString . $havingString . $orderString . $limitString;
@@ -313,21 +315,30 @@ class DatasetModel extends Component\Model
 		$this->getTotalRecords();
 		$this->processRows($rows);
 		
-		$pages = ceil($this->DataSet['total'] / $this->pagination);
-		if ($pages == 0){
-			$this->DataSet['totalPages'] = range(1, 1, 1);
-			$this->DataSet['activePage'] = 1;
-			$this->DataSet['lastPage'] = 1;
-			$this->DataSet['previousPage'] = 1;
-			$this->DataSet['nextPage'] = 1;
-		}
-		else{
-			$this->DataSet['totalPages'] = range(1, $pages, 1);
-			$this->DataSet['activePage'] = $this->currentPage;
-			$this->DataSet['lastPage'] = $pages;
-			$this->DataSet['previousPage'] = $this->currentPage - 1;
-			$this->DataSet['nextPage'] = $this->currentPage + 1;
-		}
+    if($this->pagination > 0) {
+      $pages = ceil($this->DataSet['total'] / $this->pagination);
+      if ($pages == 0){
+        $this->DataSet['totalPages'] = range(1, 1, 1);
+        $this->DataSet['activePage'] = 1;
+        $this->DataSet['lastPage'] = 1;
+        $this->DataSet['previousPage'] = 1;
+        $this->DataSet['nextPage'] = 1;
+      }
+      else{
+        $this->DataSet['totalPages'] = range(1, $pages, 1);
+        $this->DataSet['activePage'] = $this->currentPage;
+        $this->DataSet['lastPage'] = $pages;
+        $this->DataSet['previousPage'] = $this->currentPage - 1;
+        $this->DataSet['nextPage'] = $this->currentPage + 1;
+      }
+    }
+    else {
+      $this->DataSet['totalPages'] = range(1, 1, 1);
+      $this->DataSet['activePage'] = 1;
+      $this->DataSet['lastPage'] = 1;
+      $this->DataSet['previousPage'] = 1;
+      $this->DataSet['nextPage'] = 1;
+    }
 	}
 
 	public function getDatasetRecords ()

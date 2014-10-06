@@ -25,17 +25,18 @@
 
 	$(document).ready(function(){
     GCore.Init();
-		$('#product-search').submit(function(){
-			return xajax_doSearchQuery($('#product-search-phrase').val());
-		});
+
+    $('#product-search').submit(function(e) {
+      e.preventDefault();
+      window.location = $(this).attr('action') + '/' + $('#product-search-phrase').val();
+    });
 
 		$('#product-search-phrase').GSearch({
-			'path': "{{ path('frontend.searchresults') }}/",
-			'phrase': $('#product-search-phrase').val()
+      'form': $('#product-search')
 		}); 
 
 		{% if error is defined %}
-    GError('{{ error }}', '{{ error_msg }}');
+    GError('{{ error|e }}', '{{ error_msg|e }}');
 		{% endif %}
 
     $('#order button[type=submit]').click(function() {

@@ -24,19 +24,20 @@ class ProductSearchController extends Component\Controller\Frontend
 
 	public function index ()
 	{
-		$this->Render('Productsearchlist');
+    $this->Render('Productsearchlist');
 	}
 
-	public function noresults ()
-	{
-		$metadata = $this->getMetadata();
-		$this->registry->template->assign('metadata', $this->getMetadata());
-		$this->registry->template->assign('additionalmeta', isset($metadata['additionalmeta']) ? $metadata['additionalmeta'] : '');
-		$this->registry->xajax->processRequest();
-		$this->registry->template->assign('xajax', $this->registry->xajax->getJavascript());
-		$this->searchPhrase = $this->getParam();
+	//public function noresults ()
+	//{
+    //$this->Render('Productsearchlist');
+		//$metadata = $this->getMetadata();
+		//$this->registry->template->assign('metadata', $this->getMetadata());
+		//$this->registry->template->assign('additionalmeta', isset($metadata['additionalmeta']) ? $metadata['additionalmeta'] : '');
+		//$this->registry->xajax->processRequest();
+		//$this->registry->template->assign('xajax', $this->registry->xajax->getJavascript());
+		//$this->searchPhrase = $this->getParam();
 		
-		$this->registry->template->assign('phrase', $this->searchPhrase);
-		$this->registry->template->display($this->loadTemplate('layout.tpl'));
-	}
+		//$this->registry->template->assign('phrase', $this->searchPhrase);
+		//$this->registry->template->display($this->loadTemplate('layout.tpl'));
+	//}
 }

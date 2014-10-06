@@ -125,15 +125,23 @@ class LayeredNavigationBoxController extends Component\Controller\Box
 				
 				$this->searchPhrase = str_replace('_', '', App::getModel('formprotection')->cropDangerousCode($this->getParam()));
 				
-				$dataset = App::getModel('searchresults')->getDataset();
-				$dataset->setPagination(5);
+				$dataset = App::getModel('productsearch')->getDataset();
+        $dataset->setPagination(0);
 				$dataset->setCurrentPage(1);
 				$dataset->setOrderBy('name', 'name');
 				$dataset->setOrderDir('desc', 'desc');
 				$dataset->setSQLParams(Array(
-					'name' => '%' . $this->searchPhrase . '%'
+          'categoryid' => 0,
+          'clientid' => Session::getActiveClientid(),
+          'producer' => 0,
+          'filterbyproducer' => 0,
+          'pricefrom' => 0,
+          'priceto' => Core::PRICE_MAX,
+					'name' => '%' . $this->searchPhrase . '%',
+          'enablelayer' => 0,
+          'products' => 0,
 				));
-				$products = App::getModel('searchresults')->getProductDataset();
+				$products = App::getModel('productsearch')->getProductDataset();
 				$productIds = Array(
 					0
 				);
