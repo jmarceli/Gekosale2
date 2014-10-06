@@ -74,7 +74,7 @@ class ProductModel extends Component\Model\Dataset
         'source' => (!empty($clientGroupId))? 'IF(PGP.groupprice = 1,
                 PGP.sellprice,
                 P.sellprice
-               ) * (1 + (V.value / 100)) * CR.exchangerate' : 'P.sellprice * CR.exchangerate'
+               ) * (1 + (V.value / 100)) * CR.exchangerate' : 'P.sellprice * (1 + (V.value / 100)) * CR.exchangerate'
       ),
       'buypricenetto' => Array(
         'source' => 'P.buyprice * CR.exchangerate'

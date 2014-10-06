@@ -945,7 +945,7 @@ CREATE TABLE IF NOT EXISTS `dispatchmethodtranslation` (
   `dispatchmethodid` int(10) unsigned NOT NULL,
   `languageid` int(10) unsigned NOT NULL,
   `name` varchar(64) CHARACTER SET utf8 NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 INSERT INTO `dispatchmethodtranslation` (`iddispatchmethodtranslation`, `dispatchmethodid`, `languageid`, `name`) VALUES (1, 15, 1, 'Kurier Standard'), (2, 17, 1, 'Poczta Polska');
 ALTER TABLE `dispatchmethodtranslation`
@@ -1814,24 +1814,25 @@ CREATE TABLE `paymentmethod` (
 
 INSERT INTO `paymentmethod` (`idpaymentmethod`, `name`, `adddate`, `controller`, `online`, `active`, `maximumamount`, `hierarchy`) VALUES (2,'Platnosci.pl','2012-09-17 23:11:49','platnosci',1,0,NULL,1),(4,'Przelew bankowy','2012-09-17 23:14:40','banktransfer',0,1,NULL,4),(5,'Płatność za pobraniem','2012-09-17 23:11:56','ondelivery',0,1,NULL,3),(6,'Płatność przy odbiorze','2012-09-17 23:11:58','pickup',0,0,NULL,4),(8,'Żagiel','2012-09-18 15:50:47','eraty',1,0,NULL,5),(11,'Przelewy24','2012-09-18 15:50:50','przelewy24',1,0,NULL,6),(12,'PayU','2012-09-18 15:50:57','platnosci',1,0,NULL,7),(15,'Transferuj.pl','2012-09-18 15:51:00','transferuj',1,0,NULL,8),(16,'Dotpay','2012-10-19 11:30:02','dotpay',1,0,NULL,10),(17,'PayByNet','2012-10-19 11:30:02','paybynet',1,0,NULL,9);
 
-DROP TABLE IF EXISTS `paymentmethodtranslation`;
-CREATE TABLE IF NOT EXISTS `paymentmethodtranslation` (
-`idpaymentmethodtranslation` int(10) unsigned NOT NULL,
-  `paymentmethodid` int(10) unsigned NOT NULL,
-  `languageid` int(10) unsigned NOT NULL,
-  `name` varchar(64) CHARACTER SET utf8 NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
-INSERT INTO `paymentmethodtranslation` (`idpaymentmethodtranslation`, `paymentmethodid`, `languageid`, `name`) VALUES (1, 2, 1, 'platnosci.pl'), (6, 4, 1, 'Przelew bankowy'), (13, 5, 1, 'Płatność za pobraniem'), (14, 6, 1, 'Płatność przy odbiorze'), (15, 8, 1, 'Żagiel'), (16, 11, 1, 'Przelewy24'), (17, 12, 1, 'PayU'), (18, 15, 1, 'Transferuj.pl'), (19, 16, 1, 'Dotpay'), (20, 17, 1, 'PayByNet'); 
-ALTER TABLE `paymentmethodtranslation`
- ADD PRIMARY KEY (`idpaymentmethodtranslation`), ADD UNIQUE KEY `paymentmethodid_2` (`paymentmethodid`,`languageid`), ADD KEY `paymentmethodid` (`paymentmethodid`), ADD KEY `languageid` (`languageid`);
-ALTER TABLE `paymentmethodtranslation`
-MODIFY `idpaymentmethodtranslation` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
-ALTER TABLE `paymentmethodtranslation`
-ADD CONSTRAINT `paymentmethodtranslation_ibfk_2` FOREIGN KEY (`languageid`) REFERENCES `language` (`idlanguage`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `paymentmethodtranslation_ibfk_1` FOREIGN KEY (`paymentmethodid`) REFERENCES `paymentmethod` (`idpaymentmethod`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+DROP TABLE IF EXISTS `paymentmethodtranslation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `paymentmethodtranslation` (
+`idpaymentmethodtranslation` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `paymentmethodid` int(10) unsigned NOT NULL,
+  `languageid` int(10) unsigned NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`idpaymentmethodtranslation`),
+  CONSTRAINT `paymentmethodtranslation_ibfk_2` FOREIGN KEY (`languageid`) REFERENCES `language` (`idlanguage`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `paymentmethodtranslation_ibfk_1` FOREIGN KEY (`paymentmethodid`) REFERENCES `paymentmethod` (`idpaymentmethod`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `paymentmethodtranslation` (`idpaymentmethodtranslation`, `paymentmethodid`, `languageid`, `name`) VALUES (1, 2, 1, 'platnosci.pl'), (6, 4, 1, 'Przelew bankowy'), (13, 5, 1, 'Płatność za pobraniem'), (14, 6, 1, 'Płatność przy odbiorze'), (15, 8, 1, 'Żagiel'), (16, 11, 1, 'Przelewy24'), (17, 12, 1, 'PayU'), (18, 15, 1, 'Transferuj.pl'), (19, 16, 1, 'Dotpay'), (20, 17, 1, 'PayByNet');
+
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 DROP TABLE IF EXISTS `paymentmethodview`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
