@@ -954,6 +954,10 @@ ALTER TABLE `dispatchmethodtranslation`
 ALTER TABLE `dispatchmethodtranslation`
 MODIFY `iddispatchmethodtranslation` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 
+ALTER TABLE `dispatchmethodtranslation`
+  ADD CONSTRAINT `dispatchmethodtranslation_ibfk_2` FOREIGN KEY (`languageid`) REFERENCES `language` (`idlanguage`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `dispatchmethodtranslation_ibfk_1` FOREIGN KEY (`dispatchmethodid`) REFERENCES `dispatchmethod` (`iddispatchmethod`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 DROP TABLE IF EXISTS `dispatchmethodpaymentmethod`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
