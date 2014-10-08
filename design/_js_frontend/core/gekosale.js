@@ -562,7 +562,7 @@ var GSearch = function() {
 		gThis.m_oOptions.sDefaultText = gThis.m_jInput.attr('placeholder');
 		gThis.sLastValue = gThis.m_jInput.val();
 		gThis.m_jInput.attr('autocomplete','off');
-		gThis.m_jLiveSearch = $('<div>').attr('id', gThis.m_oOptions.sPlaceholder).appendTo($('#content')).hide().slideUp(0);
+		gThis.m_jLiveSearch = $('<div>').attr('id', gThis.m_oOptions.sPlaceholder).insertAfter($('#navbar')).hide().slideUp(0);
 		$(document.body).click(function(event){
 			var clicked = $(event.target);
 			if(!(clicked.is('#'+gThis.m_oOptions.sPlaceholder) || clicked.parents('#' + gThis.m_oOptions.sPlaceholder).length || clicked.is('input'))){
@@ -597,7 +597,6 @@ var GSearch = function() {
 		gThis.m_jLiveSearch.css({
 			position:	'absolute',
 			right:	'0px',
-			top:	'-32px',
 		});
 	};
 	

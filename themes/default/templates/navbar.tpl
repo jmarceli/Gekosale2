@@ -1,4 +1,4 @@
-<nav class="navbar">
+<nav id="navbar" class="navbar">
 <div class="navbar-inner">
   <div class="container">
     <ul class="nav">
