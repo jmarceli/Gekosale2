@@ -549,6 +549,7 @@ var oDefaults = {
 	},
 	iDuration: 200,
 	sPlaceholder: 'live-search-results',
+  minTextLength: 3
 };
 
 var GSearch = function() {
@@ -564,7 +565,7 @@ var GSearch = function() {
 		$(document.body).click(function(event){
 			var clicked = $(event.target);
 			if(!(clicked.is('#'+gThis.m_oOptions.sPlaceholder) || clicked.parents('#' + gThis.m_oOptions.sPlaceholder).length || clicked.is('input'))){
-				gThis.m_jLiveSearch.slideUp(gThis.m_oOptions.iDuration);
+        gThis.HideLiveSearch();
 			}
 		});
 		gThis.OnFocus();
@@ -599,9 +600,14 @@ var GSearch = function() {
 	};
 	
 	gThis.ShowLiveSearch = function() {
-		gThis.RepositionLiveSearch();	
-		$(window).unbind('resize', gThis.RepositionLiveSearch).bind('resize', gThis.RepositionLiveSearch);
-		gThis.m_jLiveSearch.slideDown(gThis.m_oOptions.iDuration);
+		if (gThis.value.length >= gThis.m_oOptions.minTextLength){
+      gThis.RepositionLiveSearch();	
+      $(window).unbind('resize', gThis.RepositionLiveSearch).bind('resize', gThis.RepositionLiveSearch);
+      gThis.m_jLiveSearch.slideDown(gThis.m_oOptions.iDuration);
+    }
+    else {
+      gThis.HideLiveSearch();
+    }
 	};
 	
 	gThis.HideLiveSearch = function() {
@@ -634,9 +640,17 @@ var GSearch = function() {
 	};
 	
 	gThis.OnTypingFinished = function() {
-		if(gThis.sLastValue != gThis.m_jInput.val() && gThis.m_jInput.val() != gThis.m_oOptions.sDefaultText){
-			gThis.LoadResults();
-		}
+    if(gThis.m_jInput.val() != gThis.m_oOptions.sDefaultText) {
+      if(gThis.sLastValue == gThis.m_jInput.val()) {
+        gThis.ShowLiveSearch();
+      }
+      else if(gThis.value.length >= gThis.m_oOptions.minTextLength) {
+        gThis.LoadResults();
+      }
+      else {
+        gThis.HideLiveSearch();
+      }
+    }
 	}; 
 	
 	gThis.LoadResults = function() {
