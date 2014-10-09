@@ -547,9 +547,6 @@ new GPlugin('GProductAttributes', oDefaults, GProductAttributes);
 var oDefaults = {
 	oClasses: {
 	},
-	sBackground: '#fff',
-	fOpacity: .75,
-	iZIndex: 1001,
 	iDuration: 200,
 	sPlaceholder: 'live-search-results',
 };
@@ -562,7 +559,8 @@ var GSearch = function() {
 		gThis.m_oOptions.sDefaultText = gThis.m_jInput.attr('placeholder');
 		gThis.sLastValue = gThis.m_jInput.val();
 		gThis.m_jInput.attr('autocomplete','off');
-		gThis.m_jLiveSearch = $('<div>').attr('id', gThis.m_oOptions.sPlaceholder).insertAfter($('#navbar')).hide().slideUp(0);
+		gThis.m_jLiveSearch = $('<div>').attr('id', gThis.m_oOptions.sPlaceholder).hide().slideUp(0);
+    $('#livesearch').append(gThis.m_jLiveSearch);
 		$(document.body).click(function(event){
 			var clicked = $(event.target);
 			if(!(clicked.is('#'+gThis.m_oOptions.sPlaceholder) || clicked.parents('#' + gThis.m_oOptions.sPlaceholder).length || clicked.is('input'))){
