@@ -66,6 +66,7 @@ class FinalizationModel extends Component\Model
 					Session::unsetActiveDispatchmethodChecked();
 					Session::unsetActivePaymentMethodChecked();
 					Session::unsetActiveGlobalPrice();
+					Session::unsetActiveGlobalPriceWithoutVat();
 					
 					$paymentMethodData = Array(
 						'orderId' => Session::getActiveorderid(),
