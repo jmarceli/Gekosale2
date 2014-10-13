@@ -37,6 +37,14 @@ class FinalizationModel extends Component\Model
 		try{
 			$order = $this->setClientOrder($Data);
 			if ($order != NULL){
+        if (empty($order['dispatchmethod'])) {
+          $objResponse->script("GError('" . _('ERR_ORDER_SAVE') . "', '" . _('ERR_NO_DELIVERY_SELECTED') . "');");
+          return $objResponse;
+        }
+        if (empty($order['payment'])) {
+          $objResponse->script("GError('" . _('ERR_ORDER_SAVE') . "', '" . _('ERR_NO_PAYMENT_SELECTED') . "');");
+          return $objResponse;
+        }
 				$saveOrder = App::getModel('order')->saveOrder($order);
 				$clientid = Session::getActiveClientid();
 				Session::setActiveorderid($saveOrder);
@@ -86,9 +94,12 @@ class FinalizationModel extends Component\Model
 					$objResponse->script("window.location.href = '{$url}';");
 				}
 			}
+      else {
+        $objResponse->script("GError('" . _('ERR_ORDER_SAVE') . "','" . _('ERR_ORDER_SAVE_MSG') . "');");
+      }
 		}
 		catch (Exception $e){
-			$objResponse->script("GError('" . _('ERR_ORDER_SAVE') . "');");
+			$objResponse->script("GError('" . _('ERR_ORDER_SAVE') . "','" . _('ERR_ORDER_SAVE_MSG') . "');");
 		}
 		
 		return $objResponse;
