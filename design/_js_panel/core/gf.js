@@ -2559,7 +2559,6 @@ GF_Datagrid = GF_Instance.GF_Extend('GF_Datagrid', function(jTarget, oOptions) {
 				
 				this._ChangeOrderIndicator(oRequest.order_by,  oRequest.order_dir);
 			}
-			console.log(oRequest.where);
 			dDg.m_oOptions.event_handlers.load(oRequest, 'GF_Datagrid.ProcessIncomingData');
 			this.m_bFirstLoad = false;
 		});
@@ -3869,7 +3868,6 @@ GF_Datagrid = GF_Instance.GF_Extend('GF_Datagrid', function(jTarget, oOptions) {
 					oOptions = oF.options[0];
 				}
 				var iLength = oOptions.length;
-				console.log(oF);
 				for (var i = 0; i < iLength; i++) {
 					var jLi = $('<li/>');
 					jUl.append(jLi);
@@ -3941,8 +3939,6 @@ GF_Datagrid = GF_Instance.GF_Extend('GF_Datagrid', function(jTarget, oOptions) {
 	};
 	
 	this._WriteTreeItem = function(jLi, oItem, bChecked, oFilter) {
-		console.log(oItem.id);
-		console.log(oFilter);
 		var dDg = GF_Datagrid.GetCurrentInstance(this);
 		var jField = $('<input type="checkbox" value="1"' + (bChecked ? ' checked="checked"' : '') + '/>');
 		jLi.data('sId', oItem.id);
