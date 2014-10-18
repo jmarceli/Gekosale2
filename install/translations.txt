@@ -1,3 +1,7 @@
+ERR_ORDER_SAVE # Błąd podczas składania zamówienia;
+ERR_ORDER_SAVE_MSG # Wystąpił nieznany błąd. Twoje zamówienie nie zostało złożone. Skontaktuj się z obsługą sklepu;
+ERR_NO_DELIVERY_SELECTED # Nie została wybrana żadna metoda dostawy. Przejdź do koszyka i wybierz metodę dostawy;
+ERR_NO_PAYMENT_SELECTED # Nie została wybrana żadna metoda płatności. Przejdź do koszyka i wybierz metodę płatności;
 TXT_CART_EMPTY_PRODUCTS # Nie czekaj i dodaj do niego produkty z naszej oferty!;
 TXT_TOTAL_TO_PAY # Łącznie do zapłaty;
 TXT_PAYMENT_METHOD # Metoda płatności;

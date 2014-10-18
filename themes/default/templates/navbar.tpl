@@ -1,4 +1,4 @@
-<nav class="navbar">
+<nav id="navbar" class="navbar">
 <div class="navbar-inner">
   <div class="container">
     <ul class="nav">
@@ -32,6 +32,7 @@
         <input id="product-search-phrase" name="query" type="text" class="search-query span2" placeholder="{% trans %}TXT_SEARCH_PRODUCT{% endtrans %}"><button class="btn" type="submit"><i class="icon-search"></i></button>
       </div>
     </form>
+    <div id="livesearch"></div>
   </div>
 </div>
 </nav>

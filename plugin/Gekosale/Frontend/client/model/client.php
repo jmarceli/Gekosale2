@@ -191,7 +191,7 @@ class ClientModel extends Component\Model
 		$stmt->bindValue('streetno', $Data['streetno']);
 		$stmt->bindValue('postcode', $Data['postcode']);
 		$stmt->bindValue('placeno', $Data['placeno']);
-		$stmt->bindValue('nip', $Data['nip']);
+		$stmt->bindValue('nip', isset($Data['nip'])? $Data['nip'] : '');
 		$stmt->bindValue('placename', $Data['placename']);
 		$stmt->bindValue('countryid', isset($Data['country']) ? $Data['country'] : $Data['countryid']);
 		$stmt->bindValue('clienttype', isset($Data['clienttype']) ? $Data['clienttype'] : 1);
