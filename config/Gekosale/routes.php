@@ -355,15 +355,28 @@ $this->routes->add('frontend.productnews', new Route('/' . Seo::getSeo('productn
 	'currentPage' => '\d{1,10}'
 )));
 
-$this->routes->add('frontend.productpromotion', new Route('/' . Seo::getSeo('productpromotion') . '/{currentPage}', array(
+$this->routes->add('frontend.productpromotion', new Route('/' . Seo::getSeo('productpromotion') . '/{currentPage},{orderBy},{orderDir},{viewType},{priceFrom},{priceTo},{producers},{attributes}', array(
 	'mode' => 'frontend',
 	'controller' => 'productpromotion',
 	'action' => 'index',
+	'param' => NULL,
+	'orderBy' => NULL,
+	'orderDir' => NULL,
+	'viewType' => NULL,
 	'currentPage' => NULL,
-	'param' => NULL
+	'priceFrom' => NULL,
+	'priceTo' => NULL,
+	'producers' => NULL,
+	'attributes' => NULL
 ), array(
 	'_scheme' => 'http',
-	'currentPage' => '\d{1,10}'
+	'currentPage' => '\d{1,10}',
+	'orderBy' => '\w+',
+	'orderDir' => 'asc|desc',
+	'priceFrom' => '[\d+\.]+',
+	'priceTo' => '[\d+\.]+',
+	'producers' => '[\d_]+',
+	'attributes' => '[\d_]+'
 )));
 
 $this->routes->add('frontend.news', new Route('/' . Seo::getSeo('news') . '/{param}/{slug}', array(

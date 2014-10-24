@@ -27,41 +27,86 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 	{
 		parent::__construct($registry, $box);
 		$this->model = App::getModel('productpromotion');
-		$this->currentPage = $this->getParam('currentPage', 1);
+
+		$this->orderBy = $this->getParam('orderBy', 'default');
+		$this->orderDir = $this->getParam('orderDir', 'asc');
+    $this->currentPage = 1;
+		$this->view = $this->getParam('viewType', $this->_boxAttributes['view']);
+		
+		$this->producers = $this->getParam('producers', 0);
+		$this->attributes = $this->getParam('attributes', 0);
+		
+		$this->priceFrom = $this->getParam('priceFrom', 0);
+		$this->priceTo = $this->getParam('priceTo', Core::PRICE_MAX);
+		
 		$this->_currentParams = Array(
-			'currentPage' => $this->currentPage
+			'currentPage' => $this->currentPage,
+			'viewType' => $this->view,
+			'priceFrom' => $this->priceFrom,
+			'priceTo' => $this->priceTo,
+			'producers' => $this->producers,
+			'orderBy' => $this->orderBy,
+			'orderDir' => $this->orderDir,
+			'attributes' => $this->attributes
 		);
-		if (is_numeric($this->currentPage)){
-			$dataset = $this->model->getDataset();
-			if ($this->_boxAttributes['productsCount'] > 0){
-				$dataset->setPagination($this->_boxAttributes['productsCount']);
-			}
-			$dataset->setOrderBy($this->_boxAttributes['orderBy'], $this->_boxAttributes['orderBy']);
-			$dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
-			$dataset->setCurrentPage($this->currentPage);
-			$this->products = $this->model->getProductDataset();
-		}
-		$this->dataset = $this->products;
-		foreach ($this->products['rows'] as $key => $val){
-			if ($val['discountpricenetto'] > 0 && $val['pricenetto'] > 0){
-				$this->products['rows'][$key]['discount'] = abs(ceil((1 - ($val['discountpricenetto'] / $val['pricenetto'])) * 100));
-			}
-			else{
-				$this->products['rows'][$key]['discount'] = 1;
-			}
-		}
+
+		$this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
 		if ($this->registry->router->getCurrentController() != 'productpromotion'){
 			$this->_boxAttributes['pagination'] = 0;
+      $this->registry->template->assign('view', $this->_boxAttributes['view']);
 		}
-		$this->registry->template->assign('view', $this->_boxAttributes['view']);
+    else {
+      $this->registry->template->assign('view', $this->view);
+    }
 		$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('dataset', $this->dataset);
+    $this->registry->template->assign('viewSwitcher', $this->createViewSwitcher());
+    $this->registry->template->assign('sorting', $this->createSorting());
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
+	}
+
+  protected function getProductsTemplate ()
+	{
+		$this->dataset = App::getModel('productpromotion')->getDataset();
+		if ($this->_boxAttributes['productsCount'] > 0){
+			$this->dataset->setPagination($this->_boxAttributes['productsCount']);
+		}
+
+    if($this->registry->router->getCurrentController() == 'productpromotion') {
+      // only for product promotion page use datagrid custom parameters
+
+      $producer = (strlen($this->producers) > 0) ? array_filter(array_values(explode('_', $this->producers))) : Array();
+      $attributes = array_filter((strlen($this->attributes) > 0) ? array_filter(array_values(explode('_', $this->attributes))) : Array());
+      
+      $Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributes);
+      $this->dataset->setSQLParams(Array(
+        'clientid' => Session::getActiveClientid(),
+        'producer' => $producer,
+        'pricefrom' => (float) $this->priceFrom,
+        'priceto' => (float) $this->priceTo,
+        'filterbyproducer' => (! empty($producer)) ? 1 : 0,
+        'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
+        'products' => $Products
+      ));
+      $this->dataset->setCurrentPage($this->currentPage);
+      $this->dataset->setOrderBy('name', $this->orderBy);
+      $this->dataset->setOrderDir('asc', $this->orderDir);
+    }
+    else {
+      $this->dataset->setCurrentPage(1);
+			$this->dataset->setOrderBy($this->_boxAttributes['orderBy'], $this->_boxAttributes['orderBy']);
+			$this->dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
+    }
+
+		$products = App::getModel('productpromotion')->getProductDataset();
+		$this->dataset = $products;
+		$this->registry->template->assign('items', $products['rows']);
+		$this->registry->template->assign('view', $this->view);
 	}
 
 	protected function createPaginationLinks ()
@@ -106,18 +151,90 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 		return $paginationLinks;
 	}
 
-	public function getBoxTypeClassname ()
+	protected function createSorting ()
 	{
-		if ($this->dataset['total'] > 0){
-			return 'layout-box-type-product-list';
+		$columns = Array(
+			'name' => _('TXT_NAME'),
+			'price' => _('TXT_PRICE'),
+			'rating' => _('TXT_AVERAGE_OPINION'),
+			'opinions' => _('TXT_OPINIONS_QTY'),
+			'adddate' => _('TXT_ADDDATE')
+		);
+		
+		$directions = Array(
+			'asc' => _('TXT_ASC'),
+			'desc' => _('TXT_DESC')
+		);
+		
+		$sorting = Array();
+		
+		$currentParams = $this->_currentParams;
+		
+		$currentParams['orderBy'] = 'default';
+		$currentParams['orderDir'] = 'asc';
+		
+		$sorting[] = Array(
+			'link' => $this->registry->router->generate('frontend.productpromotion', true, $currentParams),
+			'label' => _('TXT_DEFAULT'),
+			'active' => ($this->orderBy == 'default' && $this->orderDir == 'asc') ? true : false
+		);
+		
+		foreach ($columns as $orderBy => $orderByLabel){
+			foreach ($directions as $orderDir => $orderDirLabel){
+				
+				$currentParams['orderBy'] = $orderBy;
+				$currentParams['orderDir'] = $orderDir;
+				
+				$sorting[] = Array(
+					'link' => $this->registry->router->generate('frontend.productpromotion', true, $currentParams),
+					'label' => $orderByLabel . ' - ' . $orderDirLabel,
+					'active' => ($this->orderBy == $orderBy && $this->orderDir == $orderDir) ? true : false
+				);
+			}
 		}
+		
+		return $sorting;
 	}
 
-	public function boxVisible ()
+	protected function createViewSwitcher ()
 	{
-		if ($this->registry->router->getCurrentController() == 'productpromotion'){
-			return true;
+		$viewTypes = Array(
+			0 => _('TXT_VIEW_GRID'),
+			1 => _('TXT_VIEW_LIST')
+		);
+		
+		$switcher = Array();
+		
+		$currentParams = $this->_currentParams;
+		
+		foreach ($viewTypes as $view => $label){
+			
+			$currentParams['viewType'] = $view;
+			
+			$switcher[] = Array(
+				'link' => $this->registry->router->generate('frontend.productpromotion', true, $currentParams),
+				'label' => $label,
+				'type' => $view,
+				'active' => ($this->view == $view) ? true : false
+			);
 		}
-		return ($this->dataset['total'] > 0) ? true : false;
+		
+		return $switcher;
 	}
+
+
+  public function getBoxTypeClassname ()
+  {
+    if ($this->dataset['total'] > 0){
+      return 'layout-box-type-product-list';
+    }
+  }
+
+  public function boxVisible ()
+  {
+    if ($this->registry->router->getCurrentController() == 'productpromotion'){
+      return true;
+    }
+    return ($this->dataset['total'] > 0) ? true : false;
+  }
 }

@@ -158,6 +158,7 @@ class SubpagelayoutModel extends Component\Model
 		}
 		if ($controller == 'LayeredNavigationBox' && ! in_array($subpage, Array(
 			'ProductInCategory',
+			'ProductPromotionList',
 			'ProductSearchList'
 		))){
 			return 0;
