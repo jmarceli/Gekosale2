@@ -32,27 +32,16 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
-		$this->orderBy = $this->getParam('orderBy', 'default');
-		$this->orderDir = $this->getParam('orderDir', 'asc');
-		$this->currentPage = $this->getParam('currentPage', 1);
-		$this->view = $this->getParam('viewType', $this->_boxAttributes['view']);
-		
-		$this->producers = $this->getParam('producers', 0);
-		$this->attributes = $this->getParam('attributes', 0);
-		
-		$this->priceFrom = $this->getParam('priceFrom', 0);
-		$this->priceTo = $this->getParam('priceTo', Core::PRICE_MAX);
-		
 		$this->_currentParams = Array(
 			'param' => $this->category['seo'],
-			'currentPage' => $this->currentPage,
-			'viewType' => $this->view,
-			'priceFrom' => $this->priceFrom,
-			'priceTo' => $this->priceTo,
-			'producers' => $this->producers,
-			'orderBy' => $this->orderBy,
-			'orderDir' => $this->orderDir,
-			'attributes' => $this->attributes
+			'currentPage' => $this->getParam('currentPage', 1),
+			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
+			'priceFrom' => $this->getParam('priceFrom', 0),
+			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'producers' => $this->getParam('producers', 0),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
+			'attributes' => $this->getParam('attributes', 0)
 		);
 		
 		$this->getProductsTemplate();
@@ -62,12 +51,12 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 		if ($this->dataset['total'] > 0 || count($subcategories) > 0){
 			$this->registry->template->assign('subcategories', array_chunk($subcategories, 3));
 			$this->registry->template->assign('currentCategory', $this->category);
-			$this->registry->template->assign('view', (int) $this->view);
-			$this->registry->template->assign('currentPage', $this->currentPage);
-			$this->registry->template->assign('orderBy', $this->orderBy);
-			$this->registry->template->assign('orderDir', $this->orderDir);
-			$this->registry->template->assign('currentProducers', $this->producers);
-			$this->registry->template->assign('currentAttributes', $this->attributes);
+			$this->registry->template->assign('view', (int) $this->_currentParams['viewType']);
+			$this->registry->template->assign('currentPage', $this->_currentParams['currentPage']);
+			$this->registry->template->assign('orderBy', $this->_currentParams['orderBy']);
+			$this->registry->template->assign('orderDir', $this->_currentParams['orderDir']);
+			$this->registry->template->assign('currentProducers', $this->_currentParams['producers']);
+			$this->registry->template->assign('currentAttributes', $this->_currentParams['attributes']);
 			$this->registry->template->assign('sorting', $this->createSorting());
 			$this->registry->template->assign('viewSwitcher', $this->createViewSwitcher());
 			$this->registry->template->assign('dataset', $this->dataset);
@@ -113,8 +102,8 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 
 	protected function getProductsTemplate ()
 	{
-		$producer = (strlen($this->producers) > 0) ? array_filter(array_values(explode('_', $this->producers))) : Array();
-		$attributes = array_filter((strlen($this->attributes) > 0) ? array_filter(array_values(explode('_', $this->attributes))) : Array());
+		$producer = (strlen($this->_currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['producers']))) : Array();
+		$attributes = array_filter((strlen($this->_currentParams['attributes']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['attributes']))) : Array());
 		
 		$Products = App::getModel('layerednavigationbox')->getProductsForAttributes((int) $this->category['id'], $attributes);
 		
@@ -122,15 +111,15 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 		if ($this->_boxAttributes['productsCount'] > 0){
 			$dataset->setPagination($this->_boxAttributes['productsCount']);
 		}
-		$dataset->setCurrentPage($this->currentPage);
-		$dataset->setOrderBy('name', $this->orderBy);
-		$dataset->setOrderDir('asc', $this->orderDir);
+		$dataset->setCurrentPage($this->_currentParams['currentPage']);
+		$dataset->setOrderBy('name', $this->_currentParams['orderBy']);
+		$dataset->setOrderDir('asc', $this->_currentParams['orderDir']);
 		$dataset->setSQLParams(Array(
 			'categoryid' => (int) $this->category['id'],
 			'clientid' => Session::getActiveClientid(),
 			'producer' => $producer,
-			'pricefrom' => (float) $this->priceFrom,
-			'priceto' => (float) $this->priceTo,
+			'pricefrom' => (float) $this->_currentParams['priceFrom'],
+			'priceto' => (float) $this->_currentParams['priceTo'],
 			'filterbyproducer' => (! empty($producer)) ? 1 : 0,
 			'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
 			'products' => $Products
@@ -138,119 +127,21 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 		$products = App::getModel('product')->getProductDataset();
 		$this->dataset = $products;
 		$this->registry->template->assign('items', $products['rows']);
-		$this->registry->template->assign('view', $this->view);
-	}
-
-	protected function createSorting ()
-	{
-		$columns = Array(
-			'name' => _('TXT_NAME'),
-			'price' => _('TXT_PRICE'),
-			'rating' => _('TXT_AVERAGE_OPINION'),
-			'opinions' => _('TXT_OPINIONS_QTY'),
-			'adddate' => _('TXT_ADDDATE')
-		);
-		
-		$directions = Array(
-			'asc' => _('TXT_ASC'),
-			'desc' => _('TXT_DESC')
-		);
-		
-		$sorting = Array();
-		
-		$currentParams = $this->_currentParams;
-		
-		$currentParams['orderBy'] = 'default';
-		$currentParams['orderDir'] = 'asc';
-		
-		$sorting[] = Array(
-			'link' => $this->registry->router->generate('frontend.categorylist', true, $currentParams),
-			'label' => _('TXT_DEFAULT'),
-			'active' => ($this->orderBy == 'default' && $this->orderDir == 'asc') ? true : false
-		);
-		
-		foreach ($columns as $orderBy => $orderByLabel){
-			foreach ($directions as $orderDir => $orderDirLabel){
-				
-				$currentParams['orderBy'] = $orderBy;
-				$currentParams['orderDir'] = $orderDir;
-				
-				$sorting[] = Array(
-					'link' => $this->registry->router->generate('frontend.categorylist', true, $currentParams),
-					'label' => $orderByLabel . ' - ' . $orderDirLabel,
-					'active' => ($this->orderBy == $orderBy && $this->orderDir == $orderDir) ? true : false
-				);
-			}
-		}
-		
-		return $sorting;
-	}
-
-	protected function createViewSwitcher ()
-	{
-		$viewTypes = Array(
-			0 => _('TXT_VIEW_GRID'),
-			1 => _('TXT_VIEW_LIST')
-		);
-		
-		$switcher = Array();
-		
-		$currentParams = $this->_currentParams;
-		
-		foreach ($viewTypes as $view => $label){
-			
-			$currentParams['viewType'] = $view;
-			
-			$switcher[] = Array(
-				'link' => $this->registry->router->generate('frontend.categorylist', true, $currentParams),
-				'label' => $label,
-				'type' => $view,
-				'active' => ($this->view == $view) ? true : false
-			);
-		}
-		
-		return $switcher;
+		$this->registry->template->assign('view', $this->_currentParams['viewType']);
 	}
 
 	protected function createPaginationLinks ()
 	{
-		$currentParams = $this->_currentParams;
-		
-		$paginationLinks = Array();
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage - 1;
-			
-			$paginationLinks['previous'] = Array(
-				'link' => ($this->currentPage > 1) ? $this->registry->router->generate('frontend.categorylist', true, $currentParams) : '',
-				'class' => ($this->currentPage > 1) ? 'previous' : 'previous disabled',
-				'label' => _('TXT_PREVIOUS')
-			);
-		}
-		
-		foreach ($this->dataset['totalPages'] as $page){
-			
-			$currentParams['currentPage'] = $page;
-			
-			$paginationLinks[$page] = Array(
-				'link' => $this->registry->router->generate('frontend.categorylist', true, $currentParams),
-				'class' => ($this->currentPage == $page) ? 'active' : '',
-				'label' => $page
-			);
-		}
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage + 1;
-			
-			$paginationLinks['next'] = Array(
-				'link' => ($this->currentPage < end($this->dataset['totalPages'])) ? $this->registry->router->generate('frontend.categorylist', true, $currentParams) : '',
-				'class' => ($this->currentPage < end($this->dataset['totalPages'])) ? 'next' : 'next disabled',
-				'label' => _('TXT_NEXT')
-			);
-		}
-		
-		return $paginationLinks;
+    return App::getModel('productlist')->createPaginationLinks('categorylist', $this->_currentParams, $this->dataset['totalPages']);
+	}
+
+	protected function createSorting ()
+	{
+    return App::getModel('productlist')->createSorting('categorylist', $this->_currentParams);
+	}
+
+	protected function createViewSwitcher ()
+	{
+    return App::getModel('productlist')->createViewSwitcher('categorylist', $this->_currentParams);
 	}
 }
