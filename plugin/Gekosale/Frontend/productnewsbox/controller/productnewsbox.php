@@ -22,94 +22,109 @@ namespace Gekosale;
 
 class ProductNewsBoxController extends Component\Controller\Box
 {
-
-	protected $dataset;
-	protected $products;
-	
-	public function __construct ($registry, $box)
+  public function __construct ($registry, $box)
 	{
 		parent::__construct($registry, $box);
-		$this->currentPage = $this->getParam('currentPage', 1);
+		$this->model = App::getModel('productnews');
+		
 		$this->_currentParams = Array(
-			'currentPage' => $this->currentPage
+			'currentPage' => $this->getParam('currentPage', 1),
+			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
+			'priceFrom' => $this->getParam('priceFrom', 0),
+			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'producers' => $this->getParam('producers', 0),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
+			'attributes' => $this->getParam('attributes', 0)
 		);
-		if (is_numeric($this->currentPage)){
-			$dataset = App::getModel('productnews')->getDataset();
-			if ($this->_boxAttributes['productsCount'] > 0){
-				$dataset->setPagination($this->_boxAttributes['productsCount']);
-			}
-			$dataset->setOrderBy($this->_boxAttributes['orderBy'], $this->_boxAttributes['orderBy']);
-			$dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
-			$dataset->setCurrentPage($this->currentPage);
-			$this->dataset = App::getModel('productnews')->getProductDataset();
-		}
+
+		$this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
 		if ($this->registry->router->getCurrentController() != 'productnews'){
 			$this->_boxAttributes['pagination'] = 0;
+      $this->registry->template->assign('view', $this->_boxAttributes['view']);
 		}
-		
-		$this->registry->template->assign('view', $this->_boxAttributes['view']);
+    else {
+      $this->registry->template->assign('view', $this->_currentParams['viewType']);
+    }
 		$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('dataset', $this->dataset);
+    $this->registry->template->assign('viewSwitcher', $this->createViewSwitcher());
+    $this->registry->template->assign('sorting', $this->createSorting());
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
 
+  protected function getProductsTemplate ()
+	{
+		$this->dataset = App::getModel('productnews')->getDataset();
+		if ($this->_boxAttributes['productsCount'] > 0){
+			$this->dataset->setPagination($this->_boxAttributes['productsCount']);
+		}
+
+    if($this->registry->router->getCurrentController() == 'productnews') {
+      // only for product news page use datagrid custom parameters
+
+      $producer = (strlen($this->_currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['producers']))) : Array();
+      $attributes = array_filter((strlen($this->_currentParams['attributes']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['attributes']))) : Array());
+      
+      $Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributes);
+      $this->dataset->setSQLParams(Array(
+        'clientid' => Session::getActiveClientid(),
+        'producer' => $producer,
+        'pricefrom' => (float) $this->_currentParams['priceFrom'],
+        'priceto' => (float) $this->_currentParams['priceTo'],
+        'filterbyproducer' => (! empty($producer)) ? 1 : 0,
+        'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
+        'products' => $Products
+      ));
+      $this->dataset->setCurrentPage($this->_currentParams['currentPage']);
+      $this->dataset->setOrderBy('name', $this->_currentParams['orderBy']);
+      $this->dataset->setOrderDir('asc', $this->_currentParams['orderDir']);
+    }
+    else {
+      $this->dataset->setCurrentPage(1);
+			$this->dataset->setOrderBy($this->_boxAttributes['orderBy'], $this->_boxAttributes['orderBy']);
+			$this->dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
+    }
+
+		$products = App::getModel('productnews')->getProductDataset();
+		$this->dataset = $products;
+		$this->registry->template->assign('items', $products['rows']);
+		$this->registry->template->assign('view', $this->_currentParams['viewType']);
+	}
+
 	protected function createPaginationLinks ()
 	{
-		$currentParams = $this->_currentParams;
-		
-		$paginationLinks = Array();
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage - 1;
-			
-			$paginationLinks['previous'] = Array(
-				'link' => ($this->currentPage > 1) ? $this->registry->router->generate('frontend.productnews', true, $currentParams) : '',
-				'class' => ($this->currentPage > 1) ? 'previous' : 'previous disabled',
-				'label' => _('TXT_PREVIOUS')
-			);
-		}
-		
-		foreach ($this->dataset['totalPages'] as $page){
-			
-			$currentParams['currentPage'] = $page;
-			
-			$paginationLinks[$page] = Array(
-				'link' => $this->registry->router->generate('frontend.productnews', true, $currentParams),
-				'class' => ($this->currentPage == $page) ? 'active' : '',
-				'label' => $page
-			);
-		}
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage + 1;
-			
-			$paginationLinks['next'] = Array(
-				'link' => ($this->currentPage < end($this->dataset['totalPages'])) ? $this->registry->router->generate('frontend.productnews', true, $currentParams) : '',
-				'class' => ($this->currentPage < end($this->dataset['totalPages'])) ? 'next' : 'next disabled',
-				'label' => _('TXT_NEXT')
-			);
-		}
-		
-		return $paginationLinks;
+    return App::getModel('productlist')->createPaginationLinks('productnews', $this->_currentParams, $this->dataset['totalPages']);
 	}
 
-	public function getBoxTypeClassname ()
+	protected function createSorting ()
 	{
-		return 'layout-box-type-product-list';
+    return App::getModel('productlist')->createSorting('productnews', $this->_currentParams);
 	}
 
-	public function boxVisible ()
+	protected function createViewSwitcher ()
 	{
-		if ($this->registry->router->getCurrentController() == 'productnews'){
-			return true;
-		}
-		return ($this->dataset['total'] > 0) ? true : false;
+    return App::getModel('productlist')->createViewSwitcher('productnews', $this->_currentParams);
 	}
+
+
+  public function getBoxTypeClassname ()
+  {
+    if ($this->dataset['total'] > 0){
+      return 'layout-box-type-product-list';
+    }
+  }
+
+  public function boxVisible ()
+  {
+    if ($this->registry->router->getCurrentController() == 'productnews'){
+      return true;
+    }
+    return ($this->dataset['total'] > 0) ? true : false;
+  }
 }

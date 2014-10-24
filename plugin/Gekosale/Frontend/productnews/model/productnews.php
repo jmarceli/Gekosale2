@@ -57,8 +57,24 @@ class ProductNewsModel extends Component\Model\Dataset
 		}
 		else{
 			$dataset->setAdditionalWhere('
-				P.enable = 1
-			');
+        VC.viewid = :viewid AND
+        IF(:filterbyproducer > 0, FIND_IN_SET(CAST(P.producerid as CHAR), :producer), 1) AND
+        P.enable = 1 AND
+        IF(:enablelayer > 0, FIND_IN_SET(CAST(P.idproduct as CHAR), :products), 1)
+      ');
+
+      $dataset->setHavingString('
+        finalprice BETWEEN IF(:pricefrom > 0, :pricefrom, 0) AND IF( :priceto > 0, :priceto, 999999)
+      ');
+
+      $dataset->setSQLParams(Array(
+        'producer' => 0,
+        'pricefrom' => 0,
+        'priceto' => 0,
+        'filterbyproducer' => 0,
+        'enablelayer' => 0,
+        'products' => Array()
+      ));
 		}
 
 		$dataset->setGroupBy('
