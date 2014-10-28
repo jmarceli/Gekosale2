@@ -34,8 +34,8 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
 			'priceFrom' => $this->getParam('priceFrom', 0),
 			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
-			'orderBy' => $this->getParam('orderBy', $this->_boxAttributes['orderBy']),
-			'orderDir' => $this->getParam('orderDir', $this->_boxAttributes['orderDir']),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
 			'producers' => $this->getParam('producers', 0),
 			'attributes' => $this->getParam('attributes', 0)
 		);
@@ -85,6 +85,10 @@ class ProductPromotionsBoxController extends Component\Controller\Box
         'products' => $Products
       ));
       $this->dataset->setCurrentPage($this->_currentParams['currentPage']);
+      if($this->_currentParams['orderBy'] == 'default') {
+        $this->dataset->setOrderBy('name', $this->_boxAttributes['orderBy']);
+        $this->dataset->setOrderDir('asc', $this->_boxAttributes['orderDir']);
+      }
       $this->dataset->setOrderBy('name', $this->_currentParams['orderBy']);
       $this->dataset->setOrderDir('asc', $this->_currentParams['orderDir']);
     }
@@ -104,7 +108,7 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 
 	protected function createSorting ()
 	{
-    return App::getModel('productlist')->createSorting('productpromotion', $this->_currentParams);
+    return App::getModel('productlist')->createSorting('productpromotion', $this->_currentParams, 0);
 	}
 
 	protected function createViewSwitcher ()
