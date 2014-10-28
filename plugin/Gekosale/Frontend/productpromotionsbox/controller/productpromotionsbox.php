@@ -27,15 +27,16 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 	{
 		parent::__construct($registry, $box);
 		$this->model = App::getModel('productpromotion');
+    $this->controller = $this->registry->router->getCurrentController();
 		
 		$this->_currentParams = Array(
 			'currentPage' => $this->getParam('currentPage', 1),
 			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
 			'priceFrom' => $this->getParam('priceFrom', 0),
 			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'orderBy' => $this->getParam('orderBy', $this->_boxAttributes['orderBy']),
+			'orderDir' => $this->getParam('orderDir', $this->_boxAttributes['orderDir']),
 			'producers' => $this->getParam('producers', 0),
-			'orderBy' => $this->getParam('orderBy', 'default'),
-			'orderDir' => $this->getParam('orderDir', 'asc'),
 			'attributes' => $this->getParam('attributes', 0)
 		);
 
@@ -44,7 +45,7 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
-		if ($this->registry->router->getCurrentController() != 'productpromotion'){
+		if ($this->controller != 'productpromotion'){
 			$this->_boxAttributes['pagination'] = 0;
       $this->registry->template->assign('view', $this->_boxAttributes['view']);
 		}
@@ -53,6 +54,7 @@ class ProductPromotionsBoxController extends Component\Controller\Box
     }
 		$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('dataset', $this->dataset);
+		$this->registry->template->assign('items', $this->dataset['rows']);
     $this->registry->template->assign('viewSwitcher', $this->createViewSwitcher());
     $this->registry->template->assign('sorting', $this->createSorting());
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
@@ -66,7 +68,7 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 			$this->dataset->setPagination($this->_boxAttributes['productsCount']);
 		}
 
-    if($this->registry->router->getCurrentController() == 'productpromotion') {
+    if($this->controller == 'productpromotion') {
       // only for product promotion page use datagrid custom parameters
 
       $producer = (strlen($this->_currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['producers']))) : Array();
@@ -92,10 +94,7 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 			$this->dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
     }
 
-		$products = App::getModel('productpromotion')->getProductDataset();
-		$this->dataset = $products;
-		$this->registry->template->assign('items', $products['rows']);
-		$this->registry->template->assign('view', $this->_currentParams['viewType']);
+		$this->dataset = App::getModel('productpromotion')->getProductDataset();
 	}
 
 	protected function createPaginationLinks ()
@@ -123,7 +122,7 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 
   public function boxVisible ()
   {
-    if ($this->registry->router->getCurrentController() == 'productpromotion'){
+    if ($this->controller == 'productpromotion'){
       return true;
     }
     return ($this->dataset['total'] > 0) ? true : false;
