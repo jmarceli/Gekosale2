@@ -27,7 +27,19 @@ class LayeredNavigationBoxModel extends Component\Model
   public function __construct ($registry, $modelFile = NULL)
   {
     parent::__construct($registry, $modelFile);
+    $this->controller = $this->registry->router->getCurrentController();
 
+    $this->init();
+   
+    if (isset($_POST['layered_submitted']) && $_POST['layered_submitted'] == 1){
+      App::redirectUrl($this->generateRedirectUrl());
+    }
+
+    $this->productIds = $this->getProducts();
+  }
+
+  protected function init()
+  {
     $this->args = array(
       'orderBy' => $this->getParam('orderBy', 'default'),
       'orderDir' => $this->getParam('orderDir', 'asc'),
@@ -39,7 +51,6 @@ class LayeredNavigationBoxModel extends Component\Model
       'attributes' => $this->getParam('attributes', 0)
     );
 
-    $this->controller = $this->registry->router->getCurrentController();
 
     if($this->controller == 'categorylist') {
       $this->category = App::getModel('categorylist')->getCurrentCategory();
@@ -52,12 +63,6 @@ class LayeredNavigationBoxModel extends Component\Model
     else {
       $this->category = array('id' => 0);
     }
-    
-    if (isset($_POST['layered_submitted']) && $_POST['layered_submitted'] == 1){
-      App::redirectUrl($this->generateRedirectUrl());
-    }
-
-    $this->productIds = $this->getProducts();
   }
 
   // Returns array of products IDs on this page "by default" (without filtering)
