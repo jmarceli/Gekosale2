@@ -365,6 +365,15 @@ class LayoutboxModel extends Component\Model
 				break;
 		}
 
+		$eventData = Event::filter($this, 'admin.layoutbox.updateLayoutBoxContentTypeSpecificValues', Array(
+			'variables' => $variables,
+      'submittedData' => $submittedData
+		));
+
+    foreach ($eventData as $Data){
+      $variables = \Gekosale\Arr::merge($variables, $Data);
+    }
+
 		foreach ($variables as $variable => $value){
 			if (is_array($value)){
 				foreach ($value as $languageid => $translatedValue){
