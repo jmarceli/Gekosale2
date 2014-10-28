@@ -29,20 +29,7 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 		$this->category = App::getModel('categorylist')->getCurrentCategory();
 		$this->dataset = Array();
 
-		$this->_currentParams = Array(
-      'categoryid' => $this->category['id'],
-			'param' => $this->category['seo'],
-			'currentPage' => $this->getParam('currentPage', 1),
-			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
-			'priceFrom' => $this->getParam('priceFrom', 0),
-			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
-			'producers' => $this->getParam('producers', 0),
-			'orderBy' => $this->getParam('orderBy', 'default'),
-			'orderDir' => $this->getParam('orderDir', 'asc'),
-			'attributes' => $this->getParam('attributes', 0)
-		);
-    $this->_boxAttributes['orderBy'] = $this->_currentParams['orderBy'];
-    $this->_boxAttributes['orderDir'] = $this->_currentParams['orderDir'];
+    $this->init();
 		
 		$this->dataset = $this->getProductsTemplate();
 	}
@@ -103,6 +90,24 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 		$dataset->setCurrentPage(1);
 		return App::getModel('productnews')->getProductDataset();
 	}
+
+  protected function init()
+  {
+		$this->_currentParams = Array(
+      'categoryid' => $this->category['id'],
+			'param' => $this->category['seo'],
+			'currentPage' => $this->getParam('currentPage', 1),
+			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
+			'priceFrom' => $this->getParam('priceFrom', 0),
+			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'producers' => $this->getParam('producers', 0),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
+			'attributes' => $this->getParam('attributes', 0)
+		);
+    $this->_boxAttributes['orderBy'] = $this->_currentParams['orderBy'];
+    $this->_boxAttributes['orderDir'] = $this->_currentParams['orderDir'];
+  }
 
 	protected function getProductsTemplate ()
 	{

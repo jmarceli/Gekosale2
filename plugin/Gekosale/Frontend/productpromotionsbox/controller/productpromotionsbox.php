@@ -28,18 +28,9 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 		parent::__construct($registry, $box);
 		$this->model = App::getModel('productpromotion');
     $this->controller = $this->registry->router->getCurrentController();
-		
-		$this->_currentParams = Array(
-			'currentPage' => $this->getParam('currentPage', 1),
-			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
-			'priceFrom' => $this->getParam('priceFrom', 0),
-			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
-			'orderBy' => $this->getParam('orderBy', 'default'),
-			'orderDir' => $this->getParam('orderDir', 'asc'),
-			'producers' => $this->getParam('producers', 0),
-			'attributes' => $this->getParam('attributes', 0)
-		);
 
+    $this->init();
+	
     $this->dataset = $this->getProductsTemplate();
 	}
 
@@ -60,6 +51,20 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
+
+  protected function init ()
+  {
+		$this->_currentParams = Array(
+			'currentPage' => $this->getParam('currentPage', 1),
+			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
+			'priceFrom' => $this->getParam('priceFrom', 0),
+			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
+			'producers' => $this->getParam('producers', 0),
+			'attributes' => $this->getParam('attributes', 0)
+		);
+  }
 
   protected function getProductsTemplate ()
 	{

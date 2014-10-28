@@ -28,16 +28,7 @@ class ProductNewsBoxController extends Component\Controller\Box
 		$this->model = App::getModel('productnews');
     $this->controller = $this->registry->router->getCurrentController();
 		
-		$this->_currentParams = Array(
-			'currentPage' => $this->getParam('currentPage', 1),
-			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
-			'priceFrom' => $this->getParam('priceFrom', 0),
-			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
-			'producers' => $this->getParam('producers', 0),
-			'orderBy' => $this->getParam('orderBy', 'default'),
-			'orderDir' => $this->getParam('orderDir', 'asc'),
-			'attributes' => $this->getParam('attributes', 0)
-		);
+    $this->init();
 
 		$this->dataset = $this->getProductsTemplate();
 	}
@@ -59,6 +50,20 @@ class ProductNewsBoxController extends Component\Controller\Box
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
+
+  protected function init ()
+  {
+		$this->_currentParams = Array(
+			'currentPage' => $this->getParam('currentPage', 1),
+			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
+			'priceFrom' => $this->getParam('priceFrom', 0),
+			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'producers' => $this->getParam('producers', 0),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
+			'attributes' => $this->getParam('attributes', 0)
+		);
+  }
 
   protected function getProductsTemplate ()
 	{
