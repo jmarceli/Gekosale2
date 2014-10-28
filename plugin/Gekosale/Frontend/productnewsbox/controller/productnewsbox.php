@@ -39,7 +39,7 @@ class ProductNewsBoxController extends Component\Controller\Box
 			'attributes' => $this->getParam('attributes', 0)
 		);
 
-		$this->getProductsTemplate();
+		$this->dataset = $this->getProductsTemplate();
 	}
 
 	public function index ()
@@ -62,42 +62,7 @@ class ProductNewsBoxController extends Component\Controller\Box
 
   protected function getProductsTemplate ()
 	{
-		$this->dataset = App::getModel('productnews')->getDataset();
-		if ($this->_boxAttributes['productsCount'] > 0){
-			$this->dataset->setPagination($this->_boxAttributes['productsCount']);
-		}
-
-    if($this->controller == 'productnews') {
-      // only for product news page use datagrid custom parameters
-
-      $producer = (strlen($this->_currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['producers']))) : Array();
-      $attributes = array_filter((strlen($this->_currentParams['attributes']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['attributes']))) : Array());
-      
-      $Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributes);
-      $this->dataset->setSQLParams(Array(
-        'clientid' => Session::getActiveClientid(),
-        'producer' => $producer,
-        'pricefrom' => (float) $this->_currentParams['priceFrom'],
-        'priceto' => (float) $this->_currentParams['priceTo'],
-        'filterbyproducer' => (! empty($producer)) ? 1 : 0,
-        'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
-        'products' => $Products
-      ));
-      $this->dataset->setCurrentPage($this->_currentParams['currentPage']);
-      if($this->_currentParams['orderBy'] == 'default') {
-        $this->dataset->setOrderBy('name', $this->_boxAttributes['orderBy']);
-        $this->dataset->setOrderDir('asc', $this->_boxAttributes['orderDir']);
-      }
-      $this->dataset->setOrderBy('name', $this->_currentParams['orderBy']);
-      $this->dataset->setOrderDir('asc', $this->_currentParams['orderDir']);
-    }
-    else {
-      $this->dataset->setCurrentPage(1);
-			$this->dataset->setOrderBy($this->_boxAttributes['orderBy'], $this->_boxAttributes['orderBy']);
-			$this->dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
-    }
-
-		$this->dataset = App::getModel('productnews')->getProductDataset();
+    return App::getModel('productlist')->getProductsTemplate('productnews', 'productnews', $this->_currentParams, $this->_boxAttributes);
 	}
 
 	protected function createPaginationLinks ()

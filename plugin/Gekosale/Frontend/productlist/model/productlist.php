@@ -24,6 +24,58 @@ use xajaxResponse;
 // Class for all methods shared across subpages
 class ProductListModel extends Component\Model
 {
+
+  // Returns products for this list
+  // @param string $model - name of the model
+  // @param string $controller - name of the controller
+  // @param array $currentParams - array with current route params
+  public function getProductsTemplate ($model, $controller, $currentParams, $boxAttributes)
+	{
+		$this->dataset = App::getModel($model)->getDataset();
+		if ($boxAttributes['productsCount'] > 0){
+			$this->dataset->setPagination($boxAttributes['productsCount']);
+		}
+
+    if($this->registry->router->getCurrentController() == $controller) {
+      // only for product news page use datagrid custom parameters
+
+      $producer = (strlen($currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $currentParams['producers']))) : Array();
+      $attributes = array_filter((strlen($currentParams['attributes']) > 0) ? array_filter(array_values(explode('_', $currentParams['attributes']))) : Array());
+      
+      $Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributes);
+
+      $sqlParams = Array(
+        'clientid' => Session::getActiveClientid(),
+        'producer' => $producer,
+        'pricefrom' => (float) $currentParams['priceFrom'],
+        'priceto' => (float) $currentParams['priceTo'],
+        'filterbyproducer' => (! empty($producer)) ? 1 : 0,
+        'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
+        'products' => $Products
+      );
+      if(!empty($currentParams['categoryid'])) {
+        $sqlParams['categoryid'] = $currentParams['categoryid'];
+      }
+
+      $this->dataset->setSQLParams($sqlParams);
+      $this->dataset->setCurrentPage($currentParams['currentPage']);
+      if($currentParams['orderBy'] == 'default') { // get order from box settings
+        $this->dataset->setOrderBy('name', $boxAttributes['orderBy']);
+        $this->dataset->setOrderDir('asc', $boxAttributes['orderDir']);
+      }
+      else { // get order from params
+        $this->dataset->setOrderBy('name', $currentParams['orderBy']);
+        $this->dataset->setOrderDir('asc', $currentParams['orderDir']);
+      }
+    }
+    else {
+      $this->dataset->setCurrentPage(1);
+			$this->dataset->setOrderBy('name', $boxAttributes['orderBy']);
+			$this->dataset->setOrderDir('asc', $boxAttributes['orderDir']);
+    }
+
+		return App::getModel($model)->getProductDataset();
+	}
   // Returns view switcher
   // @param string $controller - name of the controller
   // @param array $currentParams - array with current route params

@@ -28,11 +28,9 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 		parent::__construct($registry, $box);
 		$this->category = App::getModel('categorylist')->getCurrentCategory();
 		$this->dataset = Array();
-	}
 
-	public function index ()
-	{
 		$this->_currentParams = Array(
+      'categoryid' => $this->category['id'],
 			'param' => $this->category['seo'],
 			'currentPage' => $this->getParam('currentPage', 1),
 			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
@@ -43,10 +41,15 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 			'orderDir' => $this->getParam('orderDir', 'asc'),
 			'attributes' => $this->getParam('attributes', 0)
 		);
+    $this->_boxAttributes['orderBy'] = $this->_currentParams['orderBy'];
+    $this->_boxAttributes['orderDir'] = $this->_currentParams['orderDir'];
 		
-		$this->getProductsTemplate();
-		
-		$subcategories = App::getModel('categorylist')->getCategoryMenuTop($this->category['id']);
+		$this->dataset = $this->getProductsTemplate();
+	}
+
+	public function index ()
+	{
+		$subcategories = App::getModel('categorylist')->getCategoryMenuTop($this->_currentParams['categoryid']);
 		
 		if ($this->dataset['total'] > 0 || count($subcategories) > 0){
 			$this->registry->template->assign('subcategories', array_chunk($subcategories, 3));
@@ -60,6 +63,7 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 			$this->registry->template->assign('sorting', $this->createSorting());
 			$this->registry->template->assign('viewSwitcher', $this->createViewSwitcher());
 			$this->registry->template->assign('dataset', $this->dataset);
+      $this->registry->template->assign('items', $this->dataset['rows']);
 			$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 			$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 			$this->registry->template->assign('categoryPromotions', $this->getCategoryPromotions());
@@ -102,32 +106,7 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 
 	protected function getProductsTemplate ()
 	{
-		$producer = (strlen($this->_currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['producers']))) : Array();
-		$attributes = array_filter((strlen($this->_currentParams['attributes']) > 0) ? array_filter(array_values(explode('_', $this->_currentParams['attributes']))) : Array());
-		
-		$Products = App::getModel('layerednavigationbox')->getProductsForAttributes((int) $this->category['id'], $attributes);
-		
-		$dataset = App::getModel('product')->getDataset();
-		if ($this->_boxAttributes['productsCount'] > 0){
-			$dataset->setPagination($this->_boxAttributes['productsCount']);
-		}
-		$dataset->setCurrentPage($this->_currentParams['currentPage']);
-		$dataset->setOrderBy('name', $this->_currentParams['orderBy']);
-		$dataset->setOrderDir('asc', $this->_currentParams['orderDir']);
-		$dataset->setSQLParams(Array(
-			'categoryid' => (int) $this->category['id'],
-			'clientid' => Session::getActiveClientid(),
-			'producer' => $producer,
-			'pricefrom' => (float) $this->_currentParams['priceFrom'],
-			'priceto' => (float) $this->_currentParams['priceTo'],
-			'filterbyproducer' => (! empty($producer)) ? 1 : 0,
-			'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
-			'products' => $Products
-		));
-		$products = App::getModel('product')->getProductDataset();
-		$this->dataset = $products;
-		$this->registry->template->assign('items', $products['rows']);
-		$this->registry->template->assign('view', $this->_currentParams['viewType']);
+    return App::getModel('productlist')->getProductsTemplate('product', 'categorylist', $this->_currentParams, $this->_boxAttributes);
 	}
 
 	protected function createPaginationLinks ()
