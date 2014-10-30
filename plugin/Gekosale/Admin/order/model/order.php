@@ -739,7 +739,7 @@ class OrderModel extends Component\Model\Datagrid
 					DP.dispatchmethodid as id,
 					DP.`from`,
 					DP.`to`,
-					IF(DP.vat IS NOT NULL, ROUND(DP.dispatchmethodcost+(DP.dispatchmethodcost*(V.`value`/100)),4), DP.dispatchmethodcost) as dispatchmethodcost,
+					IF(DP.vat IS NOT NULL, ROUND((DP.dispatchmethodcost+(DP.dispatchmethodcost*(V.`value`/100))) * CR.exchangerate,4), ROUND(DP.dispatchmethodcost * CR.exchangerate,4)) as dispatchmethodcost,
 					CASE
   						WHEN (`from`<>0 AND `from`< :price AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
  					 	WHEN ( :price BETWEEN `from` AND `to`) THEN DMT.name
@@ -751,6 +751,7 @@ class OrderModel extends Component\Model\Datagrid
         LEFT JOIN dispatchmethodtranslation DMT ON DMT.dispatchmethodid = D.iddispatchmethod AND DMT.languageid = :languageid
 				LEFT JOIN vat V ON V.idvat = DP.vat
 				LEFT JOIN dispatchmethodview DV ON DV.dispatchmethodid = D.iddispatchmethod
+        LEFT JOIN currencyrates CR ON CR.currencyfrom = :currencyfrom AND CR.currencyto = (SELECT O.currencyid FROM `order` O WHERE O.idorder= :idorder)
 				WHERE
 					(DV.viewid = (SELECT O.viewid FROM `order` O WHERE O.idorder= :idorder) OR DP.dispatchmethodid = (SELECT O.dispatchmethodid FROM `order` O WHERE O.idorder= :idorder)) AND
 					D.type = 1 AND
@@ -758,6 +759,7 @@ class OrderModel extends Component\Model\Datagrid
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->bindValue('price', $price);
+		$stmt->bindValue('currencyfrom', 28); // dispatchmethod price is always in PLN
 		$stmt->bindValue('idorder', $idorder);
 		$stmt->bindValue('globalweight', $globalweight);
 		$stmt->bindValue('viewid', Helper::getViewId());
