@@ -69,14 +69,37 @@ class ProductPromotionModel extends Component\Model\Dataset
 			
 			}
 			else{
-				$dataset->setAdditionalWhere('
-				IF(PGP.promotion = 1 AND IF(PGP.promotionstart IS NOT NULL, PGP.promotionstart <= CURDATE(), 1) AND IF(PGP.promotionend IS NOT NULL, PGP.promotionend >= CURDATE(), 1),
-				 	PGP.discountprice IS NOT NULL,
-				 	IF(PGP.groupprice IS NULL AND P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), P.discountprice IS NOT NULL, NULL)
-				) AND
-				VC.viewid = :viewid AND
-				P.enable = 1
-			');
+        $dataset->setAdditionalWhere('
+          IF(PGP.promotion = 1 AND IF(PGP.promotionstart IS NOT NULL, PGP.promotionstart <= CURDATE(), 1) AND IF(PGP.promotionend IS NOT NULL, PGP.promotionend >= CURDATE(), 1),
+          PGP.discountprice IS NOT NULL,
+          IF(PGP.groupprice IS NULL AND P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), P.discountprice IS NOT NULL, NULL)
+            ) AND
+            VC.viewid = :viewid AND
+          IF(:filterbyproducer > 0, FIND_IN_SET(CAST(P.producerid as CHAR), :producer), 1) AND
+          P.enable = 1 AND
+          IF(:enablelayer > 0, FIND_IN_SET(CAST(P.idproduct as CHAR), :products), 1)
+        ');
+
+        //$dataset->queryFrom = '
+          //productcategory PC
+          //LEFT JOIN viewcategory VC ON PC.categoryid = VC.categoryid AND VC.viewid = :viewid
+          //LEFT JOIN product P ON PC.productid = P.idproduct
+          //LEFT JOIN productnew PN ON P.idproduct = PN.productid
+        //' . $dataset->queryFrom;
+
+        $dataset->setHavingString('
+          finalprice BETWEEN IF(:pricefrom > 0, :pricefrom, 0) AND IF( :priceto > 0, :priceto, 999999)
+        ');
+
+        $dataset->setSQLParams(Array(
+          //'categoryid' => (int) $this->registry->core->getParam(),
+          'producer' => 0,
+          'pricefrom' => 0,
+          'priceto' => 0,
+          'filterbyproducer' => 0,
+          'enablelayer' => 0,
+          'products' => Array()
+        ));
 			}
 		
 		$dataset->setGroupBy('

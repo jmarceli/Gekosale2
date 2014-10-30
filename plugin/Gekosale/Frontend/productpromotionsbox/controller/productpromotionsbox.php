@@ -27,97 +27,78 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 	{
 		parent::__construct($registry, $box);
 		$this->model = App::getModel('productpromotion');
-		$this->currentPage = $this->getParam('currentPage', 1);
-		$this->_currentParams = Array(
-			'currentPage' => $this->currentPage
-		);
-		if (is_numeric($this->currentPage)){
-			$dataset = $this->model->getDataset();
-			if ($this->_boxAttributes['productsCount'] > 0){
-				$dataset->setPagination($this->_boxAttributes['productsCount']);
-			}
-			$dataset->setOrderBy($this->_boxAttributes['orderBy'], $this->_boxAttributes['orderBy']);
-			$dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
-			$dataset->setCurrentPage($this->currentPage);
-			$this->products = $this->model->getProductDataset();
-		}
-		$this->dataset = $this->products;
-		foreach ($this->products['rows'] as $key => $val){
-			if ($val['discountpricenetto'] > 0 && $val['pricenetto'] > 0){
-				$this->products['rows'][$key]['discount'] = abs(ceil((1 - ($val['discountpricenetto'] / $val['pricenetto'])) * 100));
-			}
-			else{
-				$this->products['rows'][$key]['discount'] = 1;
-			}
-		}
+    $this->controller = $this->registry->router->getCurrentController();
+
+    $this->init();
+	
+    $this->dataset = $this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
-		if ($this->registry->router->getCurrentController() != 'productpromotion'){
+		if ($this->controller != 'productpromotion'){
 			$this->_boxAttributes['pagination'] = 0;
+      $this->registry->template->assign('view', $this->_boxAttributes['view']);
 		}
-		$this->registry->template->assign('view', $this->_boxAttributes['view']);
+    else {
+      $this->registry->template->assign('view', $this->_currentParams['viewType']);
+    }
 		$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('dataset', $this->dataset);
+		$this->registry->template->assign('items', $this->dataset['rows']);
+    $this->registry->template->assign('viewSwitcher', $this->createViewSwitcher());
+    $this->registry->template->assign('sorting', $this->createSorting());
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
 
+  protected function init ()
+  {
+		$this->_currentParams = Array(
+			'currentPage' => $this->getParam('currentPage', 1),
+			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
+			'priceFrom' => $this->getParam('priceFrom', 0),
+			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
+			'producers' => $this->getParam('producers', 0),
+			'attributes' => $this->getParam('attributes', 0)
+		);
+  }
+
+  protected function getProductsTemplate ()
+	{
+    return App::getModel('productlist')->getProductsTemplate('productpromotion', 'productpromotion', $this->_currentParams, $this->_boxAttributes);
+	}
+
 	protected function createPaginationLinks ()
 	{
-		$currentParams = $this->_currentParams;
-		
-		$paginationLinks = Array();
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage - 1;
-			
-			$paginationLinks['previous'] = Array(
-				'link' => ($this->currentPage > 1) ? $this->registry->router->generate('frontend.productpromotion', true, $currentParams) : '',
-				'class' => ($this->currentPage > 1) ? 'previous' : 'previous disabled',
-				'label' => _('TXT_PREVIOUS')
-			);
-		}
-		
-		foreach ($this->dataset['totalPages'] as $page){
-			
-			$currentParams['currentPage'] = $page;
-			
-			$paginationLinks[$page] = Array(
-				'link' => $this->registry->router->generate('frontend.productpromotion', true, $currentParams),
-				'class' => ($this->currentPage == $page) ? 'active' : '',
-				'label' => $page
-			);
-		}
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage + 1;
-			
-			$paginationLinks['next'] = Array(
-				'link' => ($this->currentPage < end($this->dataset['totalPages'])) ? $this->registry->router->generate('frontend.productpromotion', true, $currentParams) : '',
-				'class' => ($this->currentPage < end($this->dataset['totalPages'])) ? 'next' : 'next disabled',
-				'label' => _('TXT_NEXT')
-			);
-		}
-		
-		return $paginationLinks;
+    return App::getModel('productlist')->createPaginationLinks('productpromotion', $this->_currentParams, $this->dataset['totalPages']);
 	}
 
-	public function getBoxTypeClassname ()
+	protected function createSorting ()
 	{
-		if ($this->dataset['total'] > 0){
-			return 'layout-box-type-product-list';
-		}
+    return App::getModel('productlist')->createSorting('productpromotion', $this->_currentParams, 0);
 	}
 
-	public function boxVisible ()
+	protected function createViewSwitcher ()
 	{
-		if ($this->registry->router->getCurrentController() == 'productpromotion'){
-			return true;
-		}
-		return ($this->dataset['total'] > 0) ? true : false;
+    return App::getModel('productlist')->createViewSwitcher('productpromotion', $this->_currentParams);
 	}
+
+
+  public function getBoxTypeClassname ()
+  {
+    if ($this->dataset['total'] > 0){
+      return 'layout-box-type-product-list';
+    }
+  }
+
+  public function boxVisible ()
+  {
+    if ($this->controller == 'productpromotion'){
+      return true;
+    }
+    return ($this->dataset['total'] > 0) ? true : false;
+  }
 }

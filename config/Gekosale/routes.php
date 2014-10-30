@@ -344,26 +344,52 @@ $this->routes->add('frontend.productsearch', new Route('/' . Seo::getSeo('produc
 	'attributes' => '[\d+_]+'
 )));
 
-$this->routes->add('frontend.productnews', new Route('/' . Seo::getSeo('productnews') . '/{currentPage}', array(
+$this->routes->add('frontend.productnews', new Route('/' . Seo::getSeo('productnews') . '/{currentPage},{orderBy},{orderDir},{viewType},{priceFrom},{priceTo},{producers},{attributes}', array(
 	'mode' => 'frontend',
 	'controller' => 'productnews',
 	'action' => 'index',
+	'param' => NULL,
+	'orderBy' => NULL,
+	'orderDir' => NULL,
+	'viewType' => NULL,
 	'currentPage' => NULL,
-	'param' => NULL
+	'priceFrom' => NULL,
+	'priceTo' => NULL,
+	'producers' => NULL,
+	'attributes' => NULL
 ), array(
 	'_scheme' => 'http',
-	'currentPage' => '\d{1,10}'
+	'currentPage' => '\d{1,10}',
+	'orderBy' => '\w+',
+	'orderDir' => 'asc|desc',
+	'priceFrom' => '[\d+\.]+',
+	'priceTo' => '[\d+\.]+',
+	'producers' => '[\d_]+',
+	'attributes' => '[\d_]+'
 )));
 
-$this->routes->add('frontend.productpromotion', new Route('/' . Seo::getSeo('productpromotion') . '/{currentPage}', array(
+$this->routes->add('frontend.productpromotion', new Route('/' . Seo::getSeo('productpromotion') . '/{currentPage},{orderBy},{orderDir},{viewType},{priceFrom},{priceTo},{producers},{attributes}', array(
 	'mode' => 'frontend',
 	'controller' => 'productpromotion',
 	'action' => 'index',
+	'param' => NULL,
+	'orderBy' => NULL,
+	'orderDir' => NULL,
+	'viewType' => NULL,
 	'currentPage' => NULL,
-	'param' => NULL
+	'priceFrom' => NULL,
+	'priceTo' => NULL,
+	'producers' => NULL,
+	'attributes' => NULL
 ), array(
 	'_scheme' => 'http',
-	'currentPage' => '\d{1,10}'
+	'currentPage' => '\d{1,10}',
+	'orderBy' => '\w+',
+	'orderDir' => 'asc|desc',
+	'priceFrom' => '[\d+\.]+',
+	'priceTo' => '[\d+\.]+',
+	'producers' => '[\d_]+',
+	'attributes' => '[\d_]+'
 )));
 
 $this->routes->add('frontend.news', new Route('/' . Seo::getSeo('news') . '/{param}/{slug}', array(

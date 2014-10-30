@@ -1540,46 +1540,49 @@ class OrderModel extends Component\Model\Datagrid
 				}
 			}
 		}
-		$sql = 'UPDATE `order` SET
-					price=:price,
-					dispatchmethodprice=:dispatchmethodprice,
-					globalprice=:globalprice,
-					dispatchmethodname=:dispatchmethodname,
-					dispatchmethodid=:dispatchmethodid,
-					paymentmethodname=:paymentmethodname,
-					paymentmethodid=:paymentmethodid,
-					globalpricenetto=:globalpricenetto,
-					pricebeforepromotion= :pricebeforepromotion,
-					rulescartid= :rulescartid
-				WHERE idorder= :id';
-		$stmt = Db::getInstance()->prepare($sql);
-		if (isset($pricePromo) && $pricePromo > 0){
-			$stmt->bindValue('price', $pricePromo);
-			$stmt->bindValue('globalprice', $globalpricePromo);
-			$stmt->bindValue('dispatchmethodprice', $Data['dispatchmethodprice']);
-			$stmt->bindValue('globalpricenetto', $globalpricenettoPromo);
-			$stmt->bindValue('pricebeforepromotion', ($Data['pricebrutto'] + $Data['dispatchmethodprice']));
-			$stmt->bindValue('rulescartid', $Data['additional_data']['payment_data']['rules_cart']);
-		}
-		else{
-			$stmt->bindValue('price', $Data['pricebrutto']);
-			$stmt->bindValue('globalprice', ($Data['pricebrutto'] + $Data['dispatchmethodprice']));
-			$stmt->bindValue('dispatchmethodprice', $Data['dispatchmethodprice']);
-			$stmt->bindValue('globalpricenetto', $Data['pricenetto']);
-			$stmt->bindValue('pricebeforepromotion', NULL);
-			$stmt->bindValue('rulescartid', NULL);
-		}
-		$stmt->bindValue('id', $id);
-		$stmt->bindValue('dispatchmethodname', $dispatchmethodname);
-		$stmt->bindValue('dispatchmethodid', $dispatchmethodId);
-		$stmt->bindValue('paymentmethodname', $paymentData[$Data['additional_data']['payment_data']['payment_method']]['paymentmethodname']);
-		$stmt->bindValue('paymentmethodid', $Data['additional_data']['payment_data']['payment_method']);
-		try{
-			$stmt->execute();
-		}
-		catch (Exception $e){
-			throw new CoreException(_('ERR_ORDER_EDIT'), 13, $e->getMessage());
-		}
+
+    if($Data['pricebrutto'] > 0 || $Data['pricenetto'] > 0 || $price || $globalpricePromo) {
+      $sql = 'UPDATE `order` SET
+            price=:price,
+            dispatchmethodprice=:dispatchmethodprice,
+            globalprice=:globalprice,
+            dispatchmethodname=:dispatchmethodname,
+            dispatchmethodid=:dispatchmethodid,
+            paymentmethodname=:paymentmethodname,
+            paymentmethodid=:paymentmethodid,
+            globalpricenetto=:globalpricenetto,
+            pricebeforepromotion= :pricebeforepromotion,
+            rulescartid= :rulescartid
+          WHERE idorder= :id';
+      $stmt = Db::getInstance()->prepare($sql);
+      if (isset($pricePromo) && $pricePromo > 0){
+        $stmt->bindValue('price', $pricePromo);
+        $stmt->bindValue('globalprice', $globalpricePromo);
+        $stmt->bindValue('dispatchmethodprice', $Data['dispatchmethodprice']);
+        $stmt->bindValue('globalpricenetto', $globalpricenettoPromo);
+        $stmt->bindValue('pricebeforepromotion', ($Data['pricebrutto'] + $Data['dispatchmethodprice']));
+        $stmt->bindValue('rulescartid', $Data['additional_data']['payment_data']['rules_cart']);
+      }
+      else{
+        $stmt->bindValue('price', $Data['pricebrutto']);
+        $stmt->bindValue('globalprice', ($Data['pricebrutto'] + $Data['dispatchmethodprice']));
+        $stmt->bindValue('dispatchmethodprice', $Data['dispatchmethodprice']);
+        $stmt->bindValue('globalpricenetto', $Data['pricenetto']);
+        $stmt->bindValue('pricebeforepromotion', NULL);
+        $stmt->bindValue('rulescartid', NULL);
+      }
+      $stmt->bindValue('id', $id);
+      $stmt->bindValue('dispatchmethodname', $dispatchmethodname);
+      $stmt->bindValue('dispatchmethodid', $dispatchmethodId);
+      $stmt->bindValue('paymentmethodname', $paymentData[$Data['additional_data']['payment_data']['payment_method']]['paymentmethodname']);
+      $stmt->bindValue('paymentmethodid', $Data['additional_data']['payment_data']['payment_method']);
+      try{
+        $stmt->execute();
+      }
+      catch (Exception $e){
+        throw new CoreException(_('ERR_ORDER_EDIT'), 13, $e->getMessage());
+      }
+    }
 		return true;
 	}
 

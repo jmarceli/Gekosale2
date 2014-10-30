@@ -87,7 +87,7 @@ class RegistrationBoxController extends Component\Controller\Box
 						App::getModel('clientlogin')->checkClientGroup();
 						$this->model->saveClientData();
 					}
-          elseif ($result < 0) {
+          if ($result < 0) {
             Session::setVolatileActivationRequired(1, false);
           }
           else {

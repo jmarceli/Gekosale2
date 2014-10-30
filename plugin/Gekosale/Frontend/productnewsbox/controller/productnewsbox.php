@@ -22,94 +22,82 @@ namespace Gekosale;
 
 class ProductNewsBoxController extends Component\Controller\Box
 {
-
-	protected $dataset;
-	protected $products;
-	
-	public function __construct ($registry, $box)
+  public function __construct ($registry, $box)
 	{
 		parent::__construct($registry, $box);
-		$this->currentPage = $this->getParam('currentPage', 1);
-		$this->_currentParams = Array(
-			'currentPage' => $this->currentPage
-		);
-		if (is_numeric($this->currentPage)){
-			$dataset = App::getModel('productnews')->getDataset();
-			if ($this->_boxAttributes['productsCount'] > 0){
-				$dataset->setPagination($this->_boxAttributes['productsCount']);
-			}
-			$dataset->setOrderBy($this->_boxAttributes['orderBy'], $this->_boxAttributes['orderBy']);
-			$dataset->setOrderDir($this->_boxAttributes['orderDir'], $this->_boxAttributes['orderDir']);
-			$dataset->setCurrentPage($this->currentPage);
-			$this->dataset = App::getModel('productnews')->getProductDataset();
-		}
+		$this->model = App::getModel('productnews');
+    $this->controller = $this->registry->router->getCurrentController();
+		
+    $this->init();
+
+		$this->dataset = $this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
-		if ($this->registry->router->getCurrentController() != 'productnews'){
+		if ($this->controller != 'productnews'){
 			$this->_boxAttributes['pagination'] = 0;
+      $this->registry->template->assign('view', $this->_boxAttributes['view']);
 		}
-		
-		$this->registry->template->assign('view', $this->_boxAttributes['view']);
+    else {
+      $this->registry->template->assign('view', $this->_currentParams['viewType']);
+    }
 		$this->registry->template->assign('pagination', $this->_boxAttributes['pagination']);
 		$this->registry->template->assign('dataset', $this->dataset);
+		$this->registry->template->assign('items', $this->dataset['rows']);
+    $this->registry->template->assign('viewSwitcher', $this->createViewSwitcher());
+    $this->registry->template->assign('sorting', $this->createSorting());
 		$this->registry->template->assign('paginationLinks', $this->createPaginationLinks());
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
 
+  protected function init ()
+  {
+		$this->_currentParams = Array(
+			'currentPage' => $this->getParam('currentPage', 1),
+			'viewType' => $this->getParam('viewType', $this->_boxAttributes['view']),
+			'priceFrom' => $this->getParam('priceFrom', 0),
+			'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+			'producers' => $this->getParam('producers', 0),
+			'orderBy' => $this->getParam('orderBy', 'default'),
+			'orderDir' => $this->getParam('orderDir', 'asc'),
+			'attributes' => $this->getParam('attributes', 0)
+		);
+  }
+
+  protected function getProductsTemplate ()
+	{
+    return App::getModel('productlist')->getProductsTemplate('productnews', 'productnews', $this->_currentParams, $this->_boxAttributes);
+	}
+
 	protected function createPaginationLinks ()
 	{
-		$currentParams = $this->_currentParams;
-		
-		$paginationLinks = Array();
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage - 1;
-			
-			$paginationLinks['previous'] = Array(
-				'link' => ($this->currentPage > 1) ? $this->registry->router->generate('frontend.productnews', true, $currentParams) : '',
-				'class' => ($this->currentPage > 1) ? 'previous' : 'previous disabled',
-				'label' => _('TXT_PREVIOUS')
-			);
-		}
-		
-		foreach ($this->dataset['totalPages'] as $page){
-			
-			$currentParams['currentPage'] = $page;
-			
-			$paginationLinks[$page] = Array(
-				'link' => $this->registry->router->generate('frontend.productnews', true, $currentParams),
-				'class' => ($this->currentPage == $page) ? 'active' : '',
-				'label' => $page
-			);
-		}
-		
-		if ($this->dataset['totalPages'] > 1){
-			
-			$currentParams['currentPage'] = $this->currentPage + 1;
-			
-			$paginationLinks['next'] = Array(
-				'link' => ($this->currentPage < end($this->dataset['totalPages'])) ? $this->registry->router->generate('frontend.productnews', true, $currentParams) : '',
-				'class' => ($this->currentPage < end($this->dataset['totalPages'])) ? 'next' : 'next disabled',
-				'label' => _('TXT_NEXT')
-			);
-		}
-		
-		return $paginationLinks;
+    return App::getModel('productlist')->createPaginationLinks('productnews', $this->_currentParams, $this->dataset['totalPages']);
 	}
 
-	public function getBoxTypeClassname ()
+	protected function createSorting ()
 	{
-		return 'layout-box-type-product-list';
+    return App::getModel('productlist')->createSorting('productnews', $this->_currentParams, 0);
 	}
 
-	public function boxVisible ()
+	protected function createViewSwitcher ()
 	{
-		if ($this->registry->router->getCurrentController() == 'productnews'){
-			return true;
-		}
-		return ($this->dataset['total'] > 0) ? true : false;
+    return App::getModel('productlist')->createViewSwitcher('productnews', $this->_currentParams);
 	}
+
+
+  public function getBoxTypeClassname ()
+  {
+    if ($this->dataset['total'] > 0){
+      return 'layout-box-type-product-list';
+    }
+  }
+
+  public function boxVisible ()
+  {
+    if ($this->controller == 'productnews'){
+      return true;
+    }
+    return ($this->dataset['total'] > 0) ? true : false;
+  }
 }
