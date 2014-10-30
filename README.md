@@ -70,6 +70,9 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Poprawka dotycząca wyszukiwarki i filtracji wyników wyszukiwania
 * Dodanie możliwości tłumaczenia metod wysyłki i metod płatności
 * Poprawka problemu dotyczącego tłumaczeń zawierających znak apostrofu '
+* Usprawnienia dotyczące kodu (wyczyszczenie powielanych metod)
+* Umożliwienie ustawienia filtrowania na stronach Promocje oraz Nowości
+* Poprawka problemu dotyczącego możliwości zapisania pustego zamówienia
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
