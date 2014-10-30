@@ -44,7 +44,7 @@ class LayeredNavigationBoxModel extends Component\Model
       'orderBy' => $this->getParam('orderBy', 'default'),
       'orderDir' => $this->getParam('orderDir', 'asc'),
       'currentPage' => 1,
-      'viewType' => $this->getParam('viewType', 0),
+      'viewType' => $this->getParam('viewType', 1),
       'priceFrom' => $this->getParam('priceFrom', 0),
       'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
       'producers' => $this->getParam('producers', 0),
