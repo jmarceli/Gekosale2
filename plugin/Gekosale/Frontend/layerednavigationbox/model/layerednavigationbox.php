@@ -73,11 +73,17 @@ class LayeredNavigationBoxModel extends Component\Model
       $this->searchPhrase = str_replace('_', '', App::getModel('formprotection')->cropDangerousCode($this->getParam()));
     }
 
-    if($this->controller == 'categorylist') {
+    if($this->controller == 'productsearch' || 
+      $this->controller == 'productnews' ||
+      $this->controller == 'productpromotion')
+    {
+      $controller = $this->controller;
+    }
+    elseif($this->controller == 'categorylist') {
       $controller = 'product'; // categorylist is handled by product dataset
     }
-    else {
-      $controller = $this->controller;
+    else { // return no products for other controllers (required by livesearch)
+      return array();
     }
 
     $dataset = App::getModel($controller)->getDataset();
