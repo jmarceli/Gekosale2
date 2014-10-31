@@ -1161,7 +1161,7 @@ class ProductModel extends Component\Model\Datagrid
 					$stmt->bindValue('weight', $attributegroup['weight']);
 					$stmt->bindValue('availablityid', ((int) $attributegroup['availablity'] > 0) ? $attributegroup['availablity'] : NULL);
 					$stmt->bindValue('photoid', ((int) $attributegroup['photo'] > 0) ? $attributegroup['photo'] : NULL);
-					$stmt->bindValue('attributegroupnameid', $variant['set']);
+					$stmt->bindValue('attributegroupnameid', !empty($variant['set'])? $variant['set'] : NULL);
 					try{
 						$stmt->execute();
 					}
@@ -1332,7 +1332,7 @@ class ProductModel extends Component\Model\Datagrid
 		else{
 			$stmt->bindValue('enable', 0);
 		}
-		$stmt->bindValue('stock', $Data['stock']);
+		$stmt->bindValue('stock', !empty($Data['stock'])? $Data['stock'] : 0);
 		$stmt->bindValue('trackstock', ($Data['trackstock'] == 1) ? 1 : 0);
 		if ($Data['availablityid'] > 0){
 			$stmt->bindValue('availablityid', $Data['availablityid']);

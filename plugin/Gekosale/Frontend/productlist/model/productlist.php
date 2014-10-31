@@ -53,8 +53,11 @@ class ProductListModel extends Component\Model
         'enablelayer' => (! empty($Products) && (count($attributes) > 0)) ? 1 : 0,
         'products' => $Products
       );
-      if(!empty($currentParams['categoryid'])) {
+      if(isset($currentParams['categoryid'])) {
         $sqlParams['categoryid'] = $currentParams['categoryid'];
+      }
+      if(!empty($currentParams['name'])) {
+        $sqlParams['name'] = $currentParams['name'];
       }
 
       $this->dataset->setSQLParams($sqlParams);
