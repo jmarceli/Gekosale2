@@ -240,7 +240,7 @@ class StaticContentModel extends Component\Model
 		return '<a href="' . $link . '" title="' . _('TXT_CONDITIONS') . '" target="_blank">' . _('TXT_CONDITIONS') . '</a>';
 	}
 
-	protected function generateUrl ($category)
+	public function generateUrl ($category)
 	{
 		switch ($category['redirect']) {
 			case 0:
