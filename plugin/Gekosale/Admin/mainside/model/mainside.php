@@ -28,12 +28,14 @@ class MainsideModel extends Component\Model
 		$to = $request['to'];
 		$sql = 'SELECT 
 					DATE(adddate) AS adddate,
-					ROUND(SUM(globalprice),2) as total
-				FROM `order`
+					ROUND(SUM(globalprice * CR.exchangerate),2) as total
+				FROM `order` O
+        LEFT JOIN currencyrates CR ON CR.currencyfrom = O.currencyid AND CR.currencyto = :currencyto
 				WHERE (DATE(adddate) BETWEEN DATE(:from) AND DATE(:to)) AND viewid IN (' . Helper::getViewIdsAsString() . ')
 				GROUP BY DATE(adddate) 
 				ORDER BY adddate ASC';
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('currencyto', Session::getActiveCurrencyId());
 		$stmt->bindValue('from', $from);
 		$stmt->bindValue('to', $to);
 		$stmt->execute();
@@ -370,11 +372,13 @@ class MainsideModel extends Component\Model
 	{
 		$Data = Array();
 		$period = date("Ym");
-		$sql = 'SELECT ROUND(SUM(globalprice),2) as total, COUNT(idorder) as orders
-					FROM `order`
+		$sql = 'SELECT ROUND(SUM(globalprice * CR.exchangerate),2) as total, COUNT(idorder) as orders
+					FROM `order` O
+          LEFT JOIN currencyrates CR ON CR.currencyfrom = O.currencyid AND CR.currencyto = :currencyto
 					WHERE viewid IN (' . Helper::getViewIdsAsString() . ') AND DATE_FORMAT(adddate,\'%Y%m\') = :period';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('period', $period);
+		$stmt->bindValue('currencyto', Session::getActiveCurrencyId());
 		$stmt->execute();
 		while ($rs = $stmt->fetch()){
 			$Data['summarysales'] = Array(
@@ -383,10 +387,12 @@ class MainsideModel extends Component\Model
 			);
 		}
 		// Daily sales
-		$sql = 'SELECT ROUND(SUM(globalprice),2) as total, COUNT(idorder) as orders
-					FROM `order`
+		$sql = 'SELECT ROUND(SUM(globalprice * CR.exchangerate),2) as total, COUNT(idorder) as orders
+					FROM `order` O
+          LEFT JOIN currencyrates CR ON CR.currencyfrom = O.currencyid AND CR.currencyto = :currencyto
 					WHERE viewid IN (' . Helper::getViewIdsAsString() . ') AND DATE_FORMAT(adddate,\'%Y-%m-%d\') = CURDATE()';
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('currencyto', Session::getActiveCurrencyId());
 		$stmt->execute();
 		while ($rs = $stmt->fetch()){
 			$Data['todaysales'] = Array(
