@@ -55,6 +55,7 @@ class ProductSearchModel extends Component\Model\Dataset
 		
 		$dataset->setSQLParams(Array(
 			'categoryid' => (int) $this->registry->core->getParam(),
+			'filterbyproducer' => 0,
 			'producer' => 0,
 			'pricefrom' => 0,
 			'priceto' => 0,
