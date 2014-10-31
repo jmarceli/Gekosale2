@@ -318,10 +318,10 @@ $this->routes->add('frontend.forgotpassword', new Route('/' . Seo::getSeo('forgo
 	'_scheme' => SSLNAME
 )));
 
-$this->routes->add('frontend.productsearch', new Route('/' . Seo::getSeo('productsearch') . '/{action}/{param},{currentPage},{orderBy},{orderDir},{viewType},{priceFrom},{priceTo},{producers},{attributes}', array(
+$this->routes->add('frontend.productsearch', new Route('/' . Seo::getSeo('productsearch') . '/{param},{currentPage},{orderBy},{orderDir},{viewType},{priceFrom},{priceTo},{producers},{attributes}', array(
 	'mode' => 'frontend',
 	'controller' => 'productsearch',
-	'action' => NULL,
+	'action' => 'index',
 	'param' => NULL,
 	'orderBy' => 'default',
 	'orderDir' => 'desc',
