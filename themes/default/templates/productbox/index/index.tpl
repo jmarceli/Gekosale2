@@ -21,7 +21,7 @@
           <div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
             <div class="image-large">
               <a href="{{ product.mainphoto.large }}" rel="gallery">
-                <img src="{{ product.mainphoto.normal }}" alt="{{ product.productname }}" itemprop="image">
+                <img src="{{ product.mainphoto.normal }}" alt="{{ product.productname|e }}" itemprop="image">
               </a>
             </div>
             {% if product.otherphoto.small|length > 0%}
@@ -60,7 +60,7 @@
           <div class="intro">
             <div itemprop="description">{{ product.shortdescription }}</div>
             {% if product.producername != '' %}
-            <p itemprop="brand">{% trans %}TXT_PRODUCER{% endtrans %}: <a href="{{ path('frontend.producerlist', {"param": product.producerurl}) }}" title="{{ product.producername }}"><strong>{{ product.producername }}</strong></a></p>
+            <p itemprop="brand">{% trans %}TXT_PRODUCER{% endtrans %}: <a href="{{ path('frontend.producerlist', {"param": product.producerurl}) }}" title="{{ product.producername|e }}"><strong>{{ product.producername }}</strong></a></p>
             {% endif %}
           </div>
         </div>
