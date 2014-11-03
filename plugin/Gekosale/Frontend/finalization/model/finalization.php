@@ -95,7 +95,7 @@ class FinalizationModel extends Component\Model
 				}
 			}
       else {
-        $objResponse->script("GError('" . _('ERR_ORDER_SAVE') . "','" . _('ERR_ORDER_SAVE_MSG') . "');");
+        $objResponse->script("GError('" . _('ERR_ORDER_SAVE') . "','" . _('ERR_ORDER_NOT_DEFINED') . "');");
       }
 		}
 		catch (Exception $e){
