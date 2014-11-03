@@ -1,3 +1,4 @@
+ERR_ORDER_NOT_DEFINED # Brak produktów w zamówieniu;
 ERR_ORDER_SAVE # Błąd podczas składania zamówienia;
 ERR_ORDER_SAVE_MSG # Wystąpił nieznany błąd. Twoje zamówienie nie zostało złożone. Skontaktuj się z obsługą sklepu;
 ERR_NO_DELIVERY_SELECTED # Nie została wybrana żadna metoda dostawy. Przejdź do koszyka i wybierz metodę dostawy;
