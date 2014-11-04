@@ -74,6 +74,7 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Umożliwienie ustawienia filtrowania na stronach Promocje oraz Nowości
 * Poprawka problemu dotyczącego możliwości zapisania pustego zamówienia
 * Poprawka przeliczania zamówień z wybranej waluty na PLN (na wykresie na stronie głównej)
+* Poprawienie Google Rich Snippets na karcie produktu (https://support.google.com/webmasters/answer/146750)
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
