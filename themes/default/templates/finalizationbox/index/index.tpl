@@ -195,10 +195,11 @@ $("#{{ formBilling.name }} input[name='clienttype']").unbind('change').bind('cha
 	$('#billing-company-data').collapse($(this).val() == 2 ? 'show' : 'hide');
 });
 $('#order').unbind('submit').bind('submit', function(e){
+  $('button[type="submit"]', $(this)).addClass('disabled').attr('disabled', 'disabled');
 	e.preventDefault();
-	xajax_saveOrder({
-		customeropinion: $('#customeropinion').val()
-	});
+  xajax_saveOrder({
+    customeropinion: $('#customeropinion').val()
+  });
 });
 </script>
 {% endblock %}
