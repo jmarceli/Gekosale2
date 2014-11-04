@@ -5,7 +5,7 @@
 	{{ draft }}
 </div>
 {% endif %} 
-<article id="productInfo" class="article marginbt20" itemscope itemtype="http://schema.org/Product">
+<article id="productInfo" class="article marginbt20" itemscope itemtype="http://data-vocabulary.org/Product">
   <div class="row-fluid row-form">
     <div class="span9">
       <div class="row-fluid">
@@ -52,9 +52,9 @@
             {% endfor %}
           </ul>
           {% if product.opinions > 0 %}
-          <div class="product-star" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-            <div class="star pull-left readonly" itemprop="ratingValue" data-rating="{{ product.rating }}">{{ product.rating }}</div>
-            <span class="info pull-left">(<strong>{{ product.rating }}</strong>/5) <a href="#review" title="">Opinie (<span itemprop="reviewCount">{{ product.opinions }}</span>)</a></span>
+          <div class="product-star" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
+            <div class="star pull-left readonly" itemprop="rating" data-rating="{{ product.rating }}">{{ product.rating }}</div>
+            <span class="info pull-left">(<strong>{{ product.rating }}</strong>/5) <a href="#review" title="">Opinie (<span itemprop="count">{{ product.opinions }}</span>)</a></span>
           </div>
           {% endif %}
           <div class="intro">
@@ -67,13 +67,16 @@
       </div>
     </div>
     <div class="span3">
-      <div id="addToCart" class="well well-small" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+      <div id="addToCart" class="well well-small" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
         {% if ( product.discountprice != NULL and product.discountprice != product.price ) %}
-        <span class="price price-large" id="changeprice{% if showtax == 0 %}-netto{% endif %}" itemprop="price">{% if showtax == 0 %}{{ product.discountpricenetto|priceFormat }}{% else %}{{ product.discountprice|priceFormat }}{% endif %}</span>
+        <span class="hide" itemprop="price">{% if showtax == 0 %}{{ product.discountpricenetto|number_format(2) }}{% else %}{{ product.discountprice|number_format(2) }}{% endif %}</span>
+        <span class="price price-large" id="changeprice{% if showtax == 0 %}-netto{% endif %}">{% if showtax == 0 %}{{ product.discountpricenetto|priceFormat }}{% else %}{{ product.discountprice|priceFormat }}{% endif %}</span>
         <span class="price price-small" id="changeprice{% if showtax == 0 %}-netto{% endif %}-old">{% if showtax == 0 %}{{ product.pricenetto|priceFormat }}{% else %}{{ product.price|priceFormat }}{% endif %}</span>
         {% else %}
-        <span class="price price-large" id="changeprice{% if showtax == 0 %}-netto{% endif %}" itemprop="price">{% if showtax == 0 %}{{ product.pricewithoutvat|priceFormat }}{% else %}{{ product.price|priceFormat }}{% endif %}</span>
+        <span class="hide" itemprop="price">{% if showtax == 0 %}{{ product.pricewithoutvat|number_format(2) }}{% else %}{{ product.price|number_format(2) }}{% endif %}</span>
+        <span class="price price-large" id="changeprice{% if showtax == 0 %}-netto{% endif %}">{% if showtax == 0 %}{{ product.pricewithoutvat|priceFormat }}{% else %}{{ product.price|priceFormat }}{% endif %}</span>
         {% endif %}
+        <span class="hide" itemprop="currencySymbol">{{ currencySymbol }}</span>
         <div class="hr"></div>
         <ul>
           {% if product.trackstock == 1 %}
