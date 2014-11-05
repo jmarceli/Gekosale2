@@ -8,7 +8,7 @@
 		{% if files|length > 0 %}
 		<li><a href="#files" data-toggle="tab">{% trans %}TXT_FILES{% endtrans %}</a></li>
 		{% endif %}
-		<li><a href="#reviews" data-toggle="tab">{% trans %}TXT_OPINIONS{% endtrans %}</a></li>
+		<li><a id="toggle-reviews" href="#reviews" data-toggle="tab">{% trans %}TXT_OPINIONS{% endtrans %}</a></li>
 	</ul>
 	<div id="productTabContent" class="tab-content">
 	{% if product.description != '' %} 

@@ -54,7 +54,7 @@
           {% if product.opinions > 0 %}
           <div class="product-star" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
             <div class="star pull-left readonly" itemprop="rating" data-rating="{{ product.rating }}">{{ product.rating }}</div>
-            <span class="info pull-left">(<strong>{{ product.rating }}</strong>/5) <a href="#review" title="">Opinie (<span itemprop="count">{{ product.opinions }}</span>)</a></span>
+            <span class="info pull-left">(<strong>{{ product.rating }}</strong>/5) <a href="#review" id="show-review" title="">Opinie (<span itemprop="count">{{ product.opinions }}</span>)</a></span>
           </div>
           {% endif %}
           <div class="intro">
@@ -122,6 +122,11 @@
 $(document).ready(function(){
 
 	var producttrackstock = {{ product.trackstock }};
+
+  $('#show-review').unbind('click').bind('click', function() {
+    $('#toggle-reviews').click();
+		$.scrollTo($('#productTab'));
+  });
 
 	$('#add-cart').unbind('click').bind('click', function(){
 		if(producttrackstock == 1){

@@ -355,11 +355,13 @@ class AttributeGroupModel extends Component\Model
 				$idattr = $rs['idattributeproductvalue'];
 				$Data[$idattr] = $rs['idattributeproductvalue'];
 			}
-			foreach ($parent['values'] as $children){
-				if (in_array($children['id'], $Data)){
-					unset($Data[$children['id']]);
-				}
-			}
+      if (!empty($parent['values'])) {
+        foreach ($parent['values'] as $children){
+          if (in_array($children['id'], $Data)){
+            unset($Data[$children['id']]);
+          }
+        }
+      }
 			foreach ($Data as $value){
 				$sql = "SELECT idorderproductattribute FROM orderproductattribute WHERE attributeproductvalueid = :attrvalueid LIMIT 1";
 				$stmt = Db::getInstance()->prepare($sql);
@@ -568,19 +570,21 @@ class AttributeGroupModel extends Component\Model
 					
 					try{
 						$stmt->execute();
-						foreach ($attributeproductid['values'] as $key => $valueid){
-							$sql = 'INSERT INTO attributeproductvalue(name, attributeproductid) VALUES (:name, :attributeproductid)';
-							$stmt = Db::getInstance()->prepare($sql);
-							$stmt->bindValue('name', $valueid['name']);
-							$stmt->bindValue('attributeproductid', $attributeproductids);
-							
-							try{
-								$stmt->execute();
-							}
-							catch (Exception $e){
-								throw new Exception($e->getMessage());
-							}
-						}
+            if (!empty($attributeproductid['values'])) {
+              foreach ($attributeproductid['values'] as $key => $valueid){
+                $sql = 'INSERT INTO attributeproductvalue(name, attributeproductid) VALUES (:name, :attributeproductid)';
+                $stmt = Db::getInstance()->prepare($sql);
+                $stmt->bindValue('name', $valueid['name']);
+                $stmt->bindValue('attributeproductid', $attributeproductids);
+                
+                try{
+                  $stmt->execute();
+                }
+                catch (Exception $e){
+                  throw new Exception($e->getMessage());
+                }
+              }
+            }
 					}
 					catch (Exception $e){
 						throw new Exception($e->getMessage());
