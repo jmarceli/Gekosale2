@@ -471,19 +471,21 @@ class ProducerModel extends Component\Model\Datagrid
 
 	protected function addDeliverer ($Data, $id)
 	{
-		foreach ($Data as $value){
-			$sql = 'INSERT INTO producerdeliverer (delivererid, producerid) VALUES (:delivererid, :producerid)';
-			$stmt = Db::getInstance()->prepare($sql);
-			$stmt->bindValue('delivererid', $value);
-			$stmt->bindValue('producerid', $id);
-			
-			try{
-				$stmt->execute();
-			}
-			catch (Exception $e){
-				throw new CoreException(_('ERR_PRODUCER_DELIVERER_ADD'), 15, $e->getMessage());
-			}
-		}
+    if (!empty($Data)) {
+      foreach ($Data as $value){
+        $sql = 'INSERT INTO producerdeliverer (delivererid, producerid) VALUES (:delivererid, :producerid)';
+        $stmt = Db::getInstance()->prepare($sql);
+        $stmt->bindValue('delivererid', $value);
+        $stmt->bindValue('producerid', $id);
+        
+        try{
+          $stmt->execute();
+        }
+        catch (Exception $e){
+          throw new CoreException(_('ERR_PRODUCER_DELIVERER_ADD'), 15, $e->getMessage());
+        }
+      }
+    }
 	}
 
 	protected function deleteDeliverer ($id)

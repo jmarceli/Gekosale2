@@ -29,3 +29,4 @@ CREATE TABLE `paymentmethodtranslation` (
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 INSERT INTO `paymentmethodtranslation` (`idpaymentmethodtranslation`, `paymentmethodid`, `languageid`, `name`) VALUES (1, 2, 1, 'platnosci.pl'), (6, 4, 1, 'Przelew bankowy'), (13, 5, 1, 'Płatność za pobraniem'), (14, 6, 1, 'Płatność przy odbiorze'), (15, 8, 1, 'Żagiel'), (16, 11, 1, 'Przelewy24'), (17, 12, 1, 'PayU'), (18, 15, 1, 'Transferuj.pl'), (19, 16, 1, 'Dotpay'), (20, 17, 1, 'PayByNet');
+ALTER TABLE `paymentmethodtranslation` ADD UNIQUE (`paymentmethodid`, `languageid`) COMMENT '';
