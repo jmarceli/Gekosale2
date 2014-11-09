@@ -114,9 +114,6 @@ class SubpagelayoutModel extends Component\Model
 
 	public function checkBoxForSubpage ($controller, $subpage)
 	{
-		if ($controller == 'NewsBox' && $subpage != 'News'){
-			return 0;
-		}
 		if ($controller == 'CartBox' && $subpage != 'Cart'){
 			return 0;
 		}
