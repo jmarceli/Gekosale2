@@ -1,7 +1,7 @@
 {% extends "layoutbox.tpl" %} 
 {% block content %} 
 <article class="article">
-	<h1>{{ box.heading }}</h1>
+  {% if not box.settings.bNoHeader and box.heading != '' %}<h1>{{ box.heading }}</h1>{% endif %}
 	{% for entry in news %}
 	<div class="row-fluid">
 		<div class="span12 well">
