@@ -10,6 +10,9 @@ use Twig_Function_Function;
 use Twig_Extensions_Extension_I18n;
 use Twig_Extension_Optimizer;
 use Twig_NodeVisitor_Optimizer;
+// DEBUG ONLY
+//use Twig_Extension_Debug;
+//
 
 class Template
 {
@@ -45,7 +48,10 @@ class Template
 		$this->template = new Twig_Environment(new Twig_Loader_Filesystem($designPaths), array(
 			'cache' => ROOTPATH . 'cache' . DS,
 			'auto_reload' => true,
-			'autoescape' => false
+			'autoescape' => false,
+      // DEBUG ONLY
+      //'debug' => true
+      //
 		));
 		
 		$this->template->addFilter('priceFormat', new Twig_Filter_Function('Gekosale\Template::priceFormat'));
@@ -54,6 +60,9 @@ class Template
 		$this->template->addFunction('css_namespace', new Twig_Function_Function('Gekosale\Template::getNamespaceCSS'));
 		$this->template->addFunction('css_asset', new Twig_Function_Function('Gekosale\Template::getCSSAsset'));
 		$this->template->addExtension(new Twig_Extensions_Extension_I18n());
+    // DEBUG ONLY
+    //$this->template->addExtension(new Twig_Extension_Debug());
+    //
 		$optimizer = new Twig_Extension_Optimizer(Twig_NodeVisitor_Optimizer::OPTIMIZE_ALL);
 		$this->template->addExtension($optimizer);
 	}

@@ -91,7 +91,8 @@ abstract class Box extends \Gekosale\Component\Controller
 			'editableid' => $this->layer['pageschemeid'] . ',' . $this->_boxId,
 			'schemeClass' => $this->getBoxClassname(),
 			'heading' => $this->getBoxHeading(),
-			'style' => $this->_style
+			'style' => $this->_style,
+      'settings' => $this->_jsVariables
 		));
 		
 		return call_user_func(Array(

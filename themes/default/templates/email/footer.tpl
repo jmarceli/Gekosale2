@@ -17,7 +17,7 @@
                       </p>
                     </td>
                     <td width="30%" align="right">
-                      <p style="margin:11px 0;">&copy; 2012 {{ SHOP_NAME }}</p>
+                      <p style="margin:11px 0;">&copy; {{ "now"|date("Y") }} {{ SHOP_NAME }}</p>
                     </td>
                   </tr>
                   <tr>
