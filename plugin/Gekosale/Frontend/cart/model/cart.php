@@ -328,7 +328,7 @@ class CartModel extends Component\Model
 
 	public function checkPackageQty ($qty, $packagesize)
 	{
-		$qty = number_format($qty);
+		$qty = floatval($qty);
 		$modulo = number_format(fmod($qty, $packagesize), 4);
 		if ($modulo > 0){
 			$newqty = $qty - $modulo;
