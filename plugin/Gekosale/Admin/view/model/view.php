@@ -365,7 +365,7 @@ class ViewModel extends Component\Model\Datagrid
 					:namespace, 
 					:storeid, 
 					:pageschemeid, 
-					:currencyid, 
+					(SELECT idcurrency FROM currency LIMIT 1),
 					:contactid, 
 					:periodid, 
 					:taxes,
@@ -389,7 +389,7 @@ class ViewModel extends Component\Model\Datagrid
 		$stmt->bindValue('namespace', $Data['namespace']);
 		$stmt->bindValue('storeid', $Data['store']);
 		$stmt->bindValue('pageschemeid', $Data['pageschemeid']);
-		$stmt->bindValue('currencyid', $Data['currencyid']);
+		//$stmt->bindValue('currencyid', $Data['currencyid']);
 		$stmt->bindValue('contactid', ($Data['contactid'] == 0) ? NULL : $Data['contactid']);
 		$stmt->bindValue('periodid', $Data['periodid']);
 		$stmt->bindValue('taxes', $Data['taxes']);
