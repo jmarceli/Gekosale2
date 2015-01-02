@@ -416,13 +416,13 @@ class CartModel extends Component\Model
 			$this->registry->template->assign('checkRulesCart', $checkRulesCart);
 		}
 
-    // check dispatch
-		if ($method == NULL || !isset($this->dispatchMethods[$method['dispatchmethodid']])){
+    // DON'T CHECK DISPATCH METHOD BY DEFAULT
+		//if ($method == NULL || !isset($this->dispatchMethods[$method['dispatchmethodid']])){
       // set dispatch method if not selected or not available
-			$method = current($this->dispatchMethods);
-			App::getModel('delivery')->setDispatchmethodChecked($method['dispatchmethodid']);
-		}
-    else {
+			//$method = current($this->dispatchMethods);
+			//App::getModel('delivery')->setDispatchmethodChecked($method['dispatchmethodid']);
+		//}
+    if ($method != NULL && isset($this->dispatchMethods[$method['dispatchmethodid']])){
       App::getModel('delivery')->setDispatchmethodChecked($method['dispatchmethodid']);
     }
 		

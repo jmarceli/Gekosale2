@@ -3,6 +3,15 @@
  * modified by Jan Grzegorowski mygekosale.pl (kontakt@mygekosale.pl)
  */
 
+function checkDelivery() {
+  $('.make-order').click(function(e) {
+    if( !$('.order-method input[name="optionsRadios"]').is(':selected') ) {
+      e.preventDefault();
+      GError('Nie wybrano sposobu dostawy', 'Prosimy o wybór sposobu dostawy w celu złożenia zamówienia');
+    }
+  });
+}
+
 function qtySpinner(){
   if ($('.spinnerhide').length != 0){
     $('.spinnerhide').each(function(){
@@ -128,4 +137,5 @@ jQuery(function($) {
     
     OnesideEngine.plugins.load();
     
+    checkDelivery();
 });
