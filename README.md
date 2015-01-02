@@ -88,5 +88,12 @@ Repozytorium istnieje dzięki http://mygekosale.pl, oferujemy liczne [rozszerzen
 
 Jeśli ktokolwiek byłby zainteresowany współpracą w udoskonalaniu tego repozytorium zapraszamy do kontaktu mailowego ([adres email dostępny na naszej stronie](http://mygekosale.pl))
 
+# Contributing (współtworzenie)
+1. Fork it ( https://github.com/jmarceli/Gekosale2/fork )
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+
 # Autorzy
 Modyfikowany kod został pobrany z http://gekosale.pl i tam też należy szukać jego autorów.
