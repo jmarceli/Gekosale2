@@ -75,6 +75,8 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Poprawka problemu dotyczącego możliwości zapisania pustego zamówienia
 * Poprawka przeliczania zamówień z wybranej waluty na PLN (na wykresie na stronie głównej)
 * Poprawienie Google Rich Snippets na karcie produktu (https://support.google.com/webmasters/answer/146750)
+* Dodanie pliku gwarancji do produktu (podziękowania dla użytkownika `ziomal` który opracował to zagadnienie)
+* Odznaczenie domyślnych metod dostawy i płatności zgodnie ze zmianami w prawie obowiązującymi od 24.12.2014
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
