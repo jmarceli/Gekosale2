@@ -221,6 +221,9 @@ class ProductController extends Component\Controller\Admin
 			'files_pane' => Array(
 				'file' => $PopulateData['file']
 			),
+      'warranty_pane' => Array(
+        'warranty' => $PopulateData['warranty']
+      ),
 			'statusproduct_pane' => Array(
 				'productstatuses' => $PopulateData['productstatuses'],
 				'newactive' => $PopulateData['productnew']['newactive'],
@@ -332,6 +335,9 @@ class ProductController extends Component\Controller\Admin
 			'files_pane' => Array(
 				'file' => $PopulateData['file']
 			),
+      'warranty_pane' => Array(
+        'warranty' => $PopulateData['warranty']
+      ),
 			'statusproduct_pane' => Array(
 				'productstatuses' => $PopulateData['productstatuses'],
 				'newactive' => $PopulateData['productnew']['newactive'],

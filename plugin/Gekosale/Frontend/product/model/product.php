@@ -1200,4 +1200,21 @@ class ProductModel extends Component\Model\Dataset
 			throw new FrontendException($e->getMessage());
 		}
 	}
+
+  public function getWarrantyByProductId ($id)
+  {
+    $sql = "SELECT F.name, F.idfile
+                FROM productwarranty PF
+                LEFT JOIN file F ON PF.warrantyid = F.idfile
+                WHERE PF.productid = :id";
+    $stmt = Db::getInstance()->prepare($sql);
+    $stmt->bindValue('id', $id);
+    try{
+      $stmt->execute();
+    }
+    catch (Exception $e){
+      throw new FrontendException('Error while doing sql query.', 11, $e->getMessage());
+    }
+    return $stmt->fetchAll();
+  }
 }
