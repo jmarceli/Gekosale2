@@ -37,7 +37,7 @@
 <div class="container copy">
   <div class="row">
     <div class="span6">
-      2013 © <span>{{ SHOP_NAME }}</span> / {% trans %}TXT_ALL_RIGHTS_RESERVED{% endtrans %}.
+      {{ "now"|date("Y") }} © <span>{{ SHOP_NAME }}</span> / {% trans %}TXT_ALL_RIGHTS_RESERVED{% endtrans %}.
     </div>
     <div class="span6 pull-right alignright">
       <a href="http://www.gekosale.pl/" title="{% trans %}TXT_GEKOSALE_OS{% endtrans %}" target="_blank"><img src="{{ DESIGNPATH }}_images_frontend/core/logos/logo-mini.png" alt="Gekosale" /></a>
