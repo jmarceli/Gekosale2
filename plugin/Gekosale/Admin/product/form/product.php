@@ -549,6 +549,24 @@ class ProductForm extends Component\Form
 			'repeat_max' => FormEngine\FE::INFINITE,
 			'upload_url' => App::getURLAdressWithAdminPane() . 'virtualproduct/add'
 		)));
+    
+    $warrantyPane = $form->addChild(new FormEngine\Elements\Fieldset(Array(
+      'name' => 'warranty_pane',
+      'label' => _('TXT_WARRANTY')
+    )));
+    
+    $warrantyPane->AddChild(new FormEngine\Elements\Tip(Array(
+      'tip' => '<p align="center">Wybierz pliki z biblioteki, które chcesz przypisać do tego produktu.</p>',
+      'direction' => FormEngine\Elements\Tip::DOWN
+    )));
+    
+    $warrantyPane->AddChild(new FormEngine\Elements\Downloader(Array(
+      'name' => 'warranty',
+      'label' => _('TXT_WARRANTY'),
+      'repeat_min' => 0,
+      'repeat_max' => FormEngine\FE::INFINITE,
+      'upload_url' => App::getURLAdressWithAdminPane() . 'virtualproduct/add'
+    )));
 		
 		$upsellProducts = $form->AddChild(new FormEngine\Elements\Fieldset(Array(
 			'name' => 'upsell_products',

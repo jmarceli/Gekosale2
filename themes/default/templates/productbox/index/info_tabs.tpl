@@ -5,6 +5,9 @@
 		{% if product.longdescription != '' %} 
 		<li><a href="#product-longdescription" data-toggle="tab">{% trans %}TXT_ADDITIONAL_INFO{% endtrans %}</a></li>
 		{% endif %}
+    {% if warranty|length > 0 %}
+    <li><a href="#warranty" data-toggle="tab">{% trans %}TXT_WARRANTY{% endtrans %}</a></li>
+    {% endif %}
 		{% if files|length > 0 %}
 		<li><a href="#files" data-toggle="tab">{% trans %}TXT_FILES{% endtrans %}</a></li>
 		{% endif %}
@@ -21,6 +24,11 @@
 		{{ product.longdescription }}
 	</div>
 	{% endif %}
+  {% if warranty|length > 0 %}
+  <div class="tab-pane fade product-details" id="warranty">
+  {% include 'productbox/index/warranty.tpl' %}
+  </div>
+  {% endif %}
 	{% if files|length > 0 %}
 	<div class="tab-pane fade product-details" id="files">
 		{% include 'productbox/index/files.tpl' %}

@@ -98,6 +98,7 @@ class ProductBoxController extends Component\Controller\Box
 			}
 			
 			$files = App::getModel('product')->getFilesByProductId((int) $this->productid);
+      $warranty = App::getModel('product')->getWarrantyByProductId((int) $this->productid);
 			
 			$tabs = $this->registry->template->assign('tabbed', $tabbed);
 			
@@ -122,6 +123,7 @@ class ProductBoxController extends Component\Controller\Box
 			
 			$this->registry->template->assign('range', $range);
 			$this->registry->template->assign('files', $files);
+      $this->registry->template->assign('warranty', $warranty);
 			$this->registry->template->assign('variants', json_encode($Data));
 			$this->registry->template->assign('product', $this->product);
 			$this->registry->template->assign('attributes', $selectAttributes);

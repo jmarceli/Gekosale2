@@ -23,6 +23,11 @@
 		</tbody>
 	</table>
 </div>
+{% if warranty|length > 0 %}
+<div class="well well-clean well-small product-details" id="warranty">
+{% include 'productbox/index/warranty.tpl' %}
+</div>
+{% endif %}
 {% if files|length > 0 %}
 <div class="well well-clean well-small product-details" id="files">
 	{% include 'productbox/index/files.tpl' %}

@@ -479,6 +479,7 @@ class ProductModel extends Component\Model\Datagrid
 					'variants' => $this->getSuffixForProductById($rs['id'], $duplicate),
 					'photo' => $this->productPhotoIds($rs['id']),
 					'file' => $this->productFileIds($rs['id']),
+					'warranty' => $this->productWarrantyIds($rs['id']),
 					'language' => $this->getProductTranslation($rs['id']),
 					'productnew' => $this->getProductNew($rs['id']),
 					'promotion' => $rs['promotion'],
@@ -813,6 +814,7 @@ class ProductModel extends Component\Model\Datagrid
 				$crosssell['products'] = $Data['crosssell'];
 				App::getModel('crosssell')->editRelated($crosssell, $id);
 			}
+      $this->productWarrantyUpdate($Data, $id);
 			
 			$this->syncStock();
 			
@@ -1890,4 +1892,60 @@ class ProductModel extends Component\Model\Datagrid
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->execute();
 	}
+
+  // Warranty related methods
+  public function productWarranty ($id)
+  {
+    $sql = 'SELECT warrantyid AS id FROM productwarranty WHERE productid=:id';
+    $stmt = Db::getInstance()->prepare($sql);
+    $stmt->bindValue('id', $id);
+    $stmt->execute();
+    return $stmt->fetchAll();
+  }
+
+  public function productWarrantyIds ($id)
+  {
+    $Data = $this->productWarranty($id);
+    $tmp = Array();
+    foreach ($Data as $key){
+        $tmp[] = $key['id'];
+    }
+    return $tmp;
+  }
+
+  protected function productWarrantyUpdate ($Data, $idproduct)
+  {
+    if (isset($Data['warranty']['unmodified']) && $Data['warranty']['unmodified']){
+      return;
+    }
+    
+    DbTracker::deleteRows('productwarranty', 'productid', $idproduct);
+    
+    try{
+      $this->addWarrantyProduct($Data['warranty'], $idproduct);
+    }
+    catch (Exception $e){
+      throw new Exception($e->getMessage());
+    }
+  }
+
+  public function addWarrantyProduct ($Data, $productId)
+  {
+    foreach ($Data as $key => $warranty){
+      if (is_int($key) && $warranty != 0){
+        $sql = 'INSERT INTO productwarranty (productid, warrantyid)
+                    VALUES (:productid, :warrantyid)';
+        $stmt = Db::getInstance()->prepare($sql);
+        $stmt->bindValue('productid', $productId);
+        $stmt->bindValue('warrantyid', $warranty);
+        
+        try{
+          $stmt->execute();
+        }
+        catch (Exception $e){
+          throw new CoreException(_('ERR_PRODUCT_WARRANTY_ADD'), 112, $e->getMessage());
+        }
+      }
+    }
+  }
 }
