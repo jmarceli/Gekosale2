@@ -5,7 +5,7 @@
 
 function checkDelivery() {
   $('.make-order').click(function(e) {
-    if( !$('.order-method input[name="optionsRadios"]').is(':selected') ) {
+    if( !($('.order-method input[name="optionsRadios"]:checked').length > 0) ) {
       e.preventDefault();
       GError('Nie wybrano sposobu dostawy', 'Prosimy o wybór sposobu dostawy w celu złożenia zamówienia');
     }
