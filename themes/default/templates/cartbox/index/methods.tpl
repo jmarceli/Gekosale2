@@ -5,7 +5,7 @@
 			{% for delivery in deliverymethods %}
       <label class="radio">
         <input type="radio" name="optionsRadios" id="delivery-{{ delivery.dispatchmethodid }}" value="{{ delivery.dispatchmethodid }}"  {% if delivery.dispatchmethodid == checkedDelivery.dispatchmethodid %}checked="checked"{% endif %} onclick="xajax_setDispatchmethodChecked({{ delivery.dispatchmethodid }}); return false;">
-        {{ delivery.name }} {% if delivery.description %}<i class="icon-exclamation-sign"  data-popover data-placement="bottom" data-title="{{ delivery.name }}" data-content="{{ delivery.description }}"></i>{% endif %}
+        {{ delivery.name }} {% if delivery.description %}<i class="icon-exclamation-sign"  data-popover data-placement="bottom" data-title="{{ delivery.name }}" data-content="{{ delivery.description|e }}"></i>{% endif %}
         <span class="pull-right"><strong>{{ delivery.dispatchmethodcost|priceFormat }}</strong></span>
 			</label>
 			{% endfor %}
