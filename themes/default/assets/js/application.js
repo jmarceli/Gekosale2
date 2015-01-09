@@ -138,5 +138,7 @@ jQuery(function($) {
     OnesideEngine.plugins.load();
     
     checkDelivery();
-    $("[data-popover]").popover();
+
+    // add popover to every data-popover element (also for dynamic elements)
+    $('body').popover({selector: '[data-popover]'});
 });
