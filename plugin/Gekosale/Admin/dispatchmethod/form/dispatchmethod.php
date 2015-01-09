@@ -188,7 +188,7 @@ class DispatchmethodForm extends Component\Form
 			$form->Populate($Data);
 		}
 		
-		$form->AddFilter(new FormEngine\Filters\NoCode());
+		//$form->AddFilter(new FormEngine\Filters\NoCode()); // to allow dispatchmethod description RichText
 		$form->AddFilter(new FormEngine\Filters\Trim());
 		$form->AddFilter(new FormEngine\Filters\Secure());
 		

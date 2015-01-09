@@ -81,7 +81,7 @@
 {% if order.clientaddress.nip != '' %}
 <br>{% trans %}TXT_NIP{% endtrans %}: {{ order.clientaddress.nip }}
 {% endif %} 
-{% trans %}TXT_FIRSTNAME{% endtrans %}:	{{ order.clientaddress.firstname }} 
+<br>{% trans %}TXT_FIRSTNAME{% endtrans %}:	{{ order.clientaddress.firstname }} 
 <br>{% trans %}TXT_SURNAME{% endtrans %}: {{ order.clientaddress.surname }} 
 <br>{% trans %}TXT_PLACENAME{% endtrans %}: {{ order.clientaddress.placename }}
 <br>{% trans %}TXT_POSTCODE{% endtrans %}: {{ order.clientaddress.postcode }}
