@@ -138,4 +138,5 @@ jQuery(function($) {
     OnesideEngine.plugins.load();
     
     checkDelivery();
+    $("[data-popover]").popover();
 });
