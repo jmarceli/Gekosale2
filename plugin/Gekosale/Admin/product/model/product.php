@@ -1252,6 +1252,7 @@ class ProductModel extends Component\Model\Datagrid
 			$newProductId = $this->newProduct($Data);
 			$this->addProductTranslation($Data, $newProductId);
 			$this->addPhotoProduct($Data['photo'], $newProductId);
+      $this->addWarrantyProduct($Data['warranty'], $newProductId);
 			$this->addFileProduct($Data['file'], $newProductId);
 			if ($Data['category'] > 0){
 				$this->addProductToCategoryGroup($Data['category'], $newProductId);
