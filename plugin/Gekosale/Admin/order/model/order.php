@@ -2195,7 +2195,7 @@ class OrderModel extends Component\Model\Datagrid
 		foreach ($order['products'] as $key => $val){
 			$order['products'][$key]['lp'] = $lp;
       if(!empty($order['products'][$key]['photo'])) {
-        $order['products'][$key]['photo'] = '/design/' . str_replace(DESIGNPATH, '', $order['products'][$key]['photo']);
+        $order['products'][$key]['photo'] = 'design/' . str_replace(DESIGNPATH, '', $order['products'][$key]['photo']);
       }
 			$lp ++;
 		}
