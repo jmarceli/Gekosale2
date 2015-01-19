@@ -2061,9 +2061,8 @@ CREATE TABLE `productcategory` (
   `categoryid` int(10) unsigned NOT NULL,
   `adddate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`idproductcategory`),
-  KEY `UNIQUE_productcategory_productid_categoryid` (`productid`,`categoryid`),
+  UNIQUE KEY `UNIQUE_productcategory_productid_categoryid` (`productid`,`categoryid`),
   KEY `FK_productcategory_categoryid` (`categoryid`),
-  KEY `IDX_productcategory_productid_categoryid` (`productid`,`categoryid`),
   CONSTRAINT `FK_productcategory_categoryid` FOREIGN KEY (`categoryid`) REFERENCES `category` (`idcategory`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `FK_productcategory_productid` FOREIGN KEY (`productid`) REFERENCES `product` (`idproduct`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2927 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
