@@ -89,7 +89,7 @@ class LayoutboxModel extends Component\Model
 			'ProductBestsellersBox' => _('TXT_PRODUCT_BESTSELLERS_BOX'),
 			'MostSearchedBox' => _('TXT_MOST_SEARCHED_BOX'),
 			'CartBox' => _('TXT_CART'),
-			'RegistrationCartBox' => _('TXT_REGISTRATION_CART_BOX'),
+			'RegistrationCartBox' => _('TXT_REGISTRATION_BOX'),
 			'PaymentBox' => _('TXT_PAYMENT_BOX'),
 			'FinalizationBox' => _('TXT_FINALIZATION_BOX'),
 			'ClientLoginBox' => _('TXT_CLIENT_LOGIN_BOX'),
