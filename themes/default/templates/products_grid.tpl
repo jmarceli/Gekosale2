@@ -5,7 +5,11 @@
     <a href="{{ path('frontend.productcart', {"param": item.seo}) }}" title="{{ item.name }}">
       <div class="labels">
         {% if item.discountprice > 0 %}
-        <span class="label label-promotion">{% trans %}TXT_PROMOTION{% endtrans %}</span>
+		{% if ( item.discountprice != NULL and item.discountprice != item.price and item.dateto > NULL ) %}
+			<span class="label label-promotion">{% trans %}TXT_PROMOTION{% endtrans %} {% trans %}TXT_TO{% endtrans %} {{item.dateto}}</span>
+		{% else %}
+			<span class="label label-promotion">{% trans %}TXT_PROMOTION{% endtrans %}</span>
+		{% endif %}
         {% endif %}
         {% if item.new == 1 %}
         <span class="label label-new">{% trans %}TXT_NEW_PRODUCT{% endtrans %}</span>
