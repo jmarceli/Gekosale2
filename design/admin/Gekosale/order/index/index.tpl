@@ -264,7 +264,7 @@ $(document).ready(function() {
 		
 				var action_changeStatusMultiNotify = new GF_Action({
 			img: '{{ DESIGNPATH }}/_images_panel/datagrid/change-status_not.png',
-			caption: '{% trans %}TXT_CHANGE_STATUS{% endtrans %}',
+			caption: '{% trans %}TXT_CHANGE_STATUS{% endtrans %}, {% trans %}TXT_SEND_NOTIFICATION{% endtrans %}',
 			action: changeStatusMultiNotify,
 			values: {{ order_statuses }}
 		});
