@@ -2126,6 +2126,46 @@ class OrderModel extends Component\Model\Datagrid
 		return $this->getDatagrid()->refresh($datagrid);
 	}
 
+	public function doAJAXChangeOrderStatusNotify ($id, $datagrid, $status)
+	{
+		$ids = (is_array($id)) ? $id : (array) $id;
+
+		$sql = 'UPDATE `order` SET orderstatusid = :status
+				WHERE idorder IN (' . implode(',', $ids) . ')';
+		$stmt = Db::getInstance()->prepare($sql);
+		if ($status > 0){
+			$stmt->bindValue('status', $status);
+		}
+		else{
+			$stmt->bindValue('status', NULL);
+		}
+		$stmt->execute();
+
+		$Data['inform'] = 1;
+		$Data['status'] = $status;
+		$Data['comment'] = '';
+
+		foreach ($ids as $orderid){
+			$this->addOrderHistory($Data, $orderid);
+             $orderData = $this->getOrderById($orderid);
+
+		    $orderhistory = $this->getLastOrderHistory((int) $orderData['order_id'], $status);
+			App::getRegistry()->template->assign('orderhistory', $orderhistory);
+
+			App::getModel('mailer')->sendEmail(Array(
+			'template' => 'orderhistory',
+			'email' => Array(
+				$orderhistory['email']
+			),
+			'bcc' => false,
+			'subject' => _('TXT_CHANGE_ORDER_STATUS_NR') . $orderhistory['ids'],
+			'viewid' => $orderData['viewid']
+            ));
+		}
+
+		return $this->getDatagrid()->refresh($datagrid);
+	}	
+	
 	public function getClientDataWithAddresses ($request)
 	{
 		foreach ($request as $id){
