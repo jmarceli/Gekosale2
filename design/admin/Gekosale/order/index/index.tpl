@@ -90,6 +90,10 @@ function changeStatusMulti(dg, ids, status) {
 	return xajax_doChangeOrderStatus(ids, dg, status);
 };
 
+function changeStatusMultiNotify(dg, ids, status) {
+	return xajax_doChangeOrderStatusNotify(ids, dg, status);
+};
+
 var theDatagrid;
    
 $(document).ready(function() {
@@ -257,6 +261,13 @@ $(document).ready(function() {
 			action: changeStatusMulti,
 			values: {{ order_statuses }}
 		});
+		
+				var action_changeStatusMultiNotify = new GF_Action({
+			img: '{{ DESIGNPATH }}/_images_panel/datagrid/change-status_not.png',
+			caption: '{% trans %}TXT_CHANGE_STATUS{% endtrans %}, {% trans %}TXT_SEND_NOTIFICATION{% endtrans %}',
+			action: changeStatusMultiNotify,
+			values: {{ order_statuses }}
+		});
 	
     var options = {
 			id: 'order',
@@ -302,7 +313,8 @@ $(document).ready(function() {
 			],
 			group_actions: [
 				action_changeStatus,
-				GF_Datagrid.ACTION_DELETE
+				GF_Datagrid.ACTION_DELETE,
+				action_changeStatusMultiNotify
 			],
 		
     };

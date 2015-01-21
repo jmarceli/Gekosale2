@@ -41,6 +41,12 @@ class OrderController extends Component\Controller\Admin
 		));
 		
 		$this->registry->xajax->registerFunction(array(
+			'doChangeOrderStatusNotify',
+			$this->model,
+			'doAJAXChangeOrderStatusNotify'
+		));		
+		
+		$this->registry->xajax->registerFunction(array(
 			'doDeleteOrder',
 			$this->model,
 			'doAJAXDeleteOrder'
