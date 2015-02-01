@@ -10,7 +10,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
-//  * version 2.1 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  *
  * $Revision: 627 $
@@ -27,14 +27,14 @@ class ProductNewsBoxController extends Component\Controller\Box
 		parent::__construct($registry, $box);
 		$this->model = App::getModel('productnews');
     $this->controller = $this->registry->router->getCurrentController();
-		
-    $this->init();
-
-		$this->dataset = $this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
+    $this->init();
+
+		$this->dataset = $this->getProductsTemplate();
+
 		if ($this->controller != 'productnews'){
 			$this->_boxAttributes['pagination'] = 0;
       $this->registry->template->assign('view', $this->_boxAttributes['view']);
@@ -88,9 +88,7 @@ class ProductNewsBoxController extends Component\Controller\Box
 
   public function getBoxTypeClassname ()
   {
-    if ($this->dataset['total'] > 0){
-      return 'layout-box-type-product-list';
-    }
+    return 'layout-box-type-product-list';
   }
 
   public function boxVisible ()
@@ -98,6 +96,6 @@ class ProductNewsBoxController extends Component\Controller\Box
     if ($this->controller == 'productnews'){
       return true;
     }
-    return ($this->dataset['total'] > 0) ? true : false;
+    return false;
   }
 }
