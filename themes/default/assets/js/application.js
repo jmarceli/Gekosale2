@@ -3,11 +3,11 @@
  * modified by Jan Grzegorowski mygekosale.pl (kontakt@mygekosale.pl)
  */
 
-function checkDelivery() {
-  $('.make-order').click(function(e) {
+function checkDelivery($errorTitle, $errorDesc) {
+  $(document).unbind('click').on('click', '.make-order', function(e) {
     if( !($('.order-method input[name="optionsRadios"]:checked').length > 0) ) {
       e.preventDefault();
-      GError('Nie wybrano sposobu dostawy', 'Prosimy o wybór sposobu dostawy w celu złożenia zamówienia');
+      GError($errorTitle, $errorDesc);
     }
   });
 }
@@ -136,8 +136,6 @@ jQuery(function($) {
     }
     
     OnesideEngine.plugins.load();
-    
-    checkDelivery();
 
     // add popover to every data-popover element (also for dynamic elements)
     $('body').popover({selector: '[data-popover]'});
