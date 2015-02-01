@@ -28,14 +28,14 @@ class ProductsInCategoryBoxController extends Component\Controller\Box
 		parent::__construct($registry, $box);
 		$this->category = App::getModel('categorylist')->getCurrentCategory();
 		$this->dataset = Array();
-
-    $this->init();
-		
-		$this->dataset = $this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
+    $this->init();
+		
+		$this->dataset = $this->getProductsTemplate();
+
 		$subcategories = App::getModel('categorylist')->getCategoryMenuTop($this->_currentParams['categoryid']);
 		
 		if ($this->dataset['total'] > 0 || count($subcategories) > 0){

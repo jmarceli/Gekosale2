@@ -28,14 +28,14 @@ class ProductSearchListBoxController extends Component\Controller\Box
 		parent::__construct($registry, $box);
 		$this->model = App::getModel('productsearchlist');
     $this->controller = $this->registry->router->getCurrentController();
-
-    $this->init();
-		
-		$this->dataset = $this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
+    $this->init();
+		
+		$this->dataset = $this->getProductsTemplate();
+
 		if ($this->controller != 'productsearch'){
 			$this->_boxAttributes['pagination'] = 0;
       $this->registry->template->assign('view', $this->_boxAttributes['view']);

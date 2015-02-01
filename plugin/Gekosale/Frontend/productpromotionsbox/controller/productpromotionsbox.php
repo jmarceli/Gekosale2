@@ -28,14 +28,14 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 		parent::__construct($registry, $box);
 		$this->model = App::getModel('productpromotion');
     $this->controller = $this->registry->router->getCurrentController();
-
-    $this->init();
-	
-    $this->dataset = $this->getProductsTemplate();
 	}
 
 	public function index ()
 	{
+    $this->dataset = $this->getProductsTemplate();
+
+    $this->init();
+	
 		if ($this->controller != 'productpromotion'){
 			$this->_boxAttributes['pagination'] = 0;
       $this->registry->template->assign('view', $this->_boxAttributes['view']);
@@ -89,9 +89,7 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 
   public function getBoxTypeClassname ()
   {
-    if ($this->dataset['total'] > 0){
-      return 'layout-box-type-product-list';
-    }
+    return 'layout-box-type-product-list';
   }
 
   public function boxVisible ()
