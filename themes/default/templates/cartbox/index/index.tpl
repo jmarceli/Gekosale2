@@ -22,6 +22,11 @@
 		</div>
 	</div>
 </article>
+<script type="text/javascript">
+  $(document).ready(function() {
+      checkDelivery({% trans %}ERR_DELIVERY_SELECT_TITLE{% endtrans %}, {% trans %}ERR_DELIVERY_SELECT_DESC{% endtrans %});
+  });
+</script>
 {% else %}
 	{% include 'cartbox/index/empty.tpl' %}
 {% endif %}	
