@@ -32,9 +32,9 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
-    $this->dataset = $this->getProductsTemplate();
-
     $this->init();
+
+    $this->dataset = $this->getProductsTemplate();
 	
 		if ($this->controller != 'productpromotion'){
 			$this->_boxAttributes['pagination'] = 0;
@@ -97,6 +97,6 @@ class ProductPromotionsBoxController extends Component\Controller\Box
     if ($this->controller == 'productpromotion'){
       return true;
     }
-    return ($this->dataset['total'] > 0) ? true : false;
+    return false;
   }
 }

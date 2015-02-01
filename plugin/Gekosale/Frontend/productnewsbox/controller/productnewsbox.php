@@ -96,6 +96,6 @@ class ProductNewsBoxController extends Component\Controller\Box
     if ($this->controller == 'productnews'){
       return true;
     }
-    return ($this->dataset['total'] > 0) ? true : false;
+    return false;
   }
 }
