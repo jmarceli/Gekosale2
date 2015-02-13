@@ -1166,6 +1166,7 @@ label.required:after {
   .labels {
     height: 18px;
     li {
+      .radius(3px);
       font-size: 11px;
       line-height: 14px;
       font-weight: bold;
@@ -1356,13 +1357,17 @@ label.required:after {
   position: absolute;
   left: -4px;
   top: 10px;
+
+  a:hover {
+    text-decoration: none;
+  }
 }
 .product-list .label {
   margin-bottom: 5px;
   height: 17px;
   display: block;
   padding: 2px 4px 0;
-  .radius(0px);
+  .radius(3px);
   text-transform: uppercase;
 }
 .product-list a:hover .label {
