@@ -53,4 +53,3 @@ class ProductBestsellersBoxModel extends Component\Model\Dataset
 		return $this->getDataset()->getDatasetRecords();
 	}
 }
-?>

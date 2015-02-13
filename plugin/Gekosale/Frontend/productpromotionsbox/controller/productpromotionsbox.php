@@ -94,9 +94,10 @@ class ProductPromotionsBoxController extends Component\Controller\Box
 
   public function boxVisible ()
   {
-    if ($this->controller == 'productpromotion'){
-      return true;
-    }
-    return false;
+    //if ($this->controller == 'productpromotion'){
+      //return true;
+    //}
+    //return false;
+    return true;
   }
 }
