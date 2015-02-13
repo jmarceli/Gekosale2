@@ -22,7 +22,7 @@
           </div>
           {% endfor %}
         </div>
-        {% if slideshow.count > 1 %}
+        {% if slideshow|length > 1 %}
         <a class="left carousel-control" href="#slideshow-{{ box.id }}" data-slide="prev">‹</a>
         <a class="right carousel-control" href="#slideshow-{{ box.id }}" data-slide="next">›</a>
         {% endif %}
