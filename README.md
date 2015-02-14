@@ -13,6 +13,9 @@ Proces instacji jest prosty, wymaga podania kilku informacji o nowozakładanym s
 
 Do poprawnego działania wymagane jest PHP w wersji przynajmniej 5.3
 
+## Instrukcja obsługi
+Jedyna obecnie dostępna instrukcja obsługi dotyczy wersji 1.4, ale ponieważ od strony panelu administracyjnego nie ma dużych różnic między wersjami to na początek warto się z nią zapoznać http://www.gekosale.pl/media/pdf/QuickStart.pdf
+
 # Modyfikacja
 Sugerowanym sposobem modyfikowania wyglądu sklepu jest modyfikowanie domyślnie dostępnego szablonu, czyli plików z folderu *themes/default*.
 
