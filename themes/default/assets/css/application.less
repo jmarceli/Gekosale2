@@ -110,13 +110,18 @@ a {
 }
 
 .header {
-  height: 108px;
   #shop-logo {
-    margin-top: 40px;
-    float: left;
-    a {
-      display: block;
-      height: 40px;
+    display: block;
+    margin: 10px 0;
+    &:before {
+      content: ' ';
+      display: inline-block;
+      min-height: 90px;
+      vertical-align: middle;
+    }
+    img {
+      display: inline-block;
+      vertical-align: middle;
     }
   }
   .span7 {
