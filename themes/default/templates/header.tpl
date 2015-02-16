@@ -30,7 +30,17 @@
       <header class="header">
       <div class="row">
         <div class="span5">
-          <h1><a href="{{ path('frontend.home') }}" title="{{ SHOP_NAME }}" {% if SHOP_LOGO %}style="background-image: url('{{ DESIGNPATH }}_images_frontend/core/logos/{{ SHOP_LOGO }}')"{% endif %}>{{ SHOP_NAME }}</a></h1>
+          {% if SHOP_LOGO %}
+          <a href="{{ path('frontend.home') }}" title="{{ SHOP_NAME }}" id="shop-logo">
+            <img src="{{ DESIGNPATH }}_images_frontend/core/logos/{{ SHOP_LOGO }}" title="{{ SHOP_NAME }}"/>
+          </a>
+          {% else %}
+          <h1 id="shop-logo">
+            <a href="{{ path('frontend.home') }}" title="{{ SHOP_NAME }}">
+              {{ SHOP_NAME }}
+            </a>
+          </h1>
+          {% endif %}
         </div>
         <div class="span7">
           <div class="row pull-right">
