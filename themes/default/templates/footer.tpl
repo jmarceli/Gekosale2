@@ -57,10 +57,9 @@
 <link rel="stylesheet" href="{{ css_asset('css/divante.cookies.min.css') }}" type="text/css"/>
 <script>window.jQuery.cookie || document.write('<script src="{{ DESIGNPATH }}_js_libs/jquery.cookie.min.js"><\/script>')</script>
 <script type="text/javascript">
-  jQuery.divanteCookies.render({
-    privacyPolicy : false,
-    cookiesPageURL : '{{ path('frontend.conditions') }}'
-  });
+  (function(a){a.divanteCookies={render:function(b){var c="";c+='<div id="cookiesBar"><div id="cookiesBarWrap"><p>{% trans %}TXT_COOKIE_FIRST{% endtrans %} <a href="{% trans %}TXT_COOKIE_POLICY_URL{% endtrans %}" title="{% trans %}TXT_COOKIE_POLICY{% endtrans %}">{% trans %}TXT_COOKIE_POLICY{% endtrans %}</a>.</p></p><p>{% trans %}TXT_COOKIE_SECOND{% endtrans %}</p><a id="cookiesBarClose" href="#" title="{% trans %}TXT_COOKIE_POLICY{% endtrans %}">{% trans %}TXT_COOKIE_POLICY{% endtrans %}</a></div></div>',a.cookie("cookie")||(a("body").append(c),a.fn.delegate?a("#cookiesBar").delegate("#cookiesBarClose","click",function(b){a.divanteCookies.closeCallback(b)}):a("#cookiesBarClose").bind("click",function(b){a.divanteCookies.closeCallback(b)}))},closeCallback:function(b){return a("#cookiesBar").fadeOut(),a.cookie("cookie")||a.cookie("cookie",!0,{path:"/",expires:30}),b.preventDefault(),!1}}})(jQuery);
+
+  jQuery.divanteCookies.render();
 </script>
 </body>
 </html>
