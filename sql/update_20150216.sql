@@ -16,10 +16,10 @@ INSERT INTO translation (name)
   WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_COOKIE_POLICY')
   LIMIT 1;
 INSERT INTO translationdata (translation, translationid, languageid)
-  SELECT 'Polityką prywatności', idtranslation, 1
+  SELECT 'Regulaminem', idtranslation, 1
   FROM translation
   WHERE name = 'TXT_COOKIE_POLICY'
-    ON DUPLICATE KEY UPDATE translation = 'Polityką prywatności';
+    ON DUPLICATE KEY UPDATE translation = 'Regulaminem';
 -- translation for TXT_COOKIE_POLICY_URL
 INSERT INTO translation (name)
   SELECT 'TXT_COOKIE_POLICY_URL'
@@ -27,10 +27,10 @@ INSERT INTO translation (name)
   WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_COOKIE_POLICY_URL')
   LIMIT 1;
 INSERT INTO translationdata (translation, translationid, languageid)
-  SELECT '/polityka-prywatnosci', idtranslation, 1
+  SELECT '/regulamin', idtranslation, 1
   FROM translation
   WHERE name = 'TXT_COOKIE_POLICY_URL'
-    ON DUPLICATE KEY UPDATE translation = '/polityka-prywatnosci';
+    ON DUPLICATE KEY UPDATE translation = '/regulamin';
 -- translation for TXT_COOKIE_SECOND
 INSERT INTO translation (name)
   SELECT 'TXT_COOKIE_SECOND'
