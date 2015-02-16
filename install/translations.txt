@@ -1,3 +1,7 @@
+TXT_COOKIE_FIRST # Strona korzysta z plików cookie w celu realizacji usług zgodnie z;
+TXT_COOKIE_POLICY # Regulaminem;
+TXT_COOKIE_POLICY_URL # /regulamin;
+TXT_COOKIE_SECOND # Możesz określić warunki przechowywania lub dostępu do cookie w Twojej przeglądarce lub konfiguracji usługi.;
 ERR_DELIVERY_SELECT_TITLE # Nie wybrano sposobu dostawy;
 ERR_DELIVERY_SELECT_DESC # Prosimy o wybór sposobu dostawy w celu złożenia zamówienia;
 ERR_ORDER_NOT_DEFINED # Brak produktów w zamówieniu;
