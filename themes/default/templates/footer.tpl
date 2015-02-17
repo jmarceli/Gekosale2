@@ -7,7 +7,11 @@
         {% if contentcategory is not empty %}
         {% for cat in contentcategory if cat.footer == 1 %}
         <div class="span4">
-          <h3 class="font">{{ cat.name }}</h3>
+          <h3 class="font">
+            {% if cat.children is empty %}<a href="{{ cat.link }}">{% endif %}
+              {{ cat.name }}
+            {% if cat.children is empty %}</a>{% endif %}
+          </h3>
           <ul class="nav nav-pills nav-stacked">
             {% if cat.children is not empty %}
             {% for subcat in cat.children if subcat.footer == 1 %}
