@@ -16,7 +16,9 @@
       {% for cat in contentcategory if cat.header == 1 %}
       <li class="divider-vertical"></li>
       <li class="dropdown">
-      <a href="{{ cat.link }}" class="dropdown-toggle" data-toggle="dropdown">{{ cat.name }} <b class="caret"></b></a>
+      <a href="{{ cat.link }}" {% if cat.children is not empty %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
+        {{ cat.name }}{% if cat.children is not empty %} <b class="caret"></b>{% endif %}
+      </a>
       {% if cat.children is not empty %}
       <ul class="dropdown-menu">
         {% for subcat in cat.children if subcat.header == 1 %}
