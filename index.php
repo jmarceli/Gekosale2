@@ -19,7 +19,7 @@
  */
 
 ini_set('display_errors', true);
-(defined('E_DEPRECATED')) ? error_reporting(E_ALL & ~ E_DEPRECATED) : error_reporting(E_ALL);
+(defined('E_DEPRECATED')) ? error_reporting(E_ALL & ~ E_DEPRECATED & ~ E_STRICT) : error_reporting(E_ALL);
 $__LOCAL_CATALOG = '';
 $__SERVER_DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
 if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/'){
