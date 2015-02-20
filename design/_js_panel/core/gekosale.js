@@ -16171,20 +16171,18 @@ var GFormOrderEditor = GCore.ExtendClass(GFormField, function() {
 		oRow.sellprice = isNaN(parseFloat(oRow.sellprice)) ? 0 : parseFloat(oRow.sellprice);
 		oRow.vat = isNaN(parseFloat(oRow.vat)) ? 0 : parseFloat(oRow.vat);
 		var fPrice = parseFloat(oRow.sellprice);
-		oRow.net_subsum = oRow.quantity * oRow.sellprice;
+		oRow.net_subsum = Math.round(oRow.quantity * oRow.sellprice * 100)/100; // toFixed not always round numbers
 		oRow.weight_total = oRow.quantity * oRow.weight;
-		oRow.sellprice_gross = oRow.sellprice * (1 + (oRow.vat / 100));
-		oRow.sellprice_gross = oRow.sellprice_gross.toFixed(2);
-		oRow.vat_value = oRow.net_subsum * (oRow.vat / 100);
-		oRow.subsum = (oRow.net_subsum + oRow.vat_value).toFixed(2);
-    oRow.vat_value = oRow.subsum - oRow.net_subsum; // fix for buggy vat value (eg. net price = 44.0650)
+		oRow.sellprice_gross = (Math.round(oRow.sellprice * (1 + (oRow.vat / 100)) * 100)/100).toFixed(2);
+		oRow.subsum = (oRow.sellprice_gross * oRow.quantity).toFixed(2);
+		oRow.vat_value = oRow.subsum - oRow.net_subsum;
 		oRow.sellprice = oRow.sellprice.toFixed(4);
 		oRow.net_subsum = oRow.net_subsum.toFixed(2);
 		oRow.weight_total = oRow.weight_total.toFixed(2);
 		oRow.vat = oRow.vat.toFixed(2) + '%';
 		oRow.vat_value = oRow.vat_value.toFixed(2);
 		return oRow;
-	};
+  };
 	
 	gThis._CalculateTotal = function(aoRows) {
 		var net_subsum = 0;
