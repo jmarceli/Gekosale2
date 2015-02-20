@@ -16177,6 +16177,7 @@ var GFormOrderEditor = GCore.ExtendClass(GFormField, function() {
 		oRow.sellprice_gross = oRow.sellprice_gross.toFixed(2);
 		oRow.vat_value = oRow.net_subsum * (oRow.vat / 100);
 		oRow.subsum = (oRow.net_subsum + oRow.vat_value).toFixed(2);
+    oRow.vat_value = oRow.subsum - oRow.net_subsum; // fix for buggy vat value (eg. net price = 44.0650)
 		oRow.sellprice = oRow.sellprice.toFixed(4);
 		oRow.net_subsum = oRow.net_subsum.toFixed(2);
 		oRow.weight_total = oRow.weight_total.toFixed(2);
