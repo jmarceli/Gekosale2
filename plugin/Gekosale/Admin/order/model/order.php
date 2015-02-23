@@ -2231,40 +2231,38 @@ class OrderModel extends Component\Model\Datagrid
 			$lp ++;
 		}
 
-		if ($order['pricebeforepromotion'] > 0 && ($order['pricebeforepromotion'] < $order['total'])){
+    $order['products'][] = Array(
+      'name' => $order['delivery_method']['deliverername'],
+      'net_price' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
+      'quantity' => 1,
+      'net_subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
+      'vat' => sprintf('%01.2f', $order['delivery_method']['deliverervat']),
+      'vat_value' => sprintf('%01.2f', $order['delivery_method']['deliverervatvalue']),
+      'subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererprice']),
+      'lp' => $lp
+    );
+
+		if ($order['pricebeforepromotion'] > 0 && ($order['pricebeforepromotion'] > $order['total'])){
 			$rulesCostGross = $order['total'] - $order['pricebeforepromotion'];
-			$rulesCostNet = ($order['total'] - $order['pricebeforepromotion']) / (1 + ($order['delivery_method']['deliverervat'] / 100));
+			$rulesCostNet = ($order['total'] - $order['pricebeforepromotion']);
 			$rulesVat = $rulesCostGross - $rulesCostNet;
+      if (!empty($order['rulescartid'])) {
+        $discountName = App::getModel('rulescart')->getRulesCartTranslation($order['rulescartid']);
+        $discountName = $discountName[Helper::getLanguageId()]['name'];
+      }
+      else {
+        $discountName = _('TXT_DISCOUNT');
+      }
 			$order['products'][] = Array(
-				'name' => $order['delivery_method']['deliverername'],
-				'net_price' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto'] + $rulesCostNet),
+        'name' => $discountName,
+				'net_price' => sprintf('%01.2f', $rulesCostNet),
 				'quantity' => 1,
-				'net_subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto'] + $rulesCostNet),
-				'vat' => sprintf('%01.2f', $order['delivery_method']['deliverervat']),
-				'vat_value' => sprintf('%01.2f', $order['delivery_method']['deliverervatvalue'] + $rulesVat),
-				'subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererprice'] + $rulesCostGross),
+				'net_subtotal' => sprintf('%01.2f', $rulesCostNet),
+        'vat' => '0.00',
+				'vat_value' => sprintf('%01.2f', $rulesVat),
+				'subtotal' => sprintf('%01.2f', $rulesCostGross),
 				'lp' => $lp
 			);
-		}
-		else{
-			$order['products'][] = Array(
-				'name' => $order['delivery_method']['deliverername'],
-				'net_price' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
-				'quantity' => 1,
-				'net_subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
-				'vat' => sprintf('%01.2f', $order['delivery_method']['deliverervat']),
-				'vat_value' => sprintf('%01.2f', $order['delivery_method']['deliverervatvalue']),
-				'subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererprice']),
-				'lp' => $lp
-			);
-		}
-		$rulesCostGross = 0;
-		$rulesCostNet = 0;
-		$rulesVat = 0;
-		if ($order['pricebeforepromotion'] > 0 && ($order['pricebeforepromotion'] < $order['total'])){
-			$rulesCostGross = $order['total'] - $order['pricebeforepromotion'];
-			$rulesCostNet = ($order['total'] - $order['pricebeforepromotion']) / (1 + ($order['delivery_method']['deliverervat'] / 100));
-			$rulesVat = $rulesCostGross - $rulesCostNet;
 		}
 
 		$summary = Array();
