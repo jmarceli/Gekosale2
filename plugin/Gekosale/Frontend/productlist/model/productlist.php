@@ -93,6 +93,7 @@ class ProductListModel extends Component\Model
 		
 		$switcher = Array();
 		
+    unset($currentParams['categoryid']);
 		foreach ($viewTypes as $view => $label){
 			
 			$currentParams['viewType'] = $view;
@@ -113,6 +114,7 @@ class ProductListModel extends Component\Model
   // @param array $currentParams - array with current route params
 	public function createSorting ($controller, $currentParams)
 	{
+    unset($currentParams['categoryid']);
     $currentOrderBy = $currentParams['orderBy'];
     $currentOrderDir = $currentParams['orderDir'];
 
@@ -163,6 +165,7 @@ class ProductListModel extends Component\Model
   // @param int $totalPages - total number of pages
 	public function createPaginationLinks ($controller, $currentParams, $totalPages)
 	{
+    unset($currentParams['categoryid']);
     $currentPage = $currentParams['currentPage'];
 
 		$paginationLinks = Array();
