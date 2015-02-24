@@ -262,26 +262,30 @@ class OrderModel extends Component\Model\Datagrid
 		$order = $this->getOrderById($request['idorder']);
 
 		if (isset($request['rules_cart']) && $request['rules_cart'] > 0){
-			$rulesCart = $this->calculateRulesCatalog($request['rules_cart']);
-		}
-		if (isset($request['rules_cart']) && ($request['rules_cart'] == $order['rulescartid'])){
-			if ($order['total'] > $order['pricebeforepromotion']){
-				$rulesCart = Array(
-					'discount' => abs($order['total'] - $order['pricebeforepromotion']),
-					'suffixtypeid' => 2,
-					'symbol' => '+'
-				);
-			}
-			else{
-				$rulesCart = Array(
-					'discount' => abs($order['pricebeforepromotion'] - $order['total']),
-					'suffixtypeid' => 3,
-					'symbol' => '-'
-				);
-			}
-		}
-		if ($order['totalnetto'] == $request['net_total'] && $request['delivery_method'] == $order['delivery_method']['dispatchmethodid']){
-			$cost = $order['delivery_method']['delivererprice'];
+			$rulesCart = $this->calculateRulesCatalog($request['rules_cart'], $order['clientgroupid']);
+
+      if ($request['rules_cart'] == $order['rulescartid']){
+        if ($order['total'] > $order['pricebeforepromotion']){
+          $rulesCart = Array(
+            'discount' => abs($order['total'] - $order['pricebeforepromotion']),
+            'suffixtypeid' => 2,
+            'symbol' => '+'
+          );
+        }
+        else{
+          $rulesCart = Array(
+            'discount' => abs($order['pricebeforepromotion'] - $order['total']),
+            'suffixtypeid' => 3,
+            'symbol' => '-'
+          );
+        }
+      }
+      if ($order['totalnetto'] == $request['net_total'] && $request['delivery_method'] == $order['delivery_method']['dispatchmethodid']) {
+        $cost = $order['delivery_method']['delivererprice'];
+      }
+      if (!empty($rulesCart['freedelivery'])) {
+        $cost = 0;
+      }
 		}
 		return Array(
 			'cost' => $cost,
@@ -363,28 +367,50 @@ class OrderModel extends Component\Model\Datagrid
 		);
 	}
 
-	public function calculateRulesCatalog ($rulesCartId)
+	public function calculateRulesCatalog ($rulesCartId, $clientGroupId = null)
 	{
 		$rulesCart = Array();
-		if (isset($rulesCartId) && ! empty($rulesCartId)){
-			$sql = "SELECT
-						RC.discount,
-						RC.suffixtypeid,
-						ST.symbol
-					FROM rulescart RC
-					LEFT JOIN suffixtype ST ON ST.idsuffixtype = RC.suffixtypeid
-					WHERE RC.idrulescart = :rulescartid";
-			$stmt = Db::getInstance()->prepare($sql);
-			$stmt->bindValue('rulescartid', $rulesCartId);
-			$stmt->execute();
-			$rs = $stmt->fetch();
-			if ($rs){
-				$rulesCart = Array(
-					'discount' => $rs['discount'],
-					'suffixtypeid' => $rs['suffixtypeid'],
-					'symbol' => $rs['symbol']
-				);
+		if (isset($rulesCartId) && !empty($rulesCartId)){
+      if (!empty($clientGroupId)) {
+				$sql = "SELECT 
+							RCCG.discount, 
+							RCCG.suffixtypeid, 
+              RCCG.freeshipping,
+							S.symbol
+						FROM rulescartclientgroup RCCG
+							LEFT JOIN rulescart RC ON RCCG.rulescartid = RC.idrulescart
+							LEFT JOIN suffixtype S ON RCCG.suffixtypeid = S.idsuffixtype
+						WHERE
+							RCCG.clientgroupid= :clientgroupid
+							AND IF(RC.datefrom is not null, (cast(RC.datefrom as date) <= curdate()), 1)
+							AND IF(RC.dateto is not null, (cast(RC.dateto as date)>= curdate()),1)
+              AND RCCG.rulescartid = :rulescartid";
+				$stmt = Db::getInstance()->prepare($sql);
+				$stmt->bindValue('clientgroupid', $clientGroupId);
+        $stmt->bindValue('rulescartid', $rulesCartId);
 			}
+			else {
+        $sql = "SELECT
+              RC.discount,
+              RC.suffixtypeid,
+              RC.freeshipping,
+              ST.symbol
+            FROM rulescart RC
+            LEFT JOIN suffixtype ST ON ST.idsuffixtype = RC.suffixtypeid
+            WHERE RC.idrulescart = :rulescartid";
+        $stmt = Db::getInstance()->prepare($sql);
+        $stmt->bindValue('rulescartid', $rulesCartId);
+      }
+      $stmt->execute();
+      $rs = $stmt->fetch();
+      if ($rs){
+        $rulesCart = Array(
+          'freedelivery' => $rs['freeshipping'],
+          'discount' => $rs['discount'],
+          'suffixtypeid' => $rs['suffixtypeid'],
+          'symbol' => $rs['symbol']
+        );
+      }
 		}
 		return $rulesCart;
 	}
@@ -1519,27 +1545,33 @@ class OrderModel extends Component\Model\Datagrid
 			);
 		}
 		if (isset($Data['additional_data']['payment_data']['rules_cart']) && $Data['additional_data']['payment_data']['rules_cart'] > 0){
-			$ruleCart = App::getModel('order')->calculateRulesCatalog($Data['additional_data']['payment_data']['rules_cart']);
-			if (! empty($ruleCart) && $ruleCart['discount'] > 0){
-				$symbol = $ruleCart['symbol'];
-				switch ($symbol) {
-					case '%':
-						$pricePromo = abs($Data['pricebrutto'] * ($ruleCart['discount'] / 100));
-						$globalpricePromo = abs(($Data['pricebrutto'] + $Data['dispatchmethodprice']) * ($ruleCart['discount'] / 100));
-						$globalpricenettoPromo = abs($Data['pricenetto'] * ($ruleCart['discount'] / 100));
-						break;
-					case '+':
-						$pricePromo = $Data['pricebrutto'] + $ruleCart['discount'];
-						$globalpricePromo = ($Data['pricebrutto'] + $Data['dispatchmethodprice']) + $ruleCart['discount'];
-						$globalpricenettoPromo = $Data['pricenetto'] + $ruleCart['discount'];
-						break;
-					case '-':
-						$pricePromo = $Data['pricebrutto'] - $ruleCart['discount'];
-						$globalpricePromo = ($Data['pricebrutto'] + $Data['dispatchmethodprice']) - $ruleCart['discount'];
-						$globalpricenettoPromo = $Data['pricenetto'] - $ruleCart['discount'];
-						break;
-				}
-			}
+      $oldOrderData = $this->getOrderById($id);
+			$ruleCart = $this->calculateRulesCatalog($Data['additional_data']['payment_data']['rules_cart'], $oldOrderData['clientgroupid']);
+      if (! empty($ruleCart)) {
+        if (!empty($ruleCart['freedelivery'])) {
+          $Data['dispatchmethodprice'] = 0;
+         }
+         if ($ruleCart['discount'] > 0){
+          $symbol = $ruleCart['symbol'];
+          switch ($symbol) {
+            case '%':
+              $pricePromo = abs($Data['pricebrutto'] * ($ruleCart['discount'] / 100));
+              $globalpricePromo = abs(($Data['pricebrutto'] + $Data['dispatchmethodprice']) * ($ruleCart['discount'] / 100));
+              $globalpricenettoPromo = abs($Data['pricenetto'] * ($ruleCart['discount'] / 100));
+              break;
+            case '+':
+              $pricePromo = $Data['pricebrutto'] + $ruleCart['discount'];
+              $globalpricePromo = ($Data['pricebrutto'] + $Data['dispatchmethodprice']) + $ruleCart['discount'];
+              $globalpricenettoPromo = $Data['pricenetto'] + $ruleCart['discount'];
+              break;
+            case '-':
+              $pricePromo = $Data['pricebrutto'] - $ruleCart['discount'];
+              $globalpricePromo = ($Data['pricebrutto'] + $Data['dispatchmethodprice']) - $ruleCart['discount'];
+              $globalpricenettoPromo = $Data['pricenetto'] - $ruleCart['discount'];
+              break;
+          }
+        }
+      }
 		}
 
     if($Data['pricebrutto'] > 0 || $Data['pricenetto'] > 0 || $price || $globalpricePromo) {
@@ -2239,40 +2271,38 @@ class OrderModel extends Component\Model\Datagrid
 			$lp ++;
 		}
 
-		if ($order['pricebeforepromotion'] > 0 && ($order['pricebeforepromotion'] < $order['total'])){
+    $order['products'][] = Array(
+      'name' => $order['delivery_method']['deliverername'],
+      'net_price' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
+      'quantity' => 1,
+      'net_subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
+      'vat' => sprintf('%01.2f', $order['delivery_method']['deliverervat']),
+      'vat_value' => sprintf('%01.2f', $order['delivery_method']['deliverervatvalue']),
+      'subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererprice']),
+      'lp' => $lp
+    );
+
+		if ($order['pricebeforepromotion'] > 0 && ($order['pricebeforepromotion'] > $order['total'])){
 			$rulesCostGross = $order['total'] - $order['pricebeforepromotion'];
-			$rulesCostNet = ($order['total'] - $order['pricebeforepromotion']) / (1 + ($order['delivery_method']['deliverervat'] / 100));
+			$rulesCostNet = ($order['total'] - $order['pricebeforepromotion']);
 			$rulesVat = $rulesCostGross - $rulesCostNet;
+      if (!empty($order['rulescartid'])) {
+        $discountName = App::getModel('rulescart')->getRulesCartTranslation($order['rulescartid']);
+        $discountName = $discountName[Helper::getLanguageId()]['name'];
+      }
+      else {
+        $discountName = _('TXT_DISCOUNT');
+      }
 			$order['products'][] = Array(
-				'name' => $order['delivery_method']['deliverername'],
-				'net_price' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto'] + $rulesCostNet),
+        'name' => $discountName,
+				'net_price' => sprintf('%01.2f', $rulesCostNet),
 				'quantity' => 1,
-				'net_subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto'] + $rulesCostNet),
-				'vat' => sprintf('%01.2f', $order['delivery_method']['deliverervat']),
-				'vat_value' => sprintf('%01.2f', $order['delivery_method']['deliverervatvalue'] + $rulesVat),
-				'subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererprice'] + $rulesCostGross),
+				'net_subtotal' => sprintf('%01.2f', $rulesCostNet),
+        'vat' => '0.00',
+				'vat_value' => sprintf('%01.2f', $rulesVat),
+				'subtotal' => sprintf('%01.2f', $rulesCostGross),
 				'lp' => $lp
 			);
-		}
-		else{
-			$order['products'][] = Array(
-				'name' => $order['delivery_method']['deliverername'],
-				'net_price' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
-				'quantity' => 1,
-				'net_subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererpricenetto']),
-				'vat' => sprintf('%01.2f', $order['delivery_method']['deliverervat']),
-				'vat_value' => sprintf('%01.2f', $order['delivery_method']['deliverervatvalue']),
-				'subtotal' => sprintf('%01.2f', $order['delivery_method']['delivererprice']),
-				'lp' => $lp
-			);
-		}
-		$rulesCostGross = 0;
-		$rulesCostNet = 0;
-		$rulesVat = 0;
-		if ($order['pricebeforepromotion'] > 0 && ($order['pricebeforepromotion'] < $order['total'])){
-			$rulesCostGross = $order['total'] - $order['pricebeforepromotion'];
-			$rulesCostNet = ($order['total'] - $order['pricebeforepromotion']) / (1 + ($order['delivery_method']['deliverervat'] / 100));
-			$rulesVat = $rulesCostGross - $rulesCostNet;
 		}
 
 		$summary = Array();

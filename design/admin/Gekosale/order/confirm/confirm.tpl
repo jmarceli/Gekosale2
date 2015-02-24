@@ -85,7 +85,7 @@
 						{% endif %}
 						</small></font></td>
 						<td align="center" width="15%"><font color="grey"><small>szt.</small></font></td>
-						<td align="center" width="5%"><font color="grey"><small>{{ product.quantity }}</small></font></td>
+						<td align="center" width="5%"><font color="grey"><small>{{ product.quantity|number_format(2) }}</small></font></td>
 						<td align="center" width="10%"><font color="grey"><small>{{ product.vat }} %</small></font></td>
 						<td align="center" width="10%"><font color="grey"><small>{{ product.net_subtotal|priceFormat }}</small></font></td>
 						<td align="center" width="15%"><font color="grey"><small>{{ product.vat_value|priceFormat }}</small></font></td>
@@ -102,7 +102,7 @@
 					</tr>
 					{% for sum in summary %}
 					<tr>
-						<td align="right" width="45%" colspan="4"><font color="grey">{% trans %}TXT_CONTAIN{% endtrans %}</font></td>
+            <td align="right" width="45%" colspan="4">{% if loop.first %}<font color="grey">{% trans %}TXT_CONTAIN{% endtrans %}</font>{% endif %}</td>
 						<td align="center" width="10%"><font color="grey"><small>{{ sum.vat }} %</small></font></td>
 						<td align="center" width="15%"><font color="grey"><small>{{ sum.netto|priceFormat }}</small></font></td>
 						<td align="center" width="10%"><font color="grey"><small>{{ sum.vatvalue|priceFormat }}</small></font></td>
