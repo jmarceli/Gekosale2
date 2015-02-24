@@ -422,6 +422,11 @@ class CartModel extends Component\Model
 			//$method = current($this->dispatchMethods);
 			//App::getModel('delivery')->setDispatchmethodChecked($method['dispatchmethodid']);
 		//}
+
+    // unset paymentmethod if not available for selected dispatchmethod
+    if (!isset($this->dispatchMethods[$method['dispatchmethodid']])){
+      Session::unsetActivePaymentMethodChecked();
+    }
     if ($method != NULL && isset($this->dispatchMethods[$method['dispatchmethodid']])){
       App::getModel('delivery')->setDispatchmethodChecked($method['dispatchmethodid']);
     }
