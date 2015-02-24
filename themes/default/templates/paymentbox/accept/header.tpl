@@ -8,7 +8,11 @@ ga('require', 'ecommerce');
 ga('ecommerce:addTransaction', {
   'id': '{{ orderId }}',
   'affiliation': '{{ SHOP_NAME }}',
+{% if orderData.globalPricePromo %}
+  'revenue': '{{ orderData.globalPricePromo|priceFormat }}',
+{% else %}
   'revenue': '{{ orderData.priceWithDispatchMethod|priceFormat }}',
+{% endif %}
   'shipping': '{{ orderData.dispatchmethod.dispatchmethodcost|priceFormat }}'
 });
 
@@ -16,13 +20,23 @@ ga('ecommerce:addTransaction', {
 
 ga('ecommerce:addItem', {
   'id': '{{ orderId }}',
-  'sku': '{{ item.idproduct }}',
-  'name': '{{ item.name }}',
-  'price': '{{ item.newprice|priceFormat }}',
-  'quantity': '{{ item.qty }}'
+  {% if item.attributes %}
+    {% for attitem in item.attributes %}
+	 'sku': '{{ attitem.idproduct }}',
+     'name': '{{ attitem.name }}',
+     'price': '{{ attitem.newprice|priceFormat }}',
+     'quantity': '{{ attitem.qty }}'
+	{% endfor %}
+  {% else %}
+   'sku': '{{ item.idproduct }}',
+   'name': '{{ item.name }}',
+   'price': '{{ item.newprice|priceFormat }}',
+   'quantity': '{{ item.qty }}'
+  {% endif %}
 });
 
 {% endfor %}
 
 ga('ecommerce:send');
 </script>
+
