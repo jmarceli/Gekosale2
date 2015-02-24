@@ -968,7 +968,6 @@ class CartModel extends Component\Model
 			}
 			try{
 				$stmt->execute();
-				$rs = $stmt->fetch();
 				while ($rs = $stmt->fetch()){
 					$rulescartid = $rs['rulescartid'];
 					$ruleid = $rs['ruleid'];
