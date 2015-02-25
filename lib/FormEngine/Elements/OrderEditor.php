@@ -172,7 +172,7 @@ class OrderEditor extends Select
 				'filter' => 'having'
 			),
 			'sellprice' => Array(
-				'source' => 'IF(P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), ROUND(P.discountprice, 2), ROUND(P.sellprice,2))'
+				'source' => 'IF(P.promotion = 1 AND IF(P.promotionstart IS NOT NULL, P.promotionstart <= CURDATE(), 1) AND IF(P.promotionend IS NOT NULL, P.promotionend >= CURDATE(), 1), P.discountprice, P.sellprice)'
 			),
 			'weight' => Array(
 				'source' => 'P.weight'
