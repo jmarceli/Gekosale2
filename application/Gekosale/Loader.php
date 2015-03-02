@@ -75,6 +75,7 @@ class Loader
 					V.showtax,
 					V.offline,
 					cartredirect,
+          terms,
 					photoid,
 					favicon,
 					forcelogin,
@@ -99,6 +100,7 @@ class Loader
 		$rs = $stmt->fetch();
 		if ($rs){
 			$this->layer = Array(
+        'terms' => $rs['terms'],
 				'idview' => $rs['idview'],
 				'namespace' => $rs['namespace'],
 				'cartredirect' => $rs['cartredirect'],

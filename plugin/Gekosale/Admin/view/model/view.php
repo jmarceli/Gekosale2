@@ -134,7 +134,8 @@ class ViewModel extends Component\Model\Datagrid
 				'watermark' => Array(
 					'file' => $rs['watermark']
 				),
-				'mailer' => App::getModel('mailer')->getSettings($id)
+				'mailer' => App::getModel('mailer')->getSettings($id),
+        'terms' => $rs['terms']
 			);
 		}
 		return $Data;
@@ -625,6 +626,7 @@ class ViewModel extends Component\Model\Datagrid
 	public function updateView ($Data, $id)
 	{
 		$sql = 'UPDATE view SET 
+          terms=:terms,
 					name=:name, 
 					namespace=:namespace, 
 					storeid=:storeid, 
@@ -649,6 +651,7 @@ class ViewModel extends Component\Model\Datagrid
 					watermark = :watermark
 				WHERE idview =:id';
 		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('terms', $Data['terms']['file']);
 		$stmt->bindValue('name', $Data['name']);
 		$stmt->bindValue('namespace', $Data['namespace']);
 		$stmt->bindValue('storeid', $Data['store']);

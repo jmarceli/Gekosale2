@@ -8,6 +8,7 @@ use Exception;
 include_once (__PHPMAILER_CLASS__ . 'class.phpmailer.php');
 class MailerModel extends Component\Model
 {
+  private $attachments;
 	protected $viewid = NULL;
 	protected $settings = Array(
 		'mailer' => '',
@@ -21,6 +22,11 @@ class MailerModel extends Component\Model
 		'smtppassword' => ''
 	);
 	protected $images = array();
+
+  public function AddAttachment($path, $name, $encoding = 'base64', $type = 'application/octet-stream')
+  {
+    $this->attachments[] = array('path' => $path, 'name' => $name, 'encoding' => $encoding, 'type' => $type);
+  }
 
 	public function setViewId ($viewid)
 	{
@@ -211,6 +217,13 @@ class MailerModel extends Component\Model
 		if ( $this->images !== array()) {
 			foreach ($this->images as $image) {
 				$mailer->AddEmbeddedImage($image['path'], $image['cid']);
+			}
+		}
+
+    // Attachments handling
+		if ( !empty($this->attachments)) {
+			foreach ($this->attachments as $att) {
+				$mailer->AddAttachment($att['path'], $att['name'], $att['encoding'], $att['type']);
 			}
 		}
 

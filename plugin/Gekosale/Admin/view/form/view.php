@@ -436,6 +436,16 @@ class ViewForm extends Component\Form
 				new FormEngine\Rules\Required(_('ERR_EMPTY_MAIL_FROMEMAIL'))
 			)
 		)));
+
+		$mailerdata->AddChild(new FormEngine\Elements\LocalFile(Array(
+			'name' => 'terms',
+      'label' => 'Plik regulaminu',
+      'comment' => 'Zostanie załączony do każdego maila z potwierdzeniem zamówienia',
+			'file_source' => 'upload/',
+			'file_types' => Array(
+				'pdf'
+			)
+		)));
 		
 		$invoicedata = $form->AddChild(new FormEngine\Elements\Fieldset(Array(
 			'name' => 'invoice_data',

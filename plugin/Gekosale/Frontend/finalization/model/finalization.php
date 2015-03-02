@@ -57,8 +57,13 @@ class FinalizationModel extends Component\Model
 					$this->registry->template->assign('order', $order);
 					$this->registry->template->assign('orderId', $orderid);
 					$this->registry->template->assign('orderlink', $orderlink);
+
+          $mailer = App::getModel('mailer');
+          if (!empty($this->layer['terms'])) {
+            $mailer->AddAttachment('./upload/' . $this->layer['terms'], Core::clearUTF(_('TXT_CONDITIONS')) . '.pdf');
+          }
 					
-					App::getModel('mailer')->sendEmail(Array(
+					$mailer->sendEmail(Array(
 						'template' => 'orderClient',
 						'email' => Array(
 							$email
