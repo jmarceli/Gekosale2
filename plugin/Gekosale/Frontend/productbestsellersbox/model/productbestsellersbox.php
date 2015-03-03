@@ -25,7 +25,7 @@ class ProductBestsellersBoxModel extends Component\Model\Dataset
 	public function initDataset ($dataset)
 	{
     App::getModel('product')->productsDataset($dataset);
-    $dataset->queryColumns['count'] = Array(
+    $dataset->queryColumns['total'] = Array(
       'source' => 'SUM(DISTINCT OP.qty)'
     );
 
