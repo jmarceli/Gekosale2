@@ -3,7 +3,7 @@
  * modified by Jan Grzegorowski mygekosale.pl (kontakt@mygekosale.pl)
  */
 
-function checkDelivery($errorTitle, $errorDesc) {
+function checkDelivery () {
   if( !($('.order-method input[name="optionsRadios"]:checked').length > 0) ) {
     return false;
   }
