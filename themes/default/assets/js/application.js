@@ -4,12 +4,10 @@
  */
 
 function checkDelivery($errorTitle, $errorDesc) {
-  $(document).unbind('click').on('click', '.make-order', function(e) {
-    if( !($('.order-method input[name="optionsRadios"]:checked').length > 0) ) {
-      e.preventDefault();
-      GError($errorTitle, $errorDesc);
-    }
-  });
+  if( !($('.order-method input[name="optionsRadios"]:checked').length > 0) ) {
+    return false;
+  }
+  return true;
 }
 
 function qtySpinner(){
