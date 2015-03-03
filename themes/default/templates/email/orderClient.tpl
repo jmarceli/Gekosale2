@@ -69,6 +69,13 @@
 
 <h2 style="font-size:14px; color:#231f20; border-bottom:1px solid #e3e3e3; padding-bottom:4px; margin-top:30px; text-transform:uppercase;">{% trans %}TXT_METHOD_OF_PEYMENT{% endtrans %}</h2>
 <p>{{ order.payment.paymentmethodname }}<p>
+{% if paymentmodel == 'banktransfer' %}
+{% if bankdata.bankacct %}
+<p><b>{% trans %}TXT_BANK_NUMBER{% endtrans %}</b>: {{ bankdata.bankacct }}</p>
+{% endif %}
+<p><b>{% trans %}TXT_BANK_NAME{% endtrans %}</b> {{ bankdata.bankname }}</p>
+<p><b>{% trans %}TXT_BANK_TRANSFER_TITLE{% endtrans %}:</b> {% trans %}TXT_ORDER{% endtrans %} {{ orderId }}</p>
+{% endif %}
 
 <h2 style="font-size:14px; color:#231f20; border-bottom:1px solid #e3e3e3; padding-bottom:4px; margin-top:30px; text-transform:uppercase;">Dostawa</h2>
 <p>{{ order.dispatchmethod.dispatchmethodname }}</p>
