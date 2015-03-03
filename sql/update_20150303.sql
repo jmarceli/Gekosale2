@@ -31,4 +31,15 @@ INSERT INTO translationdata (translation, translationid, languageid)
   FROM translation
   WHERE name = 'TXT_SELECT_DELIVERY_BEFORE_PAYMENT'
     ON DUPLICATE KEY UPDATE translation = 'Sposoby płatności pojawią się po wybraniu sposobu dostawy.';
+-- translation for TXT_COOKIE_SECOND
+INSERT INTO translation (name)
+  SELECT 'TXT_BANK_TRANSFER_TITLE'
+  FROM translation
+  WHERE NOT EXISTS (SELECT * FROM translation WHERE name = 'TXT_BANK_TRANSFER_TITLE')
+  LIMIT 1;
+INSERT INTO translationdata (translation, translationid, languageid)
+  SELECT 'Tytuł przelewu bankowego', idtranslation, 1
+  FROM translation
+  WHERE name = 'TXT_BANK_TRANSFER_TITLE'
+    ON DUPLICATE KEY UPDATE translation = 'Tytuł przelewu bankowego';
 
