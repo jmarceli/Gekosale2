@@ -76,7 +76,6 @@ class FinalizationModel extends Component\Model
 						'subject' => _('TXT_ORDER_CLIENT') . ': ' . $orderid,
 						'viewid' => Helper::getViewId()
 					));
-          throw new Exception();
 					
 					Session::unsetActiveCart();
 					Session::unsetActiveglobalPriceWithDispatchmethod();
