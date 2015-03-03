@@ -139,4 +139,11 @@ jQuery(function($) {
 
     // add popover to every data-popover element (also for dynamic elements)
     $('body').popover({selector: '[data-popover]'});
+
+    // has to be there for autoplay feature
+    $('.carousel').each(function() {
+      $(this).carousel({
+        interval: $(this).attr('data-interval')
+      });
+    });
 });

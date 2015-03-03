@@ -3,7 +3,7 @@
 <div class="tabbable tabs-below">
   <div class="tab-content">
     <div class="tab-pane fade active in" id="A">
-      <div id="slideshow-{{ box.id }}" class="carousel slide">
+      <div id="slideshow-{{ box.id }}" class="carousel slide" data-interval="5000">
         <div class="carousel-inner">
           {% for slide in slideshow %}
           <div class="item {% if loop.first %}active{% endif %}">
