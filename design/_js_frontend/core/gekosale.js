@@ -514,7 +514,6 @@ var GProductAttributes = function(oOptions) {
 			$('#attributevariants').val(oOptions.aoVariants[gThis.sCheckedVariant].setid);
 			$('#availablestock').val(oOptions.aoVariants[gThis.sCheckedVariant].stock);
 			$('#stockavailablity').text(oOptions.aoVariants[gThis.sCheckedVariant].stock);
-			$('#availablity').text(oOptions.aoVariants[gThis.sCheckedVariant].stock);
 			$('#variantprice').val(oOptions.aoVariants[gThis.sCheckedVariant].sellprice);
 			$('#changeprice').text(oOptions.aoVariants[gThis.sCheckedVariant].sellprice);
 			$('#changeprice-netto').text(oOptions.aoVariants[gThis.sCheckedVariant].sellpricenetto);
@@ -527,6 +526,9 @@ var GProductAttributes = function(oOptions) {
 			if(oOptions.aoVariants[gThis.sCheckedVariant].availablity != undefined && oOptions.aoVariants[gThis.sCheckedVariant].availablity != ''){
 				$('#availablity').text(oOptions.aoVariants[gThis.sCheckedVariant].availablity);
 			}
+      else {
+				$('#availablity').text($('#availablity').attr('data-default-availablity'));
+      }
 		}
 		
 	};

@@ -86,7 +86,7 @@
           {% endif %}
           <li><span>{% trans %}TXT_DISPATCH{% endtrans %}: <strong>{% trans %}TXT_FROM{% endtrans %} {{ deliverymin|priceFormat }}</strong></span></li>
           {% if product.availablityname != '' %}
-          <li><span>{% trans %}TXT_DELIVERY_IN{% endtrans %} <strong id="availablity">{{ product.availablityname }}</strong></span></li>
+          <li><span>{% trans %}TXT_DELIVERY_IN{% endtrans %} <strong id="availablity" data-default-availablity="{{ product.availablityname }}">{{ product.availablityname }}</strong></span></li>
           {% endif %}
         </ul>
         <div class="hr"></div>
