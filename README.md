@@ -80,6 +80,11 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Poprawienie Google Rich Snippets na karcie produktu (https://support.google.com/webmasters/answer/146750)
 * Dodanie pliku gwarancji do produktu (podziękowania dla użytkownika `ziomal` który opracował to zagadnienie)
 * Odznaczenie domyślnych metod dostawy i płatności zgodnie ze zmianami w prawie obowiązującymi od 24.12.2014
+* Dodanie pliku z regulaminem do maila zawierającego potwierdzenie zamówienia (w myśl zmian w prawie z 24.12.2014)
+* Poprawienie wydruku zamówienia w formacie PDF
+* Poprawka problemu z wyświetlaniem dostępności dla produktów z wariantami
+* Automatyczne uruchamianie przewijania obrazków w pokazie slajdów
+* Poprawka cen w edytorze zamówień podczas dodawania produktów przez administratora
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
