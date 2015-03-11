@@ -23,8 +23,11 @@
 	</div>
 </article>
 <script type="text/javascript">
-  $(document).ready(function() {
-    checkDelivery('{% trans %}ERR_DELIVERY_SELECT_TITLE{% endtrans %}', '{% trans %}ERR_DELIVERY_SELECT_DESC{% endtrans %}');
+  $(document).unbind('click').on('click', '.make-order', function(e) {
+    if (!checkDelivery()) {
+      e.preventDefault();
+      GError('{% trans %}ERR_DELIVERY_SELECT_TITLE{% endtrans %}', '{% trans %}ERR_DELIVERY_SELECT_DESC{% endtrans %}');
+    }
   });
 </script>
 {% else %}

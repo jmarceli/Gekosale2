@@ -198,7 +198,7 @@ class ProductController extends Component\Controller\Admin
 			'stock_pane' => Array(
 				'stock' => $PopulateData['standardstock'],
 				'trackstock' => $PopulateData['trackstock'],
-				'availablityid' => $PopulateData['availablityid'],
+				'availablityid' => isset($PopulateData['availablityid'])? $PopulateData['availablityid'] : 0,
 				'disableatstockenabled' => $PopulateData['disableatstockenabled'],
 				'disableatstock' => $PopulateData['disableatstock']
 			),
@@ -322,7 +322,7 @@ class ProductController extends Component\Controller\Admin
 			'stock_pane' => Array(
 				'stock' => $PopulateData['standardstock'],
 				'trackstock' => $PopulateData['trackstock'],
-				'availablityid' => $PopulateData['availablityid'],
+				'availablityid' => isset($PopulateData['availablityid'])? $PopulateData['availablityid'] : 0,
 				'disableatstockenabled' => $PopulateData['disableatstockenabled'],
 				'disableatstock' => $PopulateData['disableatstock']
 			),

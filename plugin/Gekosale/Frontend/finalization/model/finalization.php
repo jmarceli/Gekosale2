@@ -53,12 +53,21 @@ class FinalizationModel extends Component\Model
 				$orderlink = App::getModel('order')->generateOrderLink($orderid);
 				if ($orderlink != NULL && $orderid != NULL){
 					App::getModel('order')->changeOrderLink($orderid, $orderlink);
+          $banktransfer = $this->registry->core->loadModuleSettings('banktransfer', Helper::getViewId());
+          $payment_model = App::getModel('Admin/paymentmethod/paymentmethod')->getPaymentmethodModelById($order['payment']['idpaymentmethod']);
 					
 					$this->registry->template->assign('order', $order);
 					$this->registry->template->assign('orderId', $orderid);
 					$this->registry->template->assign('orderlink', $orderlink);
+					$this->registry->template->assign('paymentmodel', $payment_model);
+					$this->registry->template->assign('bankdata', $banktransfer);
+
+          $mailer = App::getModel('mailer');
+          if (!empty($this->layer['terms'])) {
+            $mailer->AddAttachment('./upload/' . $this->layer['terms'], Core::clearUTF(_('TXT_CONDITIONS')) . '.pdf');
+          }
 					
-					App::getModel('mailer')->sendEmail(Array(
+					$mailer->sendEmail(Array(
 						'template' => 'orderClient',
 						'email' => Array(
 							$email

@@ -3,13 +3,11 @@
  * modified by Jan Grzegorowski mygekosale.pl (kontakt@mygekosale.pl)
  */
 
-function checkDelivery($errorTitle, $errorDesc) {
-  $(document).unbind('click').on('click', '.make-order', function(e) {
-    if( !($('.order-method input[name="optionsRadios"]:checked').length > 0) ) {
-      e.preventDefault();
-      GError($errorTitle, $errorDesc);
-    }
-  });
+function checkDelivery () {
+  if( !($('.order-method input[name="optionsRadios"]:checked').length > 0) ) {
+    return false;
+  }
+  return true;
 }
 
 function qtySpinner(){
@@ -139,4 +137,11 @@ jQuery(function($) {
 
     // add popover to every data-popover element (also for dynamic elements)
     $('body').popover({selector: '[data-popover]'});
+
+    // has to be there for autoplay feature
+    $('.carousel').each(function() {
+      $(this).carousel({
+        interval: $(this).attr('data-interval')
+      });
+    });
 });

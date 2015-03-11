@@ -128,7 +128,8 @@ class ViewController extends Component\Controller\Admin
 				'smtpsecure' => $ViewData['mailer']['smtpsecure'],
 				'smtpauth' => $ViewData['mailer']['smtpauth'],
 				'smtpusername' => $ViewData['mailer']['smtpusername'],
-				'smtppassword' => $ViewData['mailer']['smtppassword']
+				'smtppassword' => $ViewData['mailer']['smtppassword'],
+        'terms' => array('file' => $ViewData['terms']),
 			)
 		);
 		
