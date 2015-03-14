@@ -85,6 +85,8 @@ Poniżej pojawi się lista poprawek w stosunku do wersji podstawowej (pobranej z
 * Poprawka problemu z wyświetlaniem dostępności dla produktów z wariantami
 * Automatyczne uruchamianie przewijania obrazków w pokazie slajdów
 * Poprawka cen w edytorze zamówień podczas dodawania produktów przez administratora
+* Poprawka zapisu do newslettera bez rejestracji w sklepie
+* Poprawka reguł koszyka na wydruku faktury
 
 # Błędy / problemy
 Ewentualne problemy prosimy zgłaszać w zakładce https://github.com/jmarceli/Gekosale2/issues za pomocą przycisku 'New issue'.
