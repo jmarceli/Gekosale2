@@ -244,6 +244,55 @@ class InvoiceModel extends Component\Model\Datagrid
 			$this->registry->template->assign('invoiceshopslogan', '');
 		}
 		$summary = $this->getOrderSummary($orderId);
+
+    // ADD RULES SUPPORT
+		if ($orderData['pricebeforepromotion'] > 0 && ($orderData['pricebeforepromotion'] > $orderData['total'])){
+      // use default VAT value for rules
+      $vat_id = App::getModel('view')->getDefaultVatId();
+      $vat_values = App::getModel('vat')->getVATValuesAll();
+      $vat = $vat_values[$vat_id];
+
+			$price = $orderData['total'] - $orderData['pricebeforepromotion'];
+			$price_net = $price / (1 + $vat/100);
+			$vat_value = $price - $price_net;
+      if (!empty($orderData['rulescartid'])) {
+        $discountName = App::getModel('rulescart')->getRulesCartTranslation($orderData['rulescartid']);
+        $discountName = $discountName[Helper::getLanguageId()]['name'];
+      }
+      else {
+        $discountName = _('TXT_DISCOUNT');
+      }
+      $orderData['products'][] = Array(
+        'name' => $discountName,
+				'net_price' => sprintf('%01.2f', $price_net),
+				'quantity' => 1,
+				'net_subtotal' => sprintf('%01.2f', $price_net),
+        'vat' => $vat,
+				'vat_value' => sprintf('%01.2f', $vat_value),
+				'subtotal' => sprintf('%01.2f', $price),
+				'lp' => $lp++
+			);
+
+      $exists = false;
+      foreach ($summary as $id => $values) {
+        if ($values['vat'] == $vat) {
+          $exists = true;
+          $summary[$id]['netto'] += $price_net;
+          $summary[$id]['brutto'] += $price;
+          $summary[$id]['vatvalue'] += $vat_value;
+        }
+      }
+      if (!$exists) {
+        $summary[] = Array(
+          'vat' => $vat,
+          'netto' => sprintf('%01.2f', $price_net),
+          'brutto' => sprintf('%01.2f', $price),
+          'vatvalue' => sprintf('%01.2f', $vat_value),
+        );
+      }
+		}
+    // END
+
 		$bDelivererVatExists = false;
 		foreach ($summary as $key => $group){
 			if ($group['vat'] == $orderData['delivery_method']['deliverervat']){
