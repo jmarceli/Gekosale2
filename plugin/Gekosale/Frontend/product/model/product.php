@@ -313,60 +313,46 @@ class ProductModel extends Component\Model\Dataset
 		return $Data;
 	}
 
-	public function nextProduct ($productid, $categoryid)
-	{
-		$sql = 'SELECT
-					PT.seo
-				FROM product P
-				LEFT JOIN productcategory PC ON PC.productid = P.idproduct
-				LEFT JOIN producttranslation PT ON P.idproduct = PT.productid AND PT.languageid = :languageid
-				LEFT JOIN category C ON PC.categoryid = C.idcategory
-				LEFT JOIN viewcategory VC ON PC.categoryid = VC.categoryid
-				WHERE P.idproduct > :productid AND PC.categoryid = :categoryid AND IF(:userid = 0, P.enable = 1, 1) AND VC.viewid = :viewid
-				LIMIT 1';
+  // returns next or previous product in category depending on $direction value
+  // returns null if this is the last product
+  public function adjacentProductInCategory ($product_id, $category_id, $direction = 'ASC')
+  {
+		$sql = "SELECT
+              (SELECT seo FROM producttranslation WHERE languageid = :languageid AND productid = idproduct) as seo,
+              idproduct
+            FROM product
+            WHERE idproduct IN
+              (SELECT productid FROM productcategory PC WHERE categoryid = :categoryid)
+            ORDER BY hierarchy {$direction}, idproduct {$direction}";
 		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('userid', (int) Session::getActiveUserid());
-		$stmt->bindValue('categoryid', $categoryid);
-		$stmt->bindValue('productid', $productid);
+		$stmt->bindValue('categoryid', $category_id);
 		$stmt->bindValue('languageid', Helper::getLanguageId());
-		$stmt->bindValue('viewid', Helper::getViewId());
-		$Data = Array();
 		$stmt->execute();
-		$rs = $stmt->fetch();
-		if ($rs){
-			return $rs['seo'];
-		}
-		else{
-			return NULL;
-		}
+
+		while($rs = $stmt->fetch()) {
+      // return product after the current product in current order
+      if ($rs['idproduct'] == $product_id) {
+        if ($rs = $stmt->fetch()) {
+          return $rs['seo'];
+        }
+        else {
+          return null;
+        }
+      }
+    }
+    return null;
+  }
+
+	public function nextProduct ($product_id, $category_id)
+	{
+    // fixed
+    return $this->adjacentProductInCategory($product_id, $category_id, 'ASC');
 	}
 
-	public function previousProduct ($productid, $categoryid)
+	public function previousProduct ($product_id, $category_id)
 	{
-		$sql = 'SELECT
-					PT.seo
-				FROM product P
-				LEFT JOIN productcategory PC ON PC.productid = P.idproduct
-				LEFT JOIN producttranslation PT ON P.idproduct = PT.productid AND PT.languageid = :languageid
-				LEFT JOIN category C ON PC.categoryid = C.idcategory
-				LEFT JOIN viewcategory VC ON PC.categoryid = VC.categoryid
-				WHERE P.idproduct < :productid AND PC.categoryid = :categoryid AND IF(:userid = 0, P.enable = 1, 1) AND VC.viewid = :viewid
-				ORDER BY P.idproduct DESC LIMIT 1';
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('userid', (int) Session::getActiveUserid());
-		$stmt->bindValue('categoryid', $categoryid);
-		$stmt->bindValue('productid', $productid);
-		$stmt->bindValue('languageid', Helper::getLanguageId());
-		$stmt->bindValue('viewid', Helper::getViewId());
-		$Data = Array();
-		$stmt->execute();
-		$rs = $stmt->fetch();
-		if ($rs){
-			return $rs['seo'];
-		}
-		else{
-			return NULL;
-		}
+    // fixed
+    return $this->adjacentProductInCategory($product_id, $category_id, 'DESC');
 	}
 
 	public function getProductById ($id)
