@@ -421,7 +421,7 @@ class CheckoutBoxController extends Component\Controller\Box
 				}
 			}
       // add support for newsletter subscription without registration
-      else if($formData['newsletter'] == 1) {
+      else if(isset($formData['newsletter']) && $formData['newsletter'] == 1) {
         $newId = App::getModel('newsletter')->addClientAboutNewsletter($formData['email']);
         if ($newId > 0){
 					App::getModel('newsletter')->changeNewsletterStatus($newId);
