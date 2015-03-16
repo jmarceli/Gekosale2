@@ -94,7 +94,10 @@
 <br>{% trans %}TXT_POSTCODE{% endtrans %}: {{ order.clientaddress.postcode }}
 <br>{% trans %}TXT_STREET{% endtrans %}: {{ order.clientaddress.street }} 
 <br>{% trans %}TXT_STREETNO{% endtrans %}: {{ order.clientaddress.streetno }}
+{% if order.clientaddress.placeno %}
 <br>{% trans %}TXT_PLACENO{% endtrans %}: {{ order.clientaddress.placeno }}
+{% endif %}
+<br>{% trans %}TXT_PHONE{% endtrans %}: {{ order.contactData.phone }}
 <br>
 </p>
 
@@ -106,7 +109,10 @@
 <br>{% trans %}TXT_POSTCODE{% endtrans %}: {{ order.deliveryAddress.postcode }}
 <br>{% trans %}TXT_STREET{% endtrans %}: {{ order.deliveryAddress.street }} 
 <br>{% trans %}TXT_STREETNO{% endtrans %}: {{ order.deliveryAddress.streetno }}
+{% if order.deliveryaddress.placeno %}
 <br>{% trans %}TXT_PLACENO{% endtrans %}: {{ order.deliveryAddress.placeno }}
+{% endif %}
+<br>{% trans %}TXT_PHONE{% endtrans %}: {{ order.contactData.phone }}
 </p>
 
 {% if order.customeropinion != '' %}
