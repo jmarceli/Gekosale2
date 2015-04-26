@@ -220,7 +220,7 @@ class InvoiceModel extends Component\Model\Datagrid
 			'lp' => $lp
 		);
 		
-		$orderData['order_date'] = date('Y-m-d', strtotime($orderData['order_date']));
+		$orderData['order_date'] = date('Y-m-d', strtotime($Data['invoicedate']));
 		$Data['invoiceTypeName'] = $invoiceTypeName;
 		$Data['symbol'] = $Data['invoicenumber'];
 		$allpricebrutto = sprintf('%01.2f', $orderData['total']);
