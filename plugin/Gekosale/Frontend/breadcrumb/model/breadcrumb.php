@@ -114,18 +114,34 @@ class BreadcrumbModel extends Component\Model
 	{
 		$this->productid = App::getModel('product')->getProductIdBySeo($this->getParam());
 		
+    // Get only last root category to which product belongs
 		$sql = "SELECT 
 					PC.categoryid 
 				FROM productcategory PC 
 				LEFT JOIN category C ON PC.categoryid = C.idcategory
-				WHERE PC.productid = :productid AND C.enable = 1
-				LIMIT 1";
+        WHERE PC.productid = :productid AND C.enable = 1 
+        ORDER BY C.distinction DESC LIMIT 1";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('productid', $this->productid);
 		$stmt->execute();
 		$rs = $stmt->fetch();
+
+    // Get last (deepest) category which has parent selected before
+    $sql = "SELECT 
+              PC.categoryid
+            FROM productcategory PC 
+              LEFT JOIN categorypath CP ON CP.categoryid = PC.categoryid        
+              WHERE PC.productid = :productid AND ancestorcategoryid = :categoryid
+              ORDER BY `order` DESC
+              LIMIT 1";
+		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('productid', $this->productid);
+		$stmt->bindValue('categoryid', $rs['categoryid']);
+		$stmt->execute();
+		$rs = $stmt->fetch();
 		$Data = Array();
 		if ($rs){
+      // create breadcrumbs
 			$sql = "SELECT
 						CONCAT(:seo,'/',IF(CT.seo IS NOT NULL, CT.seo,'')) AS link, 
 						CT.name AS title
@@ -139,6 +155,7 @@ class BreadcrumbModel extends Component\Model
 			$stmt->bindValue('languageid', Helper::getLanguageId());
 			$stmt->execute();
 			$Data = Array();
+			
 			while ($rs = $stmt->fetch()){
 				$Data[] = Array(
 					'link' => $rs['link'],
@@ -146,24 +163,25 @@ class BreadcrumbModel extends Component\Model
 				);
 			}
 		}
-		$sql = "SELECT
-					CONCAT(:seo,'/',IF(PT.seo IS NOT NULL, PT.seo,'')) AS link, 
-					PT.name AS title
-				FROM producttranslation PT 
-				WHERE PT.productid = :productid AND PT.languageid = :languageid
-				";
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('seo', Seo::getSeo('productcart'));
-		$stmt->bindValue('productid', $this->productid);
-		$stmt->bindValue('languageid', Helper::getLanguageId());
-		$stmt->execute();
-		$rs = $stmt->fetch();
-		if ($rs){
-			$Data[] = Array(
-				'link' => $rs['link'],
-				'title' => $rs['title']
-			);
-		}
+    // append product name to breadcrumbs
+    $sql = "SELECT
+          CONCAT(:seo,'/',IF(PT.seo IS NOT NULL, PT.seo,'')) AS link, 
+          PT.name AS title
+        FROM producttranslation PT 
+        WHERE PT.productid = :productid AND PT.languageid = :languageid
+        ";
+    $stmt = Db::getInstance()->prepare($sql);
+    $stmt->bindValue('seo', Seo::getSeo('productcart'));
+    $stmt->bindValue('productid', $this->productid);
+    $stmt->bindValue('languageid', Helper::getLanguageId());
+    $stmt->execute();
+    $rs = $stmt->fetch();
+    if ($rs){
+      $Data[] = Array(
+        'link' => $rs['link'],
+        'title' => $rs['title']
+      );
+    }
 		return $Data;
 	}
 

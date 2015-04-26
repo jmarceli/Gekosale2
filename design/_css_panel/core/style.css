@@ -1150,6 +1150,24 @@ a.button-green span img,span.button-green span img {
 	opacity: 1;
 }
 
+.field-product-variants-editor .attribute-photos h3 {
+  display: block;
+  float: none;
+}
+
+.field-product-variants-editor .attribute-photos img {
+  cursor: pointer;
+  border: 1px solid transparent;
+  opacity: 0.5;
+  max-width: 90px;
+  max-height: 90px;
+}
+
+.field-product-variants-editor .attribute-photos img.selected {
+  border: 1px solid #000;
+  opacity: 1;
+}
+
 .field-product-variants-editor .set-editor .field-text {
 	display: inline;
 	margin: 0 5px 0 0;
