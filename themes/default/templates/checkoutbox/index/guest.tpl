@@ -158,7 +158,7 @@
           </div>
           <div class="well well-small">
             {{ forms.checkbox(form.children.create_account, 'span12') }}
-            <div class="collapse in" id="create-account">
+            <div class="collapse {% if(form.children.create_account.value == 1) %}in{% endif %}" id="create-account">
               <legend class="marginbt10">{% trans %}TXT_ACCOUNT_INFO{% endtrans %}</legend>
               <div>
                 <div class="password-form">

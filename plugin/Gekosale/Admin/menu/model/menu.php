@@ -79,7 +79,7 @@ class MenuModel extends Component\Model
 				}
 				if (isset($elem)){
 					if (isset($element->subelement) && ! empty($element->subelement)){
-						array_multisort($sub, SORT_ASC, SORT_STRING, $sort_subelement, SORT_ASC);
+            array_multisort($sort_subelement, SORT_ASC, $sub);
 						$menu[] = Array(
 							'name' => _((string) $block->name),
 							'link' => (string) $block->link,
@@ -89,7 +89,7 @@ class MenuModel extends Component\Model
 						);
 					}
 					else{
-						array_multisort($elem, SORT_ASC, SORT_STRING, $sort_element, SORT_ASC);
+            array_multisort($sort_element, SORT_ASC, $elem);
 						$menu[] = Array(
 							'name' => _((string) $block->name),
 							'link' => (string) $block->link,
@@ -118,7 +118,7 @@ class MenuModel extends Component\Model
 				}
 			}
 		}
-		array_multisort($menu, SORT_ASC, SORT_STRING, $sort_block, SORT_ASC);
+		array_multisort($sort_block, SORT_ASC, $menu);
 		$Data = Array();
 		foreach ($menu as $key => $val){
 			$Data[] = $menu[$key];

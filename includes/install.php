@@ -136,8 +136,8 @@ class Install
 			$db->query('SET names utf8');
 			$db->query('SET FOREIGN_KEY_CHECKS = 0');
 			$db->autocommit(false);
-			$dir = opendir(ROOTPATH . 'sql/');
-			while ($fh = readdir($dir)){
+      $files = scandir(ROOTPATH . 'sql/');
+      foreach ($files as $fh) {
 				if (strpos($fh, '.sql') !== FALSE){
 					$file = file_get_contents(ROOTPATH . 'sql/' . $fh);
 					$sql = explode(";\n", $file);
