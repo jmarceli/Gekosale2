@@ -342,7 +342,7 @@ class CartModel extends Component\Model
 	public function changeQuantity ($idproduct, $attr = NULL, $newqty)
 	{
 		$objResponseInc = new xajaxResponse();
-		if ($newqty == 0){
+		if ($newqty <= 0){
 			$this->deleteAJAXProductFromCart($idproduct, $attr);
 		}
 		else{
