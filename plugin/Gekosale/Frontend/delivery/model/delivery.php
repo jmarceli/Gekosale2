@@ -68,7 +68,7 @@ class DeliveryModel extends Component\Model
 			$shippingCountryId = Session::getActiveShippingCountryId();
 		}
 		$cartData = Session::getActiveCartForDelivery();
-		$globalprice = isset($cartData['price']) ? $cartData['price'] : 0;
+		$globalprice = round(isset($cartData['price']) ? $cartData['price'] : 0, 2);
 		$globalweight = isset($cartData['weight']) ? $cartData['weight'] : 0;
 		
 		$Data = Array();
@@ -82,10 +82,10 @@ class DeliveryModel extends Component\Model
 					ROUND(DP.dispatchmethodcost * CR.exchangerate, 4) AS dispatchmethodcostnetto,
 					IF(DP.vat IS NOT NULL, ROUND((DP.dispatchmethodcost + (DP.dispatchmethodcost*(V.`value`/100))) * CR.exchangerate,4), DP.dispatchmethodcost * CR.exchangerate) as dispatchmethodcost,
 					CASE
-  						WHEN (`from`<>0 AND `from`<:globalprice AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
+  						WHEN (`from` <> 0 AND `from` <= :globalprice AND `to` = 0 AND DP.dispatchmethodcost =0) THEN DMT.name
  					 	WHEN (:globalprice BETWEEN `from` AND `to`) THEN DMT.name
-  						WHEN (`to` = 0 AND `from`<:globalprice AND DP.dispatchmethodcost <> 0) THEN DMT.name
-  						WHEN (`from`=0 AND `to`=0 AND DP.dispatchmethodcost =0) THEN DMT.name
+  						WHEN (`to` = 0 AND `from` <= :globalprice AND DP.dispatchmethodcost <> 0) THEN DMT.name
+  						WHEN (`from` = 0 AND `to` = 0 AND DP.dispatchmethodcost = 0) THEN DMT.name
 					END as name,
 					D.description,
 					D.photo,
@@ -137,10 +137,10 @@ class DeliveryModel extends Component\Model
 					IF(DW.vat IS NOT NULL, ROUND((DW.cost+(DW.cost*(V.`value`/100))) * CR.exchangerate,4), DW.cost * CR.exchangerate) as dispatchmethodcost, 
 					D.freedelivery,
 					CASE
-  						WHEN (`from`<>0 AND `from`<:globalweight AND `to`=0 AND DW.cost =0) THEN DMT.name
+  						WHEN (`from` <> 0 AND `from` <= :globalweight AND `to` = 0 AND DW.cost = 0) THEN DMT.name
  					 	WHEN (:globalweight BETWEEN `from` AND `to`) THEN DMT.name
-  						WHEN (`to` = 0 AND `from`<:globalweight AND DW.cost <> 0) THEN DMT.name
-  						WHEN (`from`=0 AND `to`=0 AND DW.cost = 0) THEN DMT.name
+  						WHEN (`to` = 0 AND `from` <= :globalweight AND DW.cost <> 0) THEN DMT.name
+  						WHEN (`from` = 0 AND `to`=0 AND DW.cost = 0) THEN DMT.name
 					END as name,
 					D.description,
 					D.photo,
