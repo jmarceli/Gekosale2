@@ -19,10 +19,10 @@ class RequiredDependency extends \SimpleForm\Rule
 		switch ($this->_condition->GetType()) {
 			case \SimpleForm\Condition::EQUALS:
 				if ($this->_field instanceof \SimpleForm\Elements\Radio){
-					return "'#{$this->_field->GetId()}_{$this->_condition->GetArgument()}:checked";
+					return "#{$this->_field->GetId()}_{$this->_condition->GetArgument()}:checked";
 				}
 				if ($this->_field instanceof \SimpleForm\Elements\Checkbox){
-					return "'#{$this->_field->GetId()}:checked";
+					return "#{$this->_field->GetId()}:checked";
 				}
 				
 				break;
