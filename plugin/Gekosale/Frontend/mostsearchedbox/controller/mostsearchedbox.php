@@ -32,13 +32,6 @@ class MostSearchedBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
-		foreach ($this->phrases as $key => $tag){
-			$max[] = $tag['textcount'];
-		}
-		foreach ($this->phrases as $key => $tag){
-			$search[$key]['percentage'] = ceil(($tag['textcount'] / max($max)) * 10);
-		}
-		
 		$this->registry->template->assign('mostsearched', $this->phrases);
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
