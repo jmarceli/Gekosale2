@@ -46,11 +46,11 @@ class ProductBoxController extends Component\Controller\Box
 			'addAJAXOpinionAboutProduct'
 		));
 		
-		$this->registry->xajax->registerFunction(array(
-			'addProductRangeOpinion',
-			$this->productModel,
-			'addAJAXProductRangeOpinion'
-		));
+		//$this->registry->xajax->registerFunction(array(
+			//'addProductRangeOpinion',
+			//$this->productModel,
+			//'addAJAXProductRangeOpinion'
+		//));
 		
 		if (isset($this->_boxAttributes['tabbed'])){
 			$tabbed = $this->_boxAttributes['tabbed'];
