@@ -798,10 +798,12 @@ class ProductModel extends Component\Model\Dataset
 				$product['photo']['orginal'][] = $gallery->getImagePath($gallery->getOrginalImageById($photo['photoid']));
 			}
 			if (isset($product['producerphotoid']) && $product['producerphotoid'] > 0){
-				$product['producerphoto']['small'] = $gallery->getImagePath($gallery->getSmallImageById($product['producerphotoid']));
-				$product['producerphoto']['normal'] = $gallery->getImagePath($gallery->getNormalImageById($product['producerphotoid']));
-				$product['producerphoto']['large'] = $gallery->getImagePath($gallery->getLargeImageById($product['producerphotoid']));
-				$product['producerphoto']['orginal'] = $gallery->getImagePath($gallery->getOrginalImageById($product['producerphotoid']));
+        $product['producerphoto'] = array(
+          'small' => $gallery->getImagePath($gallery->getSmallImageById($product['producerphotoid'])),
+          'normal' => $gallery->getImagePath($gallery->getNormalImageById($product['producerphotoid'])),
+          'large' => $gallery->getImagePath($gallery->getLargeImageById($product['producerphotoid'])),
+          'orginal' => $gallery->getImagePath($gallery->getOrginalImageById($product['producerphotoid'])),
+        );
 			}
 		}
 	}
