@@ -453,7 +453,7 @@ class ProductModel extends Component\Model\Dataset
 					'keyword_description' => $rs['keyword_description'],
 					'keyword' => $rs['keyword'],
 					'weight' => $rs['weight'],
-					'packagesize' => $rs['packagesize'],
+					'packagesize' => is_float($rs['packagesize'])? $rs['packagesize'] : round($rs['packagesize']),
 					'unit' => $rs['unit'],
 					'categoryphoto' => App::getModel('gallery')->getImagePath(App::getModel('gallery')->getSmallImageById($rs['categoryphoto'], 0)),
 					'categoryname' => $rs['categoryname'],
