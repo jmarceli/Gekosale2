@@ -813,7 +813,7 @@ class ProductModel extends Component\Model\Dataset
 		$gallery = App::getModel('gallery');
 
 		if (is_array($product['otherphoto'])){
-			if (isset($product['mainphotoid']) && $product['mainphotoid'] = 0){
+			if (isset($product['mainphotoid']) && $product['mainphotoid'] == 0){
 				$product['mainphoto']['small'] = $gallery->getImagePath($gallery->getSmallImageById($product['mainphotoid']));
 				$product['mainphoto']['normal'] = $gallery->getImagePath($gallery->getNormalImageById($product['mainphotoid']));
 				$product['mainphoto']['large'] = $gallery->getImagePath($gallery->getLargeImageById($product['mainphotoid']));
