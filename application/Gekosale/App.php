@@ -337,6 +337,11 @@ class App
 			}, self::$registry->router->getUri());
 			self::$registry->xajax->configure('requestURI', $url);
 		}
+    else { // force language in admin mode
+      Session::unsetActiveLanguage();
+      self::$registry->core->setLanguage('pl');
+			Translation::loadTranslations();
+    }
 		self::$registry->xajaxInterface = new XajaxInterface();
 		
 		self::$registry->right = new Right(self::$registry);

@@ -48,11 +48,11 @@ class Core
 		return implode($glue, $Data);
 	}
 
-	public function setLanguage ()
+	public function setLanguage ($langCode = null)
 	{
 		$Data = Array();
 		$browserLanguage = $this->getBrowserFirstLanguage();
-		if (Session::getActiveLanguage() == NULL){
+		if (Session::getActiveLanguage() == NULL || !empty($langCode)){
 			$sql = 'SELECT 
 						L.idlanguage,
 						L.name,
@@ -74,6 +74,15 @@ class Core
 					'currencysymbol' => $rs['currencysymbol']
 				);
 			}
+
+      if (!empty($langCode)) {
+        Session::setActiveLanguage($Data[$langCode]['name']);
+        Session::setActiveLanguageId($Data[$langCode]['id']);
+        Session::setActiveCurrencyId($Data[$langCode]['currencyid']);
+        Session::setActiveCurrencySymbol($Data[$langCode]['currencysymbol']);
+        return;
+      }
+
 			foreach ($Data as $language => $val){
 				if ($language == $browserLanguage){
 					Session::setActiveLanguage($val['name']);
