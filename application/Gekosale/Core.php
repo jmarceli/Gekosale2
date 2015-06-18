@@ -76,10 +76,39 @@ class Core
 			}
 
       if (!empty($langCode)) {
-        Session::setActiveLanguage($Data[$langCode]['name']);
-        Session::setActiveLanguageId($Data[$langCode]['id']);
-        Session::setActiveCurrencyId($Data[$langCode]['currencyid']);
-        Session::setActiveCurrencySymbol($Data[$langCode]['currencysymbol']);
+        if (!empty($Data)) {
+          Session::setActiveLanguage($Data[$langCode]['name']);
+          Session::setActiveLanguageId($Data[$langCode]['id']);
+          Session::setActiveCurrencyId($Data[$langCode]['currencyid']);
+          Session::setActiveCurrencySymbol($Data[$langCode]['currencysymbol']);
+        }
+        else {
+          // for Global view (viewid = 0) get settings from first view
+          $sql = 'SELECT 
+                L.idlanguage,
+                L.name,
+                C.idcurrency, 
+                C.currencysymbol
+              FROM language L
+              LEFT JOIN languageview LV ON L.idlanguage = LV.languageid
+              LEFT JOIN currency C ON C.idcurrency = L.currencyid
+              WHERE LV.viewid = (SELECT idview FROM view LIMIT 1) ORDER BY L.idlanguage';
+          $stmt = Db::getInstance()->prepare($sql);
+          $stmt->execute();
+          $set = false;
+          while ($rs = $stmt->fetch()){
+            $Data[substr($rs['name'], 0, 2)] = Array(
+              'id' => $rs['idlanguage'],
+              'name' => $rs['name'],
+              'currencyid' => $rs['idcurrency'],
+              'currencysymbol' => $rs['currencysymbol']
+            );
+          }
+          Session::setActiveLanguage($Data[$langCode]['name']);
+          Session::setActiveLanguageId($Data[$langCode]['id']);
+          Session::setActiveCurrencyId($Data[$langCode]['currencyid']);
+          Session::setActiveCurrencySymbol($Data[$langCode]['currencysymbol']);
+        }
         return;
       }
 
