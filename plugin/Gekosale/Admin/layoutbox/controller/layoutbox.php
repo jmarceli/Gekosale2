@@ -179,22 +179,23 @@ class LayoutBoxController extends Component\Controller\Admin
 			'deleteLayoutbox'
 		));
 		
-		$pageschemeid = $this->registry->core->getParam(0);
-		
-		if (Helper::getViewId() > 0 && $this->registry->loader->getParam('pageschemeid') != $pageschemeid){
-			App::redirect(__ADMINPANE__ . '/layoutbox/edit/' . $this->registry->loader->getParam('pageschemeid'));
+    $layoutboxes = $this->model->getLayoutBoxTree();
+    $pagescheme_id = $this->id; // selected by user
+    if (Helper::getViewId() > 0 && $pagescheme_id != $this->registry->core->getParam(0)) {
+      // if it is not current view pagescheme change it
+      App::redirect(__ADMINPANE__ . '/layoutbox/edit/' . $pagescheme_id . ',' . $this->model->getFirstLayoutBox($pagescheme_id));
+    }
+		$layoutbox_id = $this->registry->core->getParam(1); // id from URL
+		if ((int) $layoutbox_id == 0 || empty($layoutboxes[$pagescheme_id . ',' . $layoutbox_id])){
+      // change pagescheme if subpage is not inside active
+      $pagescheme_id = App::getModel('view')->getViewPagescheme(Helper::getViewId());
+			App::redirect(__ADMINPANE__ . '/layoutbox/edit/' . $pagescheme_id . ',' . $this->model->getFirstLayoutBox($pagescheme_id));
 		}
-		$templateMainInfo = App::getModel('pagescheme')->getTemplateNameToEdit($pageschemeid);
-		$id = $this->registry->core->getParam(1);
-		if ((int) $id == 0){
-			App::redirect(__ADMINPANE__ . '/layoutbox/edit/' . $pageschemeid . ',' . $this->model->getFirstLayoutBox($pageschemeid));
-		}
-		$layoutBox = $this->model->getLayoutBoxToEdit($id);
-		if (empty($layoutBox)){
-			App::redirect(__ADMINPANE__ . '/layoutbox/edit/' . $pageschemeid . ',' . $this->model->getFirstLayoutBox($pageschemeid));
-		}
-		$behaviourBoxArray = $this->model->getLayoutBoxJSValuesToEdit($id);
-		$ctValues = $this->model->getLayoutBoxContentTypeSpecificValues($id);
+
+		$layoutBox = $this->model->getLayoutBoxToEdit($layoutbox_id);
+
+		$behaviourBoxArray = $this->model->getLayoutBoxJSValuesToEdit($layoutbox_id);
+		$ctValues = $this->model->getLayoutBoxContentTypeSpecificValues($layoutbox_id);
 		
 		if (isset($ctValues['categoryId']) && ($ctValues['categoryId'] > 0)){
 			$this->categoryActive = $ctValues['categoryId'];
@@ -217,9 +218,9 @@ class LayoutBoxController extends Component\Controller\Admin
 			'clickable' => true,
 			'deletable' => true,
 			'addable' => false,
-			'items' => $this->model->getLayoutBoxTree(),
+			'items' => $layoutboxes,
 			'onClick' => 'openLayoutBoxEditor',
-			'active' => $pageschemeid . ',' . $id
+			'active' => $pagescheme_id . ',' . $layoutbox_id
 		)));
 		
 		$form = new FormEngine\Elements\Form(Array(
@@ -330,9 +331,9 @@ class LayoutBoxController extends Component\Controller\Admin
 		$form->AddFilter(new FormEngine\Filters\Secure());
 		
 		if ($form->Validate(FormEngine\FE::SubmittedData())){
-			$this->model->editLayoutBox($this->_performArtificialMechanics($form->getSubmitValues(FormEngine\Elements\Form::FORMAT_FLAT)), $id);
+			$this->model->editLayoutBox($this->_performArtificialMechanics($form->getSubmitValues(FormEngine\Elements\Form::FORMAT_FLAT)), $layoutbox_id);
 			if (FormEngine\FE::IsAction('continue')){
-				App::redirect(__ADMINPANE__ . '/layoutbox/edit/' . $pageschemeid . ',' . $id);
+				App::redirect(__ADMINPANE__ . '/layoutbox/edit/' . $pagescheme_id . ',' . $layoutbox_id);
 			}
 			else{
 				App::redirect(__ADMINPANE__ . '/layoutbox');
@@ -341,7 +342,7 @@ class LayoutBoxController extends Component\Controller\Admin
 		
 		$this->renderLayout(Array(
 			'tree' => $tree->Render(),
-			'id' => $id,
+			'id' => $layoutbox_id,
 			'form' => $form->Render()
 		));
 	}

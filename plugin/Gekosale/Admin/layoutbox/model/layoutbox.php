@@ -647,11 +647,10 @@ class LayoutboxModel extends Component\Model
 					idpagescheme AS id,
 					name
 				FROM pagescheme
-				WHERE IF(:viewid > 0, idpagescheme = :pageschemeid, 1)
+				WHERE IF(:viewid > 0, idpagescheme = (SELECT pageschemeid FROM view WHERE idview = :viewid), 1)
 				ORDER BY name ASC';
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('viewid', (int) Helper::getViewId());
-		$stmt->bindValue('pageschemeid', $this->registry->loader->getParam('pageschemeid'));
 		$stmt->execute();
 		$Data = Array();
 		$i = 0;

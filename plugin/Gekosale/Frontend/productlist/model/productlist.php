@@ -31,6 +31,16 @@ class ProductListModel extends Component\Model
   // @param array $currentParams - array with current route params
   public function getProductsTemplate ($model, $controller, $currentParams, $boxAttributes)
 	{
+    // this has to be defined BEFORE 
+		// $this->dataset = App::getModel($model)->getDataset();
+    // in other case layerednavigationbox will be required
+    if($this->registry->router->getCurrentController() == $controller) {
+      $producer = (strlen($currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $currentParams['producers']))) : Array();
+      $attributes = array_filter((strlen($currentParams['attributes']) > 0) ? array_filter(array_values(explode('_', $currentParams['attributes']))) : Array());
+      
+      $Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributes);
+    }
+
 		$this->dataset = App::getModel($model)->getDataset();
 		if ($boxAttributes['productsCount'] > 0){
 			$this->dataset->setPagination($boxAttributes['productsCount']);
@@ -38,12 +48,6 @@ class ProductListModel extends Component\Model
 
     if($this->registry->router->getCurrentController() == $controller) {
       // only for product news page use datagrid custom parameters
-
-      $producer = (strlen($currentParams['producers']) > 0) ? array_filter(array_values(explode('_', $currentParams['producers']))) : Array();
-      $attributes = array_filter((strlen($currentParams['attributes']) > 0) ? array_filter(array_values(explode('_', $currentParams['attributes']))) : Array());
-      
-      $Products = App::getModel('layerednavigationbox')->getProductsForAttributes(0, $attributes);
-
       $sqlParams = Array(
         'clientid' => Session::getActiveClientid(),
         'producer' => $producer,

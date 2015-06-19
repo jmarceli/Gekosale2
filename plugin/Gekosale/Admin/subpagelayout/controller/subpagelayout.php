@@ -42,17 +42,19 @@ class subpagelayoutController extends Component\Controller\Admin
 	public function edit ()
 	{
 		$subpages = $this->model->getSubpageTree();
-		$pageschemeid = $this->registry->core->getParam(0);
-		if (Helper::getViewId() > 0 && $this->registry->loader->getParam('pageschemeid') != $pageschemeid){
-			App::redirect(__ADMINPANE__ . '/subpagelayout/edit/' . $this->registry->loader->getParam('pageschemeid'));
-		}
-		$templateMainInfo = App::getModel('pagescheme')->getTemplateNameToEdit($pageschemeid);
-		$id = $this->registry->core->getParam(1);
-		if ((int) $id == 0){
-			App::redirect(__ADMINPANE__ . '/subpagelayout/edit/' . $pageschemeid . ',' . $this->model->getFirstPageScheme($pageschemeid));
+    $pagescheme_id = $this->id; // selected by user
+    if (Helper::getViewId() > 0 && $pagescheme_id != $this->registry->core->getParam(0)) {
+      // if it is not current view pagescheme change it
+      App::redirect(__ADMINPANE__ . '/subpagelayout/edit/' . $pagescheme_id . ',' . $this->model->getFirstPageScheme($pagescheme_id));
+    }
+		$subpage_id = $this->registry->core->getParam(1); // id from URL
+		if ((int) $subpage_id == 0 || empty($subpages[$pagescheme_id . ',' . $subpage_id])){
+      // change pagescheme if subpage is not inside active
+      $pagescheme_id = App::getModel('view')->getViewPagescheme(Helper::getViewId());
+			App::redirect(__ADMINPANE__ . '/subpagelayout/edit/' . $pagescheme_id . ',' . $this->model->getFirstPageScheme($pagescheme_id));
 		}
 		
-		$subpageLayout = App::getModel('subpagelayout')->getSubPageLayoutAll($id);
+		$subpageLayout = App::getModel('subpagelayout')->getSubPageLayoutAll($subpage_id);
 		
 		if (! isset($subpageLayout[0]['name'])){
 			App::redirect(__ADMINPANE__ . '/subpagelayout');
@@ -74,7 +76,7 @@ class subpagelayoutController extends Component\Controller\Admin
 			'addable' => false,
 			'items' => $subpages,
 			'onClick' => 'openSubpageEditor',
-			'active' => $pageschemeid . ',' . $id
+			'active' => $pagescheme_id . ',' . $subpage_id
 		)));
 		
 		$form = new FormEngine\Elements\Form(Array(
@@ -88,7 +90,7 @@ class subpagelayoutController extends Component\Controller\Admin
 			'label' => _('TXT_SUBPAGE_COLUMNS')
 		)));
 		
-		$subpages = App::getModel('subpagelayout')->getSubPageLayoutAllToSelect($id);
+		$subpages = App::getModel('subpagelayout')->getSubPageLayoutAllToSelect($subpage_id);
 		
 		$subpagelayoutid = $columnsEdit->AddChild(new FormEngine\Elements\Constant(Array(
 			'name' => 'subpagelayout_subpage',
@@ -128,7 +130,7 @@ class subpagelayoutController extends Component\Controller\Admin
 		$form->AddFilter(new FormEngine\Filters\Trim());
 		$form->AddFilter(new FormEngine\Filters\Secure());
 		
-		$subpagelayoutcolumn = App::getModel('subpagelayout')->getSubPageLayoutColumn($id);
+		$subpagelayoutcolumn = App::getModel('subpagelayout')->getSubPageLayoutColumn($subpage_id);
 		$populate = Array();
 		
 		if (is_array($subpagelayoutcolumn) && count($subpagelayoutcolumn) > 0){
@@ -157,9 +159,9 @@ class subpagelayoutController extends Component\Controller\Admin
 		
 		if ($form->Validate(FormEngine\FE::SubmittedData())){
 			try{
-				App::getModel('subpagelayout')->editSubpageLayout($form->getSubmitValues(), $id);
+				App::getModel('subpagelayout')->editSubpageLayout($form->getSubmitValues(), $subpage_id);
 				App::getModel('subpagelayout')->flushCache($subpages[$subpagelayoutcolumn['subpagelayoutid']]);
-				App::redirect(__ADMINPANE__ . '/subpagelayout/edit/' . $pageschemeid . ',' . $id);
+				App::redirect(__ADMINPANE__ . '/subpagelayout/edit/' . $pagescheme_id . ',' . $subpage_id);
 			}
 			catch (Exception $e){
 				Session::setVolatileSubpageLayoutAdd(1, false);

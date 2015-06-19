@@ -24,6 +24,7 @@ class ProductBuyAlsoBoxModel extends Component\Model\Dataset
 
 	public function initDataset ($dataset)
 	{
+    $product_id = App::getModel('product')->getProductIdBySeo($this->registry->core->getParam());
     App::getModel('product')->productsDataset($dataset);
     $dataset->queryColumns['count'] = Array(
       'source' => 'SUM(DISTINCT OP.qty)'
@@ -53,8 +54,8 @@ class ProductBuyAlsoBoxModel extends Component\Model\Dataset
 			');
 		
 		$dataset->setSQLParams(Array(
-			'ids' => App::getModel('product')->getAlsoProduct((int) $this->registry->core->getParam()),
-			'productid' => (int) $this->registry->core->getParam()
+			'ids' => App::getModel('product')->getAlsoProduct($product_id),
+      'productid' => $product_id,
 		));
 	}
 

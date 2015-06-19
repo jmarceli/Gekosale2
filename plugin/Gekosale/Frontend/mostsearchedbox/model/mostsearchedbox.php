@@ -22,8 +22,34 @@ namespace Gekosale;
 class MostSearchedBoxModel extends Component\Model
 {
 
+  public function getTopSearched ($view_id)
+  {
+		$sql = "SELECT 
+					idmostsearch,
+					name, 
+					textcount
+				FROM mostsearch
+        WHERE viewid = :viewid
+        ORDER BY textcount DESC
+        LIMIT 1";
+		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('viewid', Helper::getViewId());
+		$stmt->execute();
+		$Data = Array();
+		if ($rs = $stmt->fetch()){
+			$Data = Array(
+				'idmostsearch' => $rs['idmostsearch'],
+				'name' => $rs['name'],
+				'textcount' => $rs['textcount']
+			);
+		}
+		return $Data;
+  }
+
 	public function getAllMostSearched ()
 	{
+    $top_count = $this->getTopSearched(Helper::getViewId());
+
 		$sql = "SELECT 
 					idmostsearch,
 					name, 
@@ -38,9 +64,10 @@ class MostSearchedBoxModel extends Component\Model
 			$Data[] = Array(
 				'idmostsearch' => $rs['idmostsearch'],
 				'name' => $rs['name'],
-				'phrase' => base64_encode($rs['name']),
+				'phrase' => $rs['name'],
 				'textcount' => $rs['textcount'],
-				'percentage' => 0
+        // search phrase as a percentage of top searched
+				'percentage' => ceil(($rs['textcount'] / $top_count['textcount']) * 100)
 			);
 		}
 		return $Data;

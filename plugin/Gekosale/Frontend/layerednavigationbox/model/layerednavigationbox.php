@@ -46,7 +46,7 @@ class LayeredNavigationBoxModel extends Component\Model
       'currentPage' => 1,
       'viewType' => $this->getParam('viewType', 1),
       'priceFrom' => $this->getParam('priceFrom', 0),
-      'priceTo' => $this->getParam('priceTo', Core::PRICE_MAX),
+      'priceTo' => $this->getParam('priceTo', 0),//Core::PRICE_MAX),
       'producers' => $this->getParam('producers', 0),
       'attributes' => $this->getParam('attributes', 0)
     );
@@ -97,7 +97,7 @@ class LayeredNavigationBoxModel extends Component\Model
       'producer' => 0,
       'filterbyproducer' => 0,
       'pricefrom' => 0,
-      'priceto' => Core::PRICE_MAX,
+      'priceto' => 0,//Core::PRICE_MAX,
       'enablelayer' => 0,
       'products' => 0,
     );
@@ -197,7 +197,7 @@ class LayeredNavigationBoxModel extends Component\Model
 		);
     $args = $this->args;
     $args['priceFrom'] = ($priceFrom > 0) ? $priceFrom : 0;
-    $args['priceTo'] = ($priceTo > 0) ? $priceTo : Core::PRICE_MAX;
+    $args['priceTo'] = ($priceTo > 0) ? $priceTo : 0;//Core::PRICE_MAX;
     $args['producers'] = implode('_', array_unique($producer));
     $args['attributes'] = implode('_', array_unique($attribute));
 		

@@ -321,7 +321,7 @@ class CartModel extends Component\Model
 			$objResponseDel->alert($e->getMessage());
 		}
 		
-		$this->updateSession();
+		$this->updateSessionSoft();
 		$objResponseDel->script('window.location.reload( false )');
 		return $objResponseDel;
 	}

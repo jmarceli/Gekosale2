@@ -453,7 +453,7 @@ class ProductModel extends Component\Model\Dataset
 					'keyword_description' => $rs['keyword_description'],
 					'keyword' => $rs['keyword'],
 					'weight' => $rs['weight'],
-					'packagesize' => $rs['packagesize'],
+					'packagesize' => is_float($rs['packagesize'])? $rs['packagesize'] : round($rs['packagesize']),
 					'unit' => $rs['unit'],
 					'categoryphoto' => App::getModel('gallery')->getImagePath(App::getModel('gallery')->getSmallImageById($rs['categoryphoto'], 0)),
 					'categoryname' => $rs['categoryname'],
@@ -798,10 +798,12 @@ class ProductModel extends Component\Model\Dataset
 				$product['photo']['orginal'][] = $gallery->getImagePath($gallery->getOrginalImageById($photo['photoid']));
 			}
 			if (isset($product['producerphotoid']) && $product['producerphotoid'] > 0){
-				$product['producerphoto']['small'] = $gallery->getImagePath($gallery->getSmallImageById($product['producerphotoid']));
-				$product['producerphoto']['normal'] = $gallery->getImagePath($gallery->getNormalImageById($product['producerphotoid']));
-				$product['producerphoto']['large'] = $gallery->getImagePath($gallery->getLargeImageById($product['producerphotoid']));
-				$product['producerphoto']['orginal'] = $gallery->getImagePath($gallery->getOrginalImageById($product['producerphotoid']));
+        $product['producerphoto'] = array(
+          'small' => $gallery->getImagePath($gallery->getSmallImageById($product['producerphotoid'])),
+          'normal' => $gallery->getImagePath($gallery->getNormalImageById($product['producerphotoid'])),
+          'large' => $gallery->getImagePath($gallery->getLargeImageById($product['producerphotoid'])),
+          'orginal' => $gallery->getImagePath($gallery->getOrginalImageById($product['producerphotoid'])),
+        );
 			}
 		}
 	}
@@ -811,7 +813,7 @@ class ProductModel extends Component\Model\Dataset
 		$gallery = App::getModel('gallery');
 
 		if (is_array($product['otherphoto'])){
-			if (isset($product['mainphotoid']) && $product['mainphotoid'] = 0){
+			if (isset($product['mainphotoid']) && $product['mainphotoid'] == 0){
 				$product['mainphoto']['small'] = $gallery->getImagePath($gallery->getSmallImageById($product['mainphotoid']));
 				$product['mainphoto']['normal'] = $gallery->getImagePath($gallery->getNormalImageById($product['mainphotoid']));
 				$product['mainphoto']['large'] = $gallery->getImagePath($gallery->getLargeImageById($product['mainphotoid']));
