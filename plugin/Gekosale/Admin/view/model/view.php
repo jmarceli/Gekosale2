@@ -1027,4 +1027,27 @@ class ViewModel extends Component\Model\Datagrid
 		}
 		return $Data;
 	}
+
+  // Returns pageschemeid for selected view
+  public function getViewPagescheme ($view_id)
+  {
+		$sql = 'SELECT pageschemeid FROM view WHERE idview = :viewid';
+		$stmt = Db::getInstance()->prepare($sql);
+    $stmt->bindValue('viewid', $view_id);
+		$stmt->execute();
+		if ($rs = $stmt->fetch()){
+      return $rs['pageschemeid'];
+    }
+    else { // return first pagescheme
+      $sql = 'SELECT idpagescheme FROM pagescheme LIMIT 1';
+      $stmt = Db::getInstance()->prepare($sql);
+      $stmt->execute();
+      if ($rs = $stmt->fetch()){
+        return $rs['idpagescheme'];
+      }
+      else {
+        return null;
+      }
+    }
+  }
 }
