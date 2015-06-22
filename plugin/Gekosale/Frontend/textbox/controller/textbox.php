@@ -24,6 +24,10 @@ class TextBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
+    if (empty($this->_boxAttributes['content'])) {
+      // fix possible bug when content is undefined
+      $this->_boxAttributes['content'] = '';
+    }
 		$this->registry->template->assign('content', $this->registry->template->parse($this->_boxAttributes['content']));
 		return $this->registry->template->fetch($this->loadTemplate('index.tpl'));
 	}
