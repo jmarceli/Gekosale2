@@ -33,6 +33,11 @@ class CheckoutBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
+    // limit available delivery countries
+    $dispatchmethod = Session::getActiveDispatchmethodChecked();
+    // list of country ids which are specified for selected delivery method
+    $countryids = App::getModel('delivery')->getDispatchmethodCountries($dispatchmethod['dispatchmethodid']);
+
 		$clientorder = App::getModel('finalization')->setClientOrder();
 		
 		if (empty($clientorder['cart'])){
@@ -168,7 +173,7 @@ class CheckoutBoxController extends Component\Controller\Box
 		$form->AddChild(new SimpleForm\Elements\Select(Array(
 			'name' => 'billing_country',
 			'label' => _('TXT_NAME_OF_COUNTRY'),
-			'options' => App::getModel('lists')->getCountryForSelect(),
+			'options' => App::getModel('lists')->getCountryForSelect($countryids),
 			'rules' => Array(
 				new SimpleForm\Rules\Required(_('ERR_EMPTY_NAME_OF_COUNTRY'))
 			)
@@ -241,7 +246,7 @@ class CheckoutBoxController extends Component\Controller\Box
 		$form->AddChild(new SimpleForm\Elements\Select(Array(
 			'name' => 'shipping_country',
 			'label' => _('TXT_NAME_OF_COUNTRY'),
-			'options' => App::getModel('lists')->getCountryForSelect(),
+			'options' => App::getModel('lists')->getCountryForSelect($countryids),
 			'rules' => Array(
 				new SimpleForm\Rules\RequiredDependency(_('ERR_EMPTY_NAME_OF_COUNTRY'), $otherAddress, new SimpleForm\Conditions\Equals('0'))
 			)

@@ -21,15 +21,37 @@ namespace Gekosale;
 
 class ListsModel extends Component\Model
 {
-
-	public function getCountries ()
+	public function getCountries($ids = array())
 	{
-    return App::getModel('Admin/countrieslist/countrieslist')->getCountries();
+    if(!empty($ids)) { // get only countries with ids from array
+      if(!is_array($ids)) $ids = array($ids);
+      $sql = 'SELECT 
+            C.idcountry as countryid, 
+            C.name
+            FROM country C
+            WHERE idcountry IN ('.implode(',', $ids).')';//:ids)';
+      $stmt = Db::getInstance()->prepare($sql);
+      //$stmt->bindValue('ids', $ids);//implode(',', $ids)); // 261 = Polska
+    }
+    else { // get all
+      $sql = 'SELECT 
+            C.idcountry as countryid, 
+            C.name
+          FROM country C';
+      $stmt = Db::getInstance()->prepare($sql);
+    }
+
+    $stmt->execute();
+		return $stmt->fetchAll();
 	}
 
-	public function getCountryForSelect ()
+	public function getCountryForSelect($ids = array())
 	{
-    return App::getModel('Admin/countrieslist/countrieslist')->getCountryForSelect();
-	}
-
+    $countries = $this->getCountries($ids);
+    $data = array();
+    foreach($countries as $country) {
+      $data[$country['countryid']] = \Gekosale\_($country['name']);
+    }
+    return $data;
+  }
 }

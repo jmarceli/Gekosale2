@@ -354,4 +354,24 @@ class DeliveryModel extends Component\Model
 		$objResponse->script('window.location.reload(false);');
 		return $objResponse;
 	}
+
+  // Returns country ids for selected dispatch method
+	public function getDispatchmethodCountries($id)
+	{
+		$sql = "SELECT 
+					countryids
+				FROM dispatchmethod
+				WHERE iddispatchmethod = :id";
+		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('id', $id);
+		$stmt->execute();
+		$rs = $stmt->fetch();
+    $countryids = Array();
+		if ($rs){
+			if ($rs['countryids'] != ''){
+				$countryids = explode(',', $rs['countryids']);
+			}
+		}
+		return $countryids;
+	}
 }
