@@ -364,7 +364,7 @@ class CheckoutBoxController extends Component\Controller\Box
 				'clienttype' => $formData['billing_clienttype']
 			);
 			
-			if ($formData['other_address'] == 1){
+			if (!empty($formData['other_address'])){
 				$Data['deliveryAddress'] = Array(
 					'firstname' => $formData['shipping_firstname'],
 					'surname' => $formData['shipping_surname'],
@@ -382,7 +382,7 @@ class CheckoutBoxController extends Component\Controller\Box
 			}
 
 			$recurMail = 0;
-			if (isset($formData['create_account']) && $formData['create_account'] == 1){
+      if (!empty($formData['create_account'])) {
 				$recurMail = $this->clientModel->checkClientNewMail($formData);
 				if ($recurMail == 0){
 					$clientData = $Data['clientaddress'];
@@ -421,7 +421,7 @@ class CheckoutBoxController extends Component\Controller\Box
 				}
 			}
       // add support for newsletter subscription without registration
-      else if(isset($formData['newsletter']) && $formData['newsletter'] == 1) {
+      else if(!empty($formData['newsletter'])) {
         $newId = App::getModel('newsletter')->addClientAboutNewsletter($formData['email']);
         if ($newId > 0){
 					App::getModel('newsletter')->changeNewsletterStatus($newId);
