@@ -33,6 +33,11 @@ class CheckoutBoxController extends Component\Controller\Box
 
 	public function index ()
 	{
+    // limit available delivery countries
+    $dispatchmethod = Session::getActiveDispatchmethodChecked();
+    // list of country ids which are specified for selected delivery method
+    $countryids = App::getModel('delivery')->getDispatchmethodCountries($dispatchmethod['dispatchmethodid']);
+
 		$clientorder = App::getModel('finalization')->setClientOrder();
 		
 		if (empty($clientorder['cart'])){
@@ -168,7 +173,7 @@ class CheckoutBoxController extends Component\Controller\Box
 		$form->AddChild(new SimpleForm\Elements\Select(Array(
 			'name' => 'billing_country',
 			'label' => _('TXT_NAME_OF_COUNTRY'),
-			'options' => App::getModel('lists')->getCountryForSelect(),
+			'options' => App::getModel('lists')->getCountryForSelect($countryids),
 			'rules' => Array(
 				new SimpleForm\Rules\Required(_('ERR_EMPTY_NAME_OF_COUNTRY'))
 			)
@@ -241,7 +246,7 @@ class CheckoutBoxController extends Component\Controller\Box
 		$form->AddChild(new SimpleForm\Elements\Select(Array(
 			'name' => 'shipping_country',
 			'label' => _('TXT_NAME_OF_COUNTRY'),
-			'options' => App::getModel('lists')->getCountryForSelect(),
+			'options' => App::getModel('lists')->getCountryForSelect($countryids),
 			'rules' => Array(
 				new SimpleForm\Rules\RequiredDependency(_('ERR_EMPTY_NAME_OF_COUNTRY'), $otherAddress, new SimpleForm\Conditions\Equals('0'))
 			)
@@ -364,7 +369,7 @@ class CheckoutBoxController extends Component\Controller\Box
 				'clienttype' => $formData['billing_clienttype']
 			);
 			
-			if ($formData['other_address'] == 1){
+			if (!empty($formData['other_address'])){
 				$Data['deliveryAddress'] = Array(
 					'firstname' => $formData['shipping_firstname'],
 					'surname' => $formData['shipping_surname'],
@@ -382,7 +387,7 @@ class CheckoutBoxController extends Component\Controller\Box
 			}
 
 			$recurMail = 0;
-			if (isset($formData['create_account']) && $formData['create_account'] == 1){
+      if (!empty($formData['create_account'])) {
 				$recurMail = $this->clientModel->checkClientNewMail($formData);
 				if ($recurMail == 0){
 					$clientData = $Data['clientaddress'];
@@ -421,7 +426,7 @@ class CheckoutBoxController extends Component\Controller\Box
 				}
 			}
       // add support for newsletter subscription without registration
-      else if(isset($formData['newsletter']) && $formData['newsletter'] == 1) {
+      else if(!empty($formData['newsletter'])) {
         $newId = App::getModel('newsletter')->addClientAboutNewsletter($formData['email']);
         if ($newId > 0){
 					App::getModel('newsletter')->changeNewsletterStatus($newId);
