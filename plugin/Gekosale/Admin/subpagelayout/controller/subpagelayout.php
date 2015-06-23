@@ -124,7 +124,7 @@ class subpagelayoutController extends Component\Controller\Admin
 		$boxDataEdit = $columnsDataEdit->AddChild(new FormEngine\Elements\LayoutBoxesList(Array(
 			'name' => 'layout_boxes',
 			'label' => 'Wybierz boksy',
-			'boxes' => FormEngine\Option::Make(App::getModel('subpagelayout')->getBoxesAllToSelect($subpageLayout[0]['name'], $pageschemeid))
+			'boxes' => FormEngine\Option::Make(App::getModel('subpagelayout')->getBoxesAllToSelect($subpageLayout[0]['name'], $pagescheme_id))
 		)));
 		
 		$form->AddFilter(new FormEngine\Filters\Trim());
