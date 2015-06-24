@@ -281,4 +281,11 @@ class PaypalModel extends Component\Model
 		return $Data;
 	}
 
+	public function cancelPayment ()
+	{
+	}
+
+	public function confirmPayment ()
+	{
+	}
 }
