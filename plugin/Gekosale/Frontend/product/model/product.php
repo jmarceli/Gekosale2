@@ -320,12 +320,16 @@ class ProductModel extends Component\Model\Dataset
 		$sql = "SELECT
               (SELECT seo FROM producttranslation WHERE languageid = :languageid AND productid = idproduct) as seo,
               idproduct
-            FROM product
-            WHERE idproduct IN
-              (SELECT productid FROM productcategory PC WHERE categoryid = :categoryid)
+            FROM product P
+            WHERE 
+            P.enable = 1 
+            AND idproduct IN
+            (SELECT productid FROM productcategory PC WHERE categoryid = :categoryid 
+              AND EXISTS(SELECT * FROM viewcategory WHERE categoryid = :categoryid AND viewid = :viewid))
             ORDER BY hierarchy {$direction}, idproduct {$direction}";
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('categoryid', $category_id);
+    $stmt->bindValue('viewid', Helper::getViewId());
 		$stmt->bindValue('languageid', Helper::getLanguageId());
 		$stmt->execute();
 
