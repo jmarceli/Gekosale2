@@ -1632,7 +1632,8 @@ class OrderModel extends Component\Model\Datagrid
  				FROM orderproduct OP
  				LEFT JOIN product P ON P.idproduct = OP.productid
 				LEFT JOIN productphoto PP ON PP.productid = P.idproduct AND PP.mainphoto = 1
-				WHERE orderid = :id";
+        WHERE orderid = :id
+        GROUP BY idorderproduct"; // fix for duplicated products in order editor
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('id', $id);
 		$stmt->execute();
@@ -1757,7 +1758,12 @@ class OrderModel extends Component\Model\Datagrid
 			$stmt->bindValue('productid', $value['idproduct']);
 			if ($value['variant'] > 0){
 				$stmt->bindValue('productattributesetid', $value['variant']);
-				$stmt->bindValue('variant', $value['variantcaption']);
+        if (!empty($value['variantcaption'])) {
+          $stmt->bindValue('variant', $value['variantcaption']);
+        }
+        else {
+          $stmt->bindValue('variant', '');
+        }
 			}
 			else{
 				$stmt->bindValue('productattributesetid', NULL);
