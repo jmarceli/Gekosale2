@@ -4,7 +4,7 @@
 {% if producer.photo != '' or producer.description != '' %}
 <div class="category-description">
   {% if producer.photo != '' %}
-  <img style="float: right;right: 0;position: absolute;" src="{{ producer.photo }}" alt="{{ producer.name }}" title="{{ producer.name }}" />
+  <img style="float: right;right: 0;position: static;" src="{{ producer.photo }}" alt="{{ producer.name }}" title="{{ producer.name }}" />
   {% endif %}
   {% if producer.description != '' %}
   <div class="caption">
