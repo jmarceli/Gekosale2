@@ -471,7 +471,7 @@ class ProductModel extends Component\Model\Dataset
         );
       }
       else {
-        throw new MailerException('No product data');
+        throw new FrontendException(_('TXT_PRODUCT') . ' ' . _('TXT_NOT_AVAILABLE'));
       }
     }
     catch (Exception $e){
