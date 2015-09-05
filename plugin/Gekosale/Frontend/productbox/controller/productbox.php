@@ -31,6 +31,7 @@ class ProductBoxController extends Component\Controller\Box
 		$this->productModel = App::getModel('product/product');
 		$this->product = $this->productModel->getProductAndAttributesById((int) $this->productid);
 		if (empty($this->product)){
+      new MailerException('empty product data');
 			App::redirectUrl($this->registry->router->generate('frontend.home', true));
 		}
 		$this->heading = $this->product['productname'];
