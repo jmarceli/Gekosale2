@@ -28,11 +28,10 @@ class FrontendException extends BaseException
 		if (__ENABLE_DEBUG__ == 0){
 			App::redirectSeo(App::getURLAdress());
 		}
-		$this->errorDesignPath = ROOTPATH . 'design/frontend/core/error/index/index.tpl';
 		App::getModel('template')->assign('SHOP_NAME', App::getRegistry()->session->getActiveShopName());
 		App::getModel('template')->assign('error', $this->errorText);
 		App::getModel('template')->assign('BASE_URL', App::getURLAdress());
-		App::getModel('template')->display($this->errorDesignPath);
+		App::getModel('template')->display('error/index/layout.tpl');
 		die();
 	}
 }
