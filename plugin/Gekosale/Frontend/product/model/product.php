@@ -359,123 +359,126 @@ class ProductModel extends Component\Model\Dataset
     return $this->adjacentProductInCategory($product_id, $category_id, 'DESC');
 	}
 
-	public function getProductById ($id)
-	{
-		$sql = "SELECT
-					P.`status`,
-					P.enable,
-					P.ean,
-					P.delivelercode,
-					P.stock,
-					IF(P.trackstock IS NULL, 0, P.trackstock) AS trackstock,
-					PT.name as productname,
-					PT.shortdescription,
-					PT.description,
-					PT.longdescription,
-					PT.seo,
-					PRODT.name AS producername,
-					PRODT.seo AS producerurl,
-					PROD.photoid AS producerphoto,
-					IF(PHOTO.photoid IS NOT NULL, IF(PHOTO.mainphoto = 1, PHOTO.photoid, 0), 1) as mainphotoid,
-					PT.keyword_title AS keyword_title,
-					IF(PT.keyword = '', VT.keyword, PT.keyword) AS keyword,
-					IF(PT.keyword_description = '',VT.keyword_description,PT.keyword_description) AS keyword_description,
-					P.weight,
-					P.packagesize,
-					IF(PN.active = 1 AND (PN.enddate IS NULL OR PN.enddate >= CURDATE()), 1, 0) AS new,
-					P.unit,
-					COUNT(DISTINCT PREV.idproductreview) AS opinions,
-					IF(CEILING(AVG(PRANGE.value)) IS NULL, 0, CEILING(AVG(PRANGE.value))) AS rating,
-					UT.name AS unit,
-					C.photoid AS categoryphoto,
-					C.idcategory AS categoryid,
-					CT.name AS categoryname,
-					CT.seo AS categoryseo,
-					AT.name AS availablityname,
-				   	AT.description AS availablitydescription
-				FROM product P
-					LEFT JOIN producttranslation PT ON P.idproduct= PT.productid AND PT.languageid= :languageid
-					LEFT JOIN productcategory PROCAT ON P.idproduct = PROCAT.productid
-					LEFT JOIN categorytranslation CT ON PROCAT.categoryid = CT.categoryid AND CT.languageid = :languageid
-					LEFT JOIN category C ON PROCAT.categoryid = C.idcategory
-					LEFT JOIN viewcategory VC ON PROCAT.categoryid = VC.categoryid
-					LEFT JOIN viewtranslation VT ON VT.viewid = VC.viewid
-					LEFT JOIN producer AS PROD ON P.producerid= PROD.idproducer
-					LEFT JOIN producertranslation PRODT ON PROD.idproducer= PRODT.producerid AND PRODT.languageid= :languageid
-					LEFT JOIN productphoto PHOTO ON P.idproduct= PHOTO.productid AND PHOTO.mainphoto = 1
-					LEFT JOIN productnew PN ON P.idproduct = PN.productid
-					LEFT JOIN productreview PREV ON PREV.productid = P.idproduct AND PREV.enable = 1
-					LEFT JOIN productrange PRANGE ON PRANGE.productid = P.idproduct
-					LEFT JOIN unitmeasuretranslation UT ON P.unit = UT.unitmeasureid AND UT.languageid= :languageid
-					LEFT JOIN availablity A ON A.idavailablity = P.availablityid
-					LEFT JOIN availablitytranslation AT ON AT.availablityid = P.availablityid AND AT.languageid = :languageid
-					WHERE P.idproduct= :productid AND P.enable = 1 AND IF(:userid = 0, VC.viewid = :viewid, 1)
-					GROUP BY P.idproduct";
-		$stmt = Db::getInstance()->prepare($sql);
-		$stmt->bindValue('userid', (int) Session::getActiveUserid());
-		$stmt->bindValue('viewid', Helper::getViewId());
-		$stmt->bindValue('productid', $id);
-		$stmt->bindValue('languageid', Helper::getLanguageId());
-		$Data = Array();
-		try{
-			$stmt->execute();
-			$rs = $stmt->fetch();
-			if ($rs){
+  public function getProductById ($id)
+  {
+    $sql = "SELECT
+          P.`status`,
+          P.enable,
+          P.ean,
+          P.delivelercode,
+          P.stock,
+          IF(P.trackstock IS NULL, 0, P.trackstock) AS trackstock,
+          PT.name as productname,
+          PT.shortdescription,
+          PT.description,
+          PT.longdescription,
+          PT.seo,
+          PRODT.name AS producername,
+          PRODT.seo AS producerurl,
+          PROD.photoid AS producerphoto,
+          IF(PHOTO.photoid IS NOT NULL, IF(PHOTO.mainphoto = 1, PHOTO.photoid, 0), 1) as mainphotoid,
+          PT.keyword_title AS keyword_title,
+          IF(PT.keyword = '', VT.keyword, PT.keyword) AS keyword,
+          IF(PT.keyword_description = '',VT.keyword_description,PT.keyword_description) AS keyword_description,
+          P.weight,
+          P.packagesize,
+          IF(PN.active = 1 AND (PN.enddate IS NULL OR PN.enddate >= CURDATE()), 1, 0) AS new,
+          P.unit,
+          COUNT(DISTINCT PREV.idproductreview) AS opinions,
+          IF(CEILING(AVG(PRANGE.value)) IS NULL, 0, CEILING(AVG(PRANGE.value))) AS rating,
+          UT.name AS unit,
+          C.photoid AS categoryphoto,
+          C.idcategory AS categoryid,
+          CT.name AS categoryname,
+          CT.seo AS categoryseo,
+          AT.name AS availablityname,
+             AT.description AS availablitydescription
+        FROM product P
+          LEFT JOIN producttranslation PT ON P.idproduct= PT.productid AND PT.languageid= :languageid
+          LEFT JOIN productcategory PROCAT ON P.idproduct = PROCAT.productid
+          LEFT JOIN categorytranslation CT ON PROCAT.categoryid = CT.categoryid AND CT.languageid = :languageid
+          LEFT JOIN category C ON PROCAT.categoryid = C.idcategory
+          LEFT JOIN viewcategory VC ON PROCAT.categoryid = VC.categoryid
+          LEFT JOIN viewtranslation VT ON VT.viewid = VC.viewid AND VT.languageid = :languageid
+          LEFT JOIN producer AS PROD ON P.producerid= PROD.idproducer
+          LEFT JOIN producertranslation PRODT ON PROD.idproducer= PRODT.producerid AND PRODT.languageid= :languageid
+          LEFT JOIN productphoto PHOTO ON P.idproduct= PHOTO.productid AND PHOTO.mainphoto = 1
+          LEFT JOIN productnew PN ON P.idproduct = PN.productid
+          LEFT JOIN productreview PREV ON PREV.productid = P.idproduct AND PREV.enable = 1
+          LEFT JOIN productrange PRANGE ON PRANGE.productid = P.idproduct
+          LEFT JOIN unitmeasuretranslation UT ON P.unit = UT.unitmeasureid AND UT.languageid= :languageid
+          LEFT JOIN availablity A ON A.idavailablity = P.availablityid
+          LEFT JOIN availablitytranslation AT ON AT.availablityid = P.availablityid AND AT.languageid = :languageid
+          WHERE P.idproduct= :productid AND P.enable = 1 AND IF(:userid = 0, VC.viewid = :viewid, 1)
+          GROUP BY P.idproduct";
+    $stmt = Db::getInstance()->prepare($sql);
+    $stmt->bindValue('userid', (int) Session::getActiveUserid());
+    $stmt->bindValue('viewid', Helper::getViewId());
+    $stmt->bindValue('productid', $id);
+    $stmt->bindValue('languageid', Helper::getLanguageId());
+    $Data = Array();
+    try{
+      $stmt->execute();
+      $rs = $stmt->fetch();
+      if ($rs){
 
-				$price = $this->getProductPrices($id);
-				$Data = Array(
-					'idproduct' => $id,
-					'seo' => $rs['seo'],
-					'enable' => $rs['enable'],
-					'previous' => $this->previousProduct($id, $rs['categoryid']),
-					'next' => $this->nextProduct($id, $rs['categoryid']),
-					'ean' => $rs['ean'],
-					'unit' => $rs['unit'],
-					'delivelercode' => $rs['delivelercode'],
-					'producername' => $rs['producername'],
-					'producerurl' => urlencode($rs['producerurl']),
-					'producerphotoid' => $rs['producerphoto'],
+        $price = $this->getProductPrices($id);
+        $Data = Array(
+          'idproduct' => $id,
+          'seo' => $rs['seo'],
+          'enable' => $rs['enable'],
+          'previous' => $this->previousProduct($id, $rs['categoryid']),
+          'next' => $this->nextProduct($id, $rs['categoryid']),
+          'ean' => $rs['ean'],
+          'unit' => $rs['unit'],
+          'delivelercode' => $rs['delivelercode'],
+          'producername' => $rs['producername'],
+          'producerurl' => urlencode($rs['producerurl']),
+          'producerphotoid' => $rs['producerphoto'],
 					'producerphoto' => App::getModel('gallery')->getImagePath(App::getModel('gallery')->getSmallImageById($rs['producerphoto'], 0)),
-					'stock' => $rs['stock'],
-					'trackstock' => $rs['trackstock'],
-					'new' => $rs['new'],
-					'pricewithoutvat' => $price['pricenetto'],
-					'pricenetto' => $price['pricenetto'],
-					'price' => $price['price'],
-					'discountpricenetto' => $price['discountpricenetto'],
-					'discountprice' => $price['discountprice'],
-					'buypricenetto' => $price['buypricenetto'],
-					'buyprice' => $price['buyprice'],
-					'vatvalue' => $price['vatvalue'],
-					'currencysymbol' => $price['currencysymbol'],
-					'mainphotoid' => $rs['mainphotoid'],
-					'description' => $rs['description'],
-					'longdescription' => $rs['longdescription'],
-					'productname' => $rs['productname'],
-					'shortdescription' => $rs['shortdescription'],
-					'keyword_title' => ($rs['keyword_title'] == NULL || $rs['keyword_title'] == '') ? $rs['productname'] : $rs['keyword_title'],
-					'keyword_description' => $rs['keyword_description'],
-					'keyword' => $rs['keyword'],
-					'weight' => $rs['weight'],
+          'stock' => $rs['stock'],
+          'trackstock' => $rs['trackstock'],
+          'new' => $rs['new'],
+          'pricewithoutvat' => $price['pricenetto'],
+          'pricenetto' => $price['pricenetto'],
+          'price' => $price['price'],
+          'discountpricenetto' => $price['discountpricenetto'],
+          'discountprice' => $price['discountprice'],
+          'buypricenetto' => $price['buypricenetto'],
+          'buyprice' => $price['buyprice'],
+          'vatvalue' => $price['vatvalue'],
+          'currencysymbol' => $price['currencysymbol'],
+          'mainphotoid' => $rs['mainphotoid'],
+          'description' => $rs['description'],
+          'longdescription' => $rs['longdescription'],
+          'productname' => $rs['productname'],
+          'shortdescription' => $rs['shortdescription'],
+          'keyword_title' => ($rs['keyword_title'] == NULL || $rs['keyword_title'] == '') ? $rs['productname'] : $rs['keyword_title'],
+          'keyword_description' => $rs['keyword_description'],
+          'keyword' => $rs['keyword'],
+          'weight' => $rs['weight'],
 					'packagesize' => is_float($rs['packagesize'])? $rs['packagesize'] : round($rs['packagesize']),
-					'unit' => $rs['unit'],
-					'categoryphoto' => App::getModel('gallery')->getImagePath(App::getModel('gallery')->getSmallImageById($rs['categoryphoto'], 0)),
-					'categoryname' => $rs['categoryname'],
-					'categoryid' => $rs['categoryid'],
-					'categoryseo' => $rs['categoryseo'],
-					'availablityname' => $rs['availablityname'],
-					'availablitydescription' => $rs['availablitydescription'],
-					'opinions' => $rs['opinions'],
-					'rating' => $rs['rating'],
-					'statuses' => $this->getProductStatuses($id)
-				);
-			}
-		}
-		catch (Exception $e){
-			throw new FrontendException($e->getMessage());
-		}
-		return $Data;
-	}
+          'unit' => $rs['unit'],
+          'categoryphoto' => App::getModel('gallery')->getImagePath(App::getModel('gallery')->getSmallImageById($rs['categoryphoto'], 0)),
+          'categoryname' => $rs['categoryname'],
+          'categoryid' => $rs['categoryid'],
+          'categoryseo' => $rs['categoryseo'],
+          'availablityname' => $rs['availablityname'],
+          'availablitydescription' => $rs['availablitydescription'],
+          'opinions' => $rs['opinions'],
+          'rating' => $rs['rating'],
+          'statuses' => $this->getProductStatuses($id)
+        );
+      }
+      else {
+        throw new MailerException('No product data');
+      }
+    }
+    catch (Exception $e){
+      throw new FrontendException($e->getMessage());
+    }
+    return $Data;
+  }
 
 	public function getProductStatuses ($id)
 	{

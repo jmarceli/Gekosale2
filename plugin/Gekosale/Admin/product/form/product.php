@@ -57,10 +57,10 @@ class ProductForm extends Component\Form
 			'label' => _('TXT_PRODUCT_NAME'),
 			'rules' => Array(
 				new FormEngine\Rules\Required(_('ERR_EMPTY_PRODUCT_NAME')),
-				new FormEngine\Rules\LanguageUnique(_('ERR_NAME_ALREADY_EXISTS'), 'producttranslation', 'name', null, Array(
-					'column' => 'productid',
-					'values' => (int) $this->registry->core->getParam()
-				))
+        new FormEngine\Rules\LanguageUnique(_('ERR_NAME_ALREADY_EXISTS'), 'producttranslation', 'name', null, Array(
+          'column' => 'productid',
+          'values' => (int) $this->registry->core->getParam()
+        ))
 			)
 		)));
 		
@@ -69,8 +69,12 @@ class ProductForm extends Component\Form
 			'label' => _('TXT_PRODUCT_SEO'),
 			'rules' => Array(
 				new FormEngine\Rules\Required(_('ERR_EMPTY_PRODUCT_SEO')),
-				new FormEngine\Rules\Format(_('ERR_ALPHANUMERIC_INVALID'), '/^[A-Za-z0-9-_\",\'\s]+$/')
-			)
+        new FormEngine\Rules\Format(_('ERR_ALPHANUMERIC_INVALID'), '/^[A-Za-z0-9-_\",\'\s]+$/'),
+				new FormEngine\Rules\LanguageUnique('Wybierz inny adres URL, podany już istnieje', 'producttranslation', 'seo', null, Array(
+					'column' => 'productid',
+					'values' => (int) $this->registry->core->getParam()
+				))
+      )
 		)));
 		
 		$basicPane->AddChild(new FormEngine\Elements\Checkbox(Array(
