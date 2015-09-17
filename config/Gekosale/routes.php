@@ -450,4 +450,13 @@ $this->routes->add('admin', new Route('/' . __ADMINPANE__ . '/{controller}/{acti
 	'_scheme' => 'http'
 )));
 
+$this->routes->add('frontend.sitemap', new Route('/xmlsitemap', array(
+	'mode' => 'frontend',
+	'controller' => 'sitemap',
+	'action' => 'sitemap',
+	'param' => NULL
+), array(
+	'_scheme' => 'http',
+)));
+
 return $this->routes;

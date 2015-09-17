@@ -25,18 +25,22 @@ class SitemapController extends Component\Controller\Frontend
 	public function index ()
 	{
 		if ($this->registry->core->getParam() > 0){
-			//header('Content-type: text/xml');
-			try{
-				App::getModel('sitemap')->generateSitemap($this->registry->core->getParam());
-			}
-			catch (Exception $e){
-				echo $e->getMessage();
-			}
-		}
+      $this->sitemap();
+    }
 		else{
 			$this->Render('Sitemap');
 		}
-	
 	}
+
+  public function sitemap ()
+  {
+    try{
+      // one sitemap for all search engines (use Google sitemap settings)
+      App::getModel('sitemap')->generateSitemap(2);
+    }
+    catch (Exception $e){
+      echo $e->getMessage();
+    }
+  }
 
 }
