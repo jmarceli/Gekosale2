@@ -120,13 +120,6 @@ class sitemapModel extends Component\Model
 
 	public function getPages ()
 	{
-		$sql = "SELECT CONCAT(:url,:seo,'/',C.idcontentcategory) as loc,CT.name,
-				DATE_FORMAT(C.adddate,'%Y-%m-%d') as lastmod
-				FROM contentcategory C
-				LEFT JOIN contentcategoryview CCV ON CCV.contentcategoryid = C.idcontentcategory
-				LEFT JOIN contentcategorytranslation CT ON CT.contentcategoryid = C.idcontentcategory AND CT.languageid = :languageid
-				WHERE CCV.viewid = :viewid ";
-
     $sql = "SELECT 
 					C.idcontentcategory AS id, 
           CCT.name,					
@@ -138,7 +131,8 @@ class sitemapModel extends Component\Model
 				FROM contentcategory C
 				LEFT JOIN contentcategoryview CCV ON CCV.contentcategoryid = C.idcontentcategory
 				LEFT JOIN contentcategorytranslation CCT ON CCT.contentcategoryid = C.idcontentcategory AND CCT.languageid = :languageid
-				WHERE CCV.viewid=:viewid";
+        WHERE CCV.viewid=:viewid AND
+        C.redirect <> 2"; // remove external redirects from sitemap
 		$stmt = Db::getInstance()->prepare($sql);
 		$stmt->bindValue('languageid', $this->languageid);
 		$stmt->bindValue('viewid', $this->viewid);
@@ -227,7 +221,7 @@ class sitemapModel extends Component\Model
 		else {
 			App::redirectUrl($this->registry->router->generate('frontend.sitemap', true));
 		}
-		header('Content-type: text/xml; charset=utf-8');
+		header('Content-type: application/xml; charset=utf-8');
 		header('Cache-Control: max-age=0');
 		$doc = new \DOMDocument('1.0', 'UTF-8');
 		$doc->formatOutput = true;
