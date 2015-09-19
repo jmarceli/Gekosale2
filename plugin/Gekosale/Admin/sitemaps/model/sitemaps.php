@@ -67,7 +67,7 @@ class SitemapsModel extends Component\Model\Datagrid
 	public function refreshSitemaps ($id)
 	{
 		
-		$sql = 'SELECT REPLACE(pingserver,\'{SITEMAP_URL}\',CONCAT(:url,\'sitemap/\',:id)) as pingserver
+		$sql = 'SELECT REPLACE(pingserver,\'{SITEMAP_URL}\',CONCAT(:url,\'xmlsitemap\')) as pingserver
 				FROM sitemaps 
 				WHERE idsitemaps = :id';
 		$stmt = Db::getInstance()->prepare($sql);
