@@ -3,6 +3,9 @@ Gekosale 2
 Nieoficjalne repozytorium Gekosale 2, którego celem jest zintegrowanie wszystkich dostępnych poprawek i doprowadzenie projektu do wersji stabilnej, która zostanie oznaczona jako 2.1.
 
 # Instalacja
+
+## Do poprawnego działania wymagane jest PHP w wersji przynajmniej 5.3
+
 Najprościej jest pobrać pliki w formie ZIPa https://github.com/jmarceli/Gekosale2/archive/master.zip i rozpakować na serwerze do katalogu głównego.
 
 Kolejny krok to wejście na adres pod którym są one dostępne, powinna pojawić się strona instalacji.
@@ -10,8 +13,6 @@ Kolejny krok to wejście na adres pod którym są one dostępne, powinna pojawi�
 Przed rozpoczęciem instalacji należy założyć nową bazę danych MySQL dla tworzonego sklepu. Dane dostępowe trzeba będzie podać podczas procesu instalacji.
 
 Proces instacji jest prosty, wymaga podania kilku informacji o nowozakładanym sklepie.
-
-Do poprawnego działania wymagane jest PHP w wersji przynajmniej 5.3
 
 ## Instrukcja obsługi
 Jedyna obecnie dostępna instrukcja obsługi dotyczy wersji 1.4, ale ponieważ od strony panelu administracyjnego nie ma dużych różnic między wersjami to na początek warto się z nią zapoznać http://www.gekosale.pl/media/pdf/QuickStart.pdf
