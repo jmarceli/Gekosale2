@@ -1627,6 +1627,7 @@ class OrderModel extends Component\Model\Datagrid
 					OP.productattributesetid as variant,
 					OP.qty as quantity,
 					OP.ean,
+          COALESCE((SELECT weight FROM productattributeset WHERE productid = OP.productid AND idproductattributeset = OP.productattributesetid), P.weight) as weight,
 					IF(OP.photoid IS NULL, PP.photoid, OP.photoid) AS photoid,
 					P.trackstock
  				FROM orderproduct OP
@@ -1648,6 +1649,7 @@ class OrderModel extends Component\Model\Datagrid
 				'trackstock' => (int) $rs['trackstock'],
 				'sellprice' => $rs['sellprice'],
 				'variant' => $rs['variant'],
+        'weight' => $rs['weight'],
 				'stock' => $this->getCurrentStock($rs['idproduct'], $rs['variant'])
 			);
 			if ((int) $rs['photoid'] > 0){

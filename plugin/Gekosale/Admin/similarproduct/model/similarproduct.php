@@ -202,6 +202,7 @@ class SimilarProductModel extends Component\Model\Datagrid
 	{
 		foreach ($Data as $value){
 			
+      //var_dump(array($id, $value));
 			$sql = 'INSERT INTO similarproduct SET
 						productid = :productid, 
 						relatedproductid = :relatedproductid,
@@ -228,14 +229,15 @@ class SimilarProductModel extends Component\Model\Datagrid
 			$this->deleteSimilarProductById($id);
 			$this->addSimilarProduct($Data['products'], $id);
 			
-			foreach ($Data['products'] as $key => $product){
-				$Product = Array();
-				$Product[] = Array(
-					'id' => $id,
-					'hierarchy' => 0
-				);
-				$this->addSimilarProduct($Product, $product['id']);
-			}
+      foreach ($Data['products'] as $key => $product){
+        $relation = $this->getSimilarProductRelation($product['id'], $id);
+        $Product = Array();
+        $Product[] = Array(
+          'id' => $id,
+          'hierarchy' => isset($relation['hierarchy'])? $relation['hierarchy'] : 0
+        );
+        $this->addSimilarProduct($Product, $product['id']);
+      }
 		}
 		catch (Exception $e){
 			throw new CoreException(_('ERR_SIMILAR_PRODUCT_EDIT'), 10, $e->getMessage());
@@ -249,4 +251,27 @@ class SimilarProductModel extends Component\Model\Datagrid
 	{
 		DbTracker::deleteRows('similarproduct', 'productid', $id);
 	}
+
+  public function getSimilarProductRelation ($id, $related_id)
+  {
+		$sql = "SELECT 
+              productid,
+              relatedproductid,
+              hierarchy
+            FROM similarproduct SP
+            WHERE SP.productid =:id AND SP.relatedproductid = :related_id";
+		$stmt = Db::getInstance()->prepare($sql);
+		$stmt->bindValue('id', $id);
+		$stmt->bindValue('related_id', $related_id);
+		$stmt->execute();
+		$Data = Array();
+		if ($rs = $stmt->fetch()){
+			$Data = Array(
+				'id' => $rs['productid'],
+				'related_id' => $rs['relatedproductid'],
+				'hierarchy' => $rs['hierarchy']
+			);
+		}
+		return $Data;
+  }
 }
