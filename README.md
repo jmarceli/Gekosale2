@@ -1,5 +1,9 @@
 Gekosale 2
 ========
+
+# OPROGRAMOWANIE NIE JEST JUŻ ROZWIJANE
+Polecam wybór innego systemu sklepowego.
+
 Nieoficjalne repozytorium Gekosale 2, którego celem jest zintegrowanie wszystkich dostępnych poprawek i doprowadzenie projektu do wersji stabilnej, która zostanie oznaczona jako 2.1.
 
 # Instalacja
